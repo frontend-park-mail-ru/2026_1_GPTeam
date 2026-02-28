@@ -1,0 +1,1 @@
+export const client = (url, method, data) => fetch(url);
