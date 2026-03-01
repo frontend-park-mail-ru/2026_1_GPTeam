@@ -7,7 +7,8 @@ export const router = new Router(root);
 
 router
     .addRoute("/", () => new IndexPage())
-    .addRoute("/login", () => new LoginPage());
+    .addRoute("/login", () => new LoginPage())
+    .addRoute("/404", () => new IndexPage());
 
 async function init() {
     router.start();
