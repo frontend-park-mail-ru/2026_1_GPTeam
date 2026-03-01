@@ -1,0 +1,13 @@
+body {
+    background-color: #191919;
+    height: 100%;
+    margin: 0;
+    padding: 0;
+    font-family: Inter, monospace;
+}
+
+.page__content {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}

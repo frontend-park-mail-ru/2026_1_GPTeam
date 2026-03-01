@@ -1,13 +1,8 @@
 <form>
-    <label>Username
-        <input id="username_input" type="text" name="username" placeholder="Username">
-    </label>
-    <span id="username_error" style="display: none; color: red"></span>
-    <br>
-    <label> Password
-        <input id="password_input" type="password" name="password" placeholder="Password">
-    </label>
-    <span id="password_error" style="display: none; color: red"></span>
-    <br>
-    <input type="submit" value="Login">
+    <h3>Вход</h3>
+    <input id="username_input" type="text" name="username" placeholder="Имя" autocomplete="off">
+    <input id="password_input" type="password" name="password" placeholder="Пароль" autocomplete="off">
+    <p id="error_message"></p>
+    <input type="submit" value="Войти">
+    <p>Ещё нет аккаунта? <a href="/">Зарегистрироваться</a></p>
 </form>
