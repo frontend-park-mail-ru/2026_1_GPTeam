@@ -38,3 +38,9 @@ export function validate_password(password) {
         return [false, "Пароль должен быть минимум 8 символов"];
     return check_symbols(password);
 }
+
+export function are_password_equal(password, confirm_password) {
+    if (password != confirm_password)
+        return [false, "Пароли не совпадают"];
+    return [true, ""];
+}
