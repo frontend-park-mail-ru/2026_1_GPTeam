@@ -30,6 +30,28 @@ export class Router {
         const path = window.location.pathname;
         const pageFactory = this.routes.get(path) || this.routes.get("/404");
 
+        if (!pageFactory) {
+            // Fallback if no matching route and no /404 route are registered
+            console.error(`No route registered for path "${path}" and no "/404" fallback route defined.`);
+
+            if (this._currentPage?.destroy) {
+                this._currentPage.destroy();
+            }
+
+            const fallbackPage = {
+                async render(root) {
+                    root.innerHTML = "<h1>Page not found</h1>";
+                },
+                destroy() {
+                    // no-op
+                }
+            };
+
+            this._currentPage = fallbackPage;
+            this.root.innerHTML = "";
+            await fallbackPage.render(this.root);
+            return;
+        }
         if (this._currentPage?.destroy) {
             this._currentPage.destroy();
         }
