@@ -1,14 +1,13 @@
 import {BaseComponent} from "../base_component.js";
 import template from "./login_form.hbs?raw";
 import "./login_form.css"
-import Handlebars from "handlebars";
+import "../../utils/helpers.js"
+import {validate_username, validate_password} from "../../utils/validation.js";
 
 export class LoginForm extends BaseComponent {
     constructor(props) {
         super(template, props);
-        Handlebars.registerHelper("equal", function (a, b, options) {
-            return (a === b) ? options.fn(this) : options.inverse(this);
-        })
+        this.mode = props.mode;
     }
 
     validate(username, password, error_message) {
@@ -16,15 +15,17 @@ export class LoginForm extends BaseComponent {
         error_message.innerText = "";
         username.style.borderColor = "#484FFF";
         password.style.borderColor = "#484FFF";
-        if (!username.value) {
+        let [ok, error] = validate_username(username.value);
+        if (!ok) {
             errors = true;
             username.style.borderColor = "red";
-            error_message.innerText = "Имя пустое";
+            error_message.innerText = error;
         }
-        if (!password.value) {
+        [ok, error] = validate_password(password.value);
+        if (!ok) {
             errors = true;
             password.style.borderColor = "red";
-            error_message.innerText = "Пароль пустой";
+            error_message.innerText = error;
         }
         return errors;
     }
