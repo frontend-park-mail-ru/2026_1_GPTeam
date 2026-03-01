@@ -25,6 +25,28 @@ input {
     background-color: #191919;
 }
 
+input:hover {
+    border: #5056E6 solid 1px !important;
+}
+
+input:focus {
+    border: #5C5FB8 solid 1px !important;
+}
+
+.valid {
+    border: #86E58A solid 1px !important;
+}
+
+.invalid {
+    border: #FF2222 solid 1px !important;
+}
+
+input:-webkit-autofill {
+    -webkit-box-shadow: 0 0 0 30px #191919 inset !important;
+    box-shadow: 0 0 0 30px #191919 inset !important;
+    -webkit-text-fill-color: #ffffff !important;
+}
+
 input[type="submit"] {
     width: auto;
     border: none;
@@ -34,11 +56,18 @@ input[type="submit"] {
 
 input[type="submit"]:hover {
     cursor: pointer;
+    border: none !important;
+    background-color: #5056E6;
 }
 
 input[type="submit"]:disabled {
-    background-color: gray;
     cursor: not-allowed;
+    background-color: #9FA2F2;
+}
+
+input[type="submit"]:focus {
+    border: none !important;
+    background-color: #5C5FB8;
 }
 
 p {
