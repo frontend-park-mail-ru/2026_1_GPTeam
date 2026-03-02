@@ -44,3 +44,9 @@ export function are_password_equal(password, confirm_password) {
         return [false, "Пароли не совпадают"];
     return [true, ""];
 }
+
+export function is_empty(value, field_name) {
+    if (value.length === 0)
+        return [false, `${field_name} не может быть пустым`];
+    return [true, ""];
+}

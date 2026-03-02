@@ -1,8 +1,8 @@
 import { BasePage } from "../base_page.js";
-import template from "./index.hbs?raw";
-import "./index.css";
+import template from "./landing.hbs?raw";
+import "./landing.css";
 
-export class IndexPage extends BasePage {
+export class LandingPage extends BasePage {
     async render(root) {
         root.innerHTML = template;
     }

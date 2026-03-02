@@ -2,7 +2,7 @@ import {BaseComponent} from "../base_component.js";
 import template from "./signup_form.hbs?raw";
 import "./signup_form.css"
 import "../../utils/helpers.js"
-import {validate_username, validate_password, are_password_equal} from "../../utils/validation.js";
+import {validate_username, validate_password, are_password_equal, is_empty} from "../../utils/validation.js";
 
 export class SignupForm extends BaseComponent {
     constructor(props) {
@@ -10,29 +10,50 @@ export class SignupForm extends BaseComponent {
         this.mode = props.mode;
     }
 
-    validate(username, password, confirm_password, error_message) {
+    validate(username, password, confirm_password, email, error_message) {
         let errors = false;
-        error_message.innerText = "";
+        let errorText = "";
+        
         username.style.borderColor = "#484FFF";
         password.style.borderColor = "#484FFF";
+        confirm_password.style.borderColor = "#484FFF";
+        email.style.borderColor = "#484FFF";
+
+        const fields = [
+            [username, "Имя"],
+            [password, "Пароль"],
+            [confirm_password, "Подтверждение пароля"],
+            [email, "Email"],
+        ];
+        for (const [field, name] of fields) {
+            let [ok, error] = is_empty(field.value, name);
+            if (!ok) {
+                errors = true;
+                field.style.borderColor = "red";
+                if (!errorText) errorText = error;
+            }
+        }
+
         let [ok, error] = validate_username(username.value);
         if (!ok) {
             errors = true;
             username.style.borderColor = "red";
-            error_message.innerText = error;
+            if (!errorText) errorText = error;
         }
         [ok, error] = validate_password(password.value);
         if (!ok) {
             errors = true;
             password.style.borderColor = "red";
-            error_message.innerText = error;
+            if (!errorText) errorText = error;
         }
         [ok, error] = are_password_equal(password.value, confirm_password.value);
         if (!ok) {
             errors = true;
-            password.style.borderColor = "red";
-            error_message.innerText = error;
+            confirm_password.style.borderColor = "red";
+            if (!errorText) errorText = error;
         }
+
+        error_message.innerText = errorText;
         return errors;
     }
 
@@ -41,10 +62,11 @@ export class SignupForm extends BaseComponent {
         let submit_input = document.querySelector("input[type='submit']");
         let username = document.getElementById("username_input");
         let password = document.getElementById("password_input");
-        let confirm_password = document.getElementById("confirm_password_input")
+        let confirm_password = document.getElementById("confirm_password_input");
+        let email = document.getElementById("email_input");
         let error_message = document.getElementById("error_message");
 
-        let errors = this.validate(username, password, confirm_password, error_message);
+        let errors = this.validate(username, password, confirm_password, email, error_message);
         if (errors) return;
 
         submit_input.disabled = true;
@@ -55,7 +77,8 @@ export class SignupForm extends BaseComponent {
             body: JSON.stringify({
                 username: username.value,
                 password: password.value,
-                email: document.getElementById("email_input").value,
+                confirm_password: confirm_password.value,
+                email: email.value,
             })
         })
         let data = await response.json();
@@ -75,7 +98,7 @@ export class SignupForm extends BaseComponent {
                     password.style.borderColor = "red";
                 }
                 else if (error["field"] === "confirm_password") {
-                    password.style.borderColor = "red";
+                    confirm_password.style.borderColor = "red";
                 }
                 error_message.innerText = data["message"];
             }
