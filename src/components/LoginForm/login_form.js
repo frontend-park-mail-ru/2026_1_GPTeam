@@ -3,6 +3,7 @@ import template from "./login_form.hbs?raw";
 import "./login_form.css"
 import "../../utils/helpers.js"
 import {validate_username, validate_password} from "../../utils/validation.js";
+import {client} from "../../api/client.js";
 
 export class LoginForm extends BaseComponent {
     constructor(props) {
@@ -10,23 +11,31 @@ export class LoginForm extends BaseComponent {
         this.mode = props.mode;
     }
 
-    validate(username, password, error_message) {
+    validate(inputs, error_message) {
         let errors = false;
         error_message.innerText = "";
-        username.style.borderColor = "#484FFF";
-        password.style.borderColor = "#484FFF";
-        let [ok, error] = validate_username(username.value);
-        if (!ok) {
+
+        const mark_invalid = (input) => {
             errors = true;
-            username.style.borderColor = "red";
             error_message.innerText = error;
+            input.classList.add("invalid");
+            input.classList.remove("valid");
+        };
+        const mark_valid = (input) => {
+            input.classList.add("valid");
+            input.classList.remove("invalid");
         }
-        [ok, error] = validate_password(password.value);
-        if (!ok) {
-            errors = true;
-            password.style.borderColor = "red";
-            error_message.innerText = error;
-        }
+
+        let [ok, error] = validate_username(inputs["username"].value);
+        if (!ok)
+            mark_invalid(inputs["username"]);
+        else
+            mark_valid(inputs["username"]);
+        [ok, error] = validate_password(inputs["password"].value);
+        if (!ok)
+            mark_invalid(inputs["password"]);
+        else
+            mark_valid(inputs["password"]);
         return errors;
     }
 
@@ -36,13 +45,26 @@ export class LoginForm extends BaseComponent {
         let username = document.getElementById("username_input");
         let password = document.getElementById("password_input");
         let error_message = document.getElementById("error_message");
+        let inputs = {
+            "username": username,
+            "password": password,
+        }
 
-        let errors = this.validate(username, password, error_message);
+        let errors = this.validate(inputs, error_message);
         if (errors) return;
 
         submit_input.disabled = true;
-        let response = await fetch("http://localhost:8080/auth/login", {
+        let userData = {
+            username: username.value,
+            password: password.value,
+        }
+        let response = await client("/auth/login", {
+            method: "POST",
             credentials: "include",
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(userData),
         })
         let data = await response.json();
 
@@ -52,16 +74,16 @@ export class LoginForm extends BaseComponent {
         else if (data["code"] === 500) {
             error_message.innerText = data["message"];
         }
-        else {
+
+        else if (data["code"] === 401) {
             for (const [_, error] of Object.entries(data["errors"])) {
-                if (error["field"] === "username") {
-                    username.style.borderColor = "red";
-                }
-                else if (error["field"] === "password") {
-                    password.style.borderColor = "red";
-                }
+                inputs[error["field"]].classList.add("invalid");
+                inputs[error["field"]].classList.remove("valid");
                 error_message.innerText = data["message"];
             }
+        }
+        else if (data["code"] === 405) {
+            console.log(data["message"]);
         }
         submit_input.disabled = false;
     }
