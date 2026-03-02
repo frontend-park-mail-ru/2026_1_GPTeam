@@ -3,6 +3,7 @@ import template from "./login_form.hbs?raw";
 import "./login_form.css"
 import "../../utils/helpers.js"
 import {validate_username, validate_password} from "../../utils/validation.js";
+import {client} from "../../api/client.js";
 
 export class LoginForm extends BaseComponent {
     constructor(props) {
@@ -53,7 +54,7 @@ export class LoginForm extends BaseComponent {
         if (errors) return;
 
         submit_input.disabled = true;
-        let response = await fetch("http://localhost:8080/auth/login", {
+        let response = await client("/auth/login", {
             credentials: "include",
         })
         let data = await response.json();
