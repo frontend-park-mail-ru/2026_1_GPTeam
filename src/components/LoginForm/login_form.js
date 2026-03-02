@@ -54,8 +54,17 @@ export class LoginForm extends BaseComponent {
         if (errors) return;
 
         submit_input.disabled = true;
+        let userData = {
+            username: username.value,
+            password: password.value,
+        }
         let response = await client("/auth/login", {
+            method: "POST",
             credentials: "include",
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(userData),
         })
         let data = await response.json();
 
@@ -65,12 +74,16 @@ export class LoginForm extends BaseComponent {
         else if (data["code"] === 500) {
             error_message.innerText = data["message"];
         }
-        else {
+
+        else if (data["code"] === 401) {
             for (const [_, error] of Object.entries(data["errors"])) {
                 inputs[error["field"]].classList.add("invalid");
                 inputs[error["field"]].classList.remove("valid");
                 error_message.innerText = data["message"];
             }
+        }
+        else if (data["code"] === 405) {
+            console.log(data["message"]);
         }
         submit_input.disabled = false;
     }
