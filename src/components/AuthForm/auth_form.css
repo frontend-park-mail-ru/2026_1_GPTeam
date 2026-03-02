@@ -6,12 +6,18 @@ body {
   min-height: 100vh;
 }
 
+.page__content {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+}
+
 .card {
   background: #000000;
   border-radius: 20px;
-  padding: 36px 32px;
-  width: 340px;
-
+  padding: 54px 48px;
+  width: 510px;
   box-shadow:
     0 0 30px rgba(72, 79, 255, 0.7),
     0 0 80px rgba(72, 79, 255, 0.3);
@@ -19,10 +25,10 @@ body {
 
 .title {
   color: #ffffff;
-  font-size: 22px;
+  font-size: 28px;
   font-weight: 700;
   text-align: center;
-  margin-bottom: 24px;
+  margin-bottom: 32px;
 }
 
 .input {
@@ -30,12 +36,13 @@ body {
   background: transparent;
   border: 1px solid rgba(72, 79, 255, 0.5);
   border-radius: 50px;
-  padding: 10px 16px;
+  padding: 14px 22px;
   color: #ffffff;
-  font-size: 13px;
-  margin-bottom: 10px;
+  font-size: 16px;
+  margin-bottom: 14px;
   outline: none;
   transition: border-color 0.2s;
+  box-sizing: border-box;
 }
 
 .input::placeholder {
@@ -47,19 +54,24 @@ body {
   box-shadow: 0 0 10px rgba(72, 79, 255, 0.3);
 }
 
+.input.error {
+  border-color: red;
+}
+
 .btn {
   width: 100%;
   background: #484fff;
   color: #ffffff;
   border: none;
   border-radius: 50px;
-  padding: 12px;
-  font-size: 14px;
+  padding: 16px;
+  font-size: 16px;
   font-weight: 600;
   cursor: pointer;
-  margin-top: 8px;
+  margin-top: 10px;
   transition: all 0.2s;
   box-shadow: 0 0 20px rgba(72, 79, 255, 0.5);
+  box-sizing: border-box;
 }
 
 .btn:hover {
@@ -67,11 +79,27 @@ body {
   transform: translateY(-1px);
 }
 
+.btn:disabled {
+  background-color: gray;
+  box-shadow: none;
+  cursor: not-allowed;
+  transform: none;
+}
+
+.error-message {
+  color: red;
+  font-size: 14px;
+  text-align: center;
+  min-height: 20px;
+  margin-bottom: 8px;
+  overflow-wrap: break-word;
+}
+
 .footer-text {
   text-align: center;
-  font-size: 12px;
+  font-size: 14px;
   color: rgba(255, 255, 255, 0.4);
-  margin-top: 16px;
+  margin-top: 20px;
 }
 
 .footer-text a {
