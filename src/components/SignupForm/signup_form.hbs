@@ -1,10 +1,10 @@
 <form>
-    <h3>Вход</h3>
-    <input id="username_input" type="text" name="username" placeholder="Имя" autocomplete="off" autofocus>
+    <h3>Регистрация</h3>
+    <input id="username_input" type="text" name="username" placeholder="Имя" autocomplete="off">
     <input id="password_input" type="password" name="password" placeholder="Пароль" autocomplete="off">
-    {{#equal mode "registration"}}
-        <input id="password_input2" type="password" name="password2" placeholder="Пароль снова" autocomplete="off" required>
-        <input id="email_input" type="email" name="email" placeholder="Email" autocomplete="off" required>
+    {{#equal mode "signup"}}
+        <input id="confirm_password_input" type="password" name="confirm_password" placeholder="Пароль снова" autocomplete="off">
+        <input id="email_input" type="email" name="email" placeholder="Email" autocomplete="off">
     {{/equal}}
     <p id="error_message"></p>
     {{#equal mode "login"}}
