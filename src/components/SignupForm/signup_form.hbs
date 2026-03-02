@@ -9,9 +9,9 @@
     <p id="error_message"></p>
     {{#equal mode "login"}}
         <input type="submit" value="Войти">
-        <p>Ещё нет аккаунта? <a href="/">Зарегистрироваться</a></p>
+        <p>Ещё нет аккаунта? <a href="/signup">Зарегистрироваться</a></p>
     {{else}}
         <input type="submit" value="Зарегистрироваться">
-        <p>Уже есть аккаунт? <a href="/">Войти</a></p>
+        <p>Уже есть аккаунт? <a href="/login">Войти</a></p>
     {{/equal}}
 </form>

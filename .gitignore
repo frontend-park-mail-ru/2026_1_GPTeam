@@ -292,6 +292,7 @@ dist
 *.asp
 *.cer
 *.csr
+
 *.jsp
 *.php
 *.rss
