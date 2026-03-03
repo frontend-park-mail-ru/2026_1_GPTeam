@@ -1,0 +1,9 @@
+.page__header div {
+    border: #484FFF solid 2px;
+    border-radius: 10px;
+    width: 70vw;
+    margin: auto;
+    padding: 10px;
+    display: flex;
+    justify-content: space-around;
+}
