@@ -13,7 +13,7 @@ export class BalancePage extends BasePage {
     async render(root) {
         let data = await is_login();
         if (data["code"] !== 200) {
-            window.location.href = "/login";
+            window.location.href = "/login";  // ToDo: navigate
             return;
         }
 
@@ -30,7 +30,9 @@ export class BalancePage extends BasePage {
       </div>
     `;
 
-        const header = new Header({});
+        const header = new Header({
+            cur_page: "/balance",
+        });
         header.render(root.querySelector(".page__header"));
         this._components.push(header);
 

@@ -18,7 +18,9 @@ export class ProfilePage extends BasePage {
             return;
         }
 
-        const header = new Header({});
+        const header = new Header({
+            cur_page: "/profile",
+        });
         header.render(root.querySelector(".page__header"));
         this._components.push(header);
     }
