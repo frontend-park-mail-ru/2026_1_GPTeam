@@ -1,14 +1,14 @@
 import { client } from "./client.js"
 
-export const is_login = async function (url) {
-    let response = await client(url, {
-        method: "GET",
+export const is_login = async function () {
+    let response = await client("/is_login", {
+        method: "POST",
         credentials: "include",
     })
     let data = await response.json();
-    if (data["is_auth"] === false) {
+    if (data["code"] === 401) {
         response = await client("/auth/refresh", {
-            method: "GET",
+            method: "POST",
             credentials: "include",
         })
         data = await response.json();
