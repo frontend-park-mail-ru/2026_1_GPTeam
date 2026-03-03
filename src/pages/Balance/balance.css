@@ -1,0 +1,21 @@
+.col {
+    width: 60%;
+    display: flex;
+    flex-direction: column;
+}
+
+.balance_time {
+    color: grey;
+}
+
+.row {
+    margin-top: 30px;
+    display: flex;
+    flex-direction: row;
+}
+
+hr {
+    background-color: rgba(255, 255, 255, 0.07);
+    border: none;
+    height: 2px;
+}
