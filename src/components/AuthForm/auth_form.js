@@ -3,6 +3,7 @@ import template from "./auth_form.hbs?raw";
 import "./auth_form.css"
 import "../../utils/helpers.js"
 import {is_empty, validate_username, validate_password, are_password_equal} from "../../utils/validation.js";
+import {client} from "../../api/client.js";
 
 export class AuthForm extends BaseComponent {
     constructor(props) {
@@ -13,7 +14,17 @@ export class AuthForm extends BaseComponent {
     validate(fields, error_message) {
         const { username, password, confirm_password, email } = fields;
         let errors = false;
-        let errorText = "";
+
+        const mark_invalid = (input, error) => {
+            errors = true;
+            error_message.innerText = error;
+            input.classList.add("invalid");
+            input.classList.remove("valid");
+        };
+        const mark_valid = (input) => {
+            input.classList.add("valid");
+            input.classList.remove("invalid");
+        }
 
         username.style.borderColor = "#484FFF";
         password.style.borderColor = "#484FFF";
@@ -31,37 +42,32 @@ export class AuthForm extends BaseComponent {
 
         for (const [field, name] of requiredFields) {
             const [ok, error] = is_empty(field.value, name);
-            if (!ok) {
-                errors = true;
-                field.style.borderColor = "red";
-                if (!errorText) errorText = error;
-            }
+            if (!ok)
+                mark_invalid(field, error);
+            else
+                mark_valid(field);
         }
 
         let [ok, error] = validate_username(username.value);
-        if (!ok) {
-            errors = true;
-            username.style.borderColor = "red";
-            if (!errorText) errorText = error;
-        }
+        if (!ok)
+            mark_invalid(username, error);
+        else
+            mark_valid(username);
 
         [ok, error] = validate_password(password.value);
-        if (!ok) {
-            errors = true;
-            password.style.borderColor = "red";
-            if (!errorText) errorText = error;
-        }
+        if (!ok)
+            mark_invalid(password, error);
+        else
+            mark_valid(password);
 
         if (this.mode === "signup" && confirm_password) {
             [ok, error] = are_password_equal(password.value, confirm_password.value);
-            if (!ok) {
-                errors = true;
-                confirm_password.style.borderColor = "red";
-                if (!errorText) errorText = error;
-            }
+            if (!ok)
+                mark_invalid(confirm_password, error);
+            else
+                mark_valid(confirm_password);
         }
 
-        error_message.innerText = errorText;
         return errors;
     }
 
@@ -80,40 +86,53 @@ export class AuthForm extends BaseComponent {
 
         const isLogin = this.mode === "login";
         const url = isLogin
-            ? "http://localhost:8080/auth/login"
-            : "http://localhost:8080/signup";
+            ? "/auth/login"
+            : "/signup";
 
-        const fetchOptions = isLogin
-            ? { credentials: "include" }
-            : {
-                method: "POST",
-                credentials: "include",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify({
-                    username: username.value,
-                    password: password.value,
-                    email: email.value,
-                }),
-            };
+        const request_data = {
+            method: "POST",
+            credentials: "include",
+            headers: { "Content-Type": "application/json" },
+        };
+        if (isLogin)
+            request_data.body = JSON.stringify({
+                username: username.value,
+                password: password.value,
+            });
+        else
+            request_data.body = JSON.stringify({
+                username: username.value,
+                password: password.value,
+                email: email.value,
+            });
 
         submit_input.disabled = true;
-        const response = await fetch(url, fetchOptions);
+        const response = await client(url, request_data);
         const data = await response.json();
 
         if (data["code"] === 200) {
             window.location.href = "/";
-        } else if (data["code"] === 500) {
+        }
+        else if (data["code"] === 500) {
             error_message.innerText = data["message"];
-        } else {
+        }
+        else if (data["code"] === 405) {
+            console.log(data["message"]);
+        }
+        else {
+            const mark_invalid = (input) => {
+                input.classList.add("invalid");
+                input.classList.remove("valid");
+            }
+
             for (const [_, error] of Object.entries(data["errors"])) {
-                if (error["field"] === "username") username.style.borderColor = "red";
-                else if (error["field"] === "password") password.style.borderColor = "red";
-                else if (error["field"] === "confirm_password" && confirm_password) confirm_password.style.borderColor = "red";
-                else if (error["field"] === "email" && email) email.style.borderColor = "red";
+                if (error["field"] === "username") mark_invalid(username);
+                else if (error["field"] === "password") mark_invalid(password);
+                else if (error["field"] === "confirm_password" && confirm_password) mark_invalid(confirm_password);
+                else if (error["field"] === "email" && email) mark_invalid(email);
             }
             error_message.innerText = data["message"];
         }
-
         submit_input.disabled = false;
     }
 }
