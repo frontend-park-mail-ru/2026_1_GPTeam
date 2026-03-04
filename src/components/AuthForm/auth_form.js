@@ -108,7 +108,7 @@ export class AuthForm extends BaseComponent {
             const data = await response.json();
 
             if (data.code === 200) {
-                window.location.href = "/";
+                window.location.href = "/budget"; //экспериментально перенаправляем на бюджет, т.к. после логина/регистрации обычно хотят попасть в приложение
             } else {
                 if (data.errors && Array.isArray(data.errors)) {
                     data.errors.forEach(err => {
