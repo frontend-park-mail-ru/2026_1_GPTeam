@@ -1,83 +1,80 @@
-.card {
-  background: #000000;
-  border-radius: 20px;
-  padding: 54px 48px;
-  width: 510px;
-  box-shadow:
-    0 0 30px rgba(72, 79, 255, 0.7),
-    0 0 80px rgba(72, 79, 255, 0.3);
+.budget-form-card {
+    background: transparent;
+    border-radius: 20px;
+    padding: 0;
+    width: 510px;
 }
 
-.title {
-  color: #ffffff;
-  font-size: 28px;
-  font-weight: 700;
-  text-align: center;
-  margin-bottom: 32px;
+.budget-form-title {
+    color: #ffffff;
+    font-size: 28px;
+    font-weight: 700;
+    text-align: center;
+    margin-bottom: 32px;
 }
 
-.input {
-  width: 100%;
-  background: transparent;
-  border: 1px solid rgba(72, 79, 255, 0.5);
-  border-radius: 50px;
-  padding: 14px 22px;
-  color: #ffffff;
-  font-size: 16px;
-  margin-bottom: 14px;
-  outline: none;
-  transition: border-color 0.2s;
-  box-sizing: border-box;
+.budget-form-input {
+    width: 100%;
+    background: transparent;
+    border: 1px solid rgba(72, 79, 255, 0.5);
+    border-radius: 50px;
+    padding: 14px 22px;
+    color: #ffffff;
+    font-size: 16px;
+    margin-bottom: 14px;
+    outline: none;
+    transition: border-color 0.2s;
+    box-sizing: border-box;
 }
 
-.input::placeholder {
-  color: rgba(255, 255, 255, 0.3);
+.budget-form-input::placeholder {
+    color: rgba(255, 255, 255, 0.3);
 }
 
-.input:focus {
-  border-color: #484fff;
-  box-shadow: 0 0 10px rgba(72, 79, 255, 0.3);
+.budget-form-input:focus {
+    border-color: #484fff;
+    box-shadow: 0 0 10px rgba(72, 79, 255, 0.3);
 }
 
-.input[type="datetime-local"]::-webkit-calendar-picker-indicator {
-  filter: invert(1);
-  opacity: 0.5;
-  cursor: pointer;
+.budget-form-input[type="datetime-local"]::-webkit-calendar-picker-indicator {
+    filter: invert(1);
+    opacity: 0.5;
+    cursor: pointer;
 }
 
-.btn {
-  width: 100%;
-  background: #484fff;
-  color: #ffffff;
-  border: none;
-  border-radius: 50px;
-  padding: 16px;
-  font-size: 16px;
-  font-weight: 600;
-  cursor: pointer;
-  margin-top: 10px;
-  transition: all 0.2s;
-  box-shadow: 0 0 20px rgba(72, 79, 255, 0.5);
-  box-sizing: border-box;
+.budget-form-btn {
+    width: 100%;
+    background: #484fff;
+    color: #ffffff;
+    border: none;
+    border-radius: 50px;
+    padding: 16px;
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+    margin-top: 10px;
+    transition: all 0.2s;
+    box-shadow: 0 0 20px rgba(72, 79, 255, 0.5);
+    box-sizing: border-box;
 }
 
-.btn:hover {
-  box-shadow: 0 0 36px rgba(72, 79, 255, 0.7);
-  transform: translateY(-1px);
+.budget-form-btn:hover {
+    box-shadow: 0 0 36px rgba(72, 79, 255, 0.7);
+    transform: translateY(-1px);
 }
 
-.btn:disabled {
-  background-color: gray;
-  box-shadow: none;
-  cursor: not-allowed;
-  transform: none;
+.budget-form-btn:disabled {
+    background-color: gray;
+    box-shadow: none;
+    cursor: not-allowed;
+    transform: none;
 }
 
-.error-message {
-  color: red;
-  font-size: 14px;
-  text-align: center;
-  min-height: 20px;
-  margin-bottom: 8px;
-  overflow-wrap: break-word;
+.budget-form-error {
+    color: red;
+    font-size: 14px;
+    text-align: center;
+    min-height: 20px;
+    margin-bottom: 8px;
+    overflow-wrap: break-word;
 }

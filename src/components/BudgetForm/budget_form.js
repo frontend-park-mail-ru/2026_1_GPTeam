@@ -1,6 +1,7 @@
 import { BaseComponent } from "../base_component.js";
 import template from "./budget_form.hbs?raw";
 import "./budget_form.css";
+import { router } from "../../router/router_instance.js";
 
 export class BudgetForm extends BaseComponent {
   constructor(props) {
@@ -57,7 +58,7 @@ export class BudgetForm extends BaseComponent {
       if (!/^[a-zA-Z]+$/.test(currency.value)) {
         errors = true;
         currency.style.borderColor = "red";
-        if (!errorText) errorText = "Валюта должна содержать только буквы";
+        if (!errorText) errorText = "Валюта должна содержать только латинские буквы";
       }
     }
 
@@ -127,7 +128,7 @@ export class BudgetForm extends BaseComponent {
       });
       const data = await response.json();
       if (data.code === 200) {
-        window.location.href = "/budget";
+        router.refresh();
       } else {
         if (data.errors && Array.isArray(data.errors)) {
           data.errors.forEach(err => {

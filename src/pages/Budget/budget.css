@@ -144,3 +144,21 @@
   display: flex;
   align-items: baseline;
 }
+
+.budget-create-btn {
+    background: #484fff;
+    color: #ffffff;
+    border: none;
+    border-radius: 50px;
+    padding: 14px 32px;
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s;
+    box-shadow: 0 0 20px rgba(72, 79, 255, 0.5);
+}
+
+.budget-create-btn:hover {
+    box-shadow: 0 0 36px rgba(72, 79, 255, 0.7);
+    transform: translateY(-1px);
+}

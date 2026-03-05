@@ -10,14 +10,15 @@ export class Modal extends BaseComponent {
   }
 
   _afterRender() {
-    const confirmBtn = this._element.querySelector(".modal-btn-confirm");
-    const cancelBtn = this._element.querySelector(".modal-btn-cancel");
-    const overlay = this._element.querySelector(".modal-overlay");
+      const confirmBtn = this._element.querySelector(".modal-btn-confirm");
+      const cancelBtn = this._element.querySelector(".modal-btn-cancel");
 
-    this._on(confirmBtn, "click", () => this._onConfirm?.());
-    this._on(cancelBtn, "click", () => this._onCancel?.());
-    this._on(overlay, "click", (e) => {
-      if (e.target === overlay) this._onCancel?.();
-    });
+      this._on(confirmBtn, "click", () => this._onConfirm?.());
+      this._on(cancelBtn, "click", () => this._onCancel?.());
+      if (this._element) {
+          this._on(this._element, "click", (e) => {
+              if (e.target === this._element) this._onCancel?.();
+          });
+      }
   }
 }
