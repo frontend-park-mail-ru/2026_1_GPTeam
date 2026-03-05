@@ -124,3 +124,23 @@
   text-align: center;
   padding: 40px;
 }
+
+.budget-card__currency {
+  display: inline-block;
+  color: rgba(255, 255, 255, 0.6);
+  font-size: 18px;
+  font-weight: 600;
+  margin-right: 4px;
+  vertical-align: middle;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.budget-card__amount {
+  color: #ffffff;
+  font-size: 36px;
+  font-weight: 700;
+  margin: 6px 0;
+  display: flex;
+  align-items: baseline;
+}

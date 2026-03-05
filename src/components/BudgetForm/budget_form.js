@@ -35,19 +35,38 @@ export class BudgetForm extends BaseComponent {
     let errors = false;
     let errorText = "";
 
-    [title, target, currency].filter(f => f).forEach(f => f.style.borderColor = "rgba(72, 79, 255, 0.5)");
+    [title, target, currency, start_at, end_at].filter(f => f).forEach(f => f.style.borderColor = "rgba(72, 79, 255, 0.5)");
 
     const requiredFields = [
       [title, "Название"],
       [target, "Планируемый бюджет"],
       [currency, "Валюта"],
+      [start_at, "Дата начала"],
+      [end_at, "Дата окончания"],
     ];
 
     for (const [field, name] of requiredFields) {
-      if (!field.value) {
+      if (!field || !field.value) {
         errors = true;
-        field.style.borderColor = "red";
+        if (field) field.style.borderColor = "red";
         if (!errorText) errorText = `${name} обязательно для заполнения`;
+      }
+    }
+
+    if (currency && currency.value) {
+      if (!/^[a-zA-Z]+$/.test(currency.value)) {
+        errors = true;
+        currency.style.borderColor = "red";
+        if (!errorText) errorText = "Валюта должна содержать только буквы";
+      }
+    }
+
+    if (target && target.value) {
+      const targetNum = parseInt(target.value, 10);
+      if (isNaN(targetNum) || targetNum <= 0) {
+        errors = true;
+        target.style.borderColor = "red";
+        if (!errorText) errorText = "Бюджет должен быть положительным числом";
       }
     }
 
@@ -92,7 +111,7 @@ export class BudgetForm extends BaseComponent {
     const payload = {
       title: title.value,
       description: description.value,
-      target: parseInt(target.value),
+      target: parseInt(target.value, 10),
       currency: currency.value,
       start_at: start_at.value ? new Date(start_at.value).toISOString() : null,
       end_at: end_at.value ? new Date(end_at.value).toISOString() : null,

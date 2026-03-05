@@ -71,6 +71,8 @@ export class BudgetPage extends BasePage {
       });
     };
 
+    const currency = (budget.currency || "RUB").toUpperCase();
+
     const card = document.createElement("div");
     card.className = "budget-card";
     card.innerHTML = `
@@ -86,8 +88,12 @@ export class BudgetPage extends BasePage {
         </div>
       </div>
       <div class="budget-card__header">
-        <span class="budget-card__amount">₽${budget.actual.toLocaleString("ru-RU")}</span>
-        <span class="budget-card__amount">₽${budget.target.toLocaleString("ru-RU")}</span>
+        <span class="budget-card__amount">
+          <span class="budget-card__currency">${currency} </span>${budget.actual.toLocaleString("ru-RU")}
+        </span>
+        <span class="budget-card__amount">
+          <span class="budget-card__currency">${currency} </span>${budget.target.toLocaleString("ru-RU")}
+        </span>
       </div>
       <div class="budget-card__header">
         <p class="budget-card__desc">${budget.title || "—"}</p>
