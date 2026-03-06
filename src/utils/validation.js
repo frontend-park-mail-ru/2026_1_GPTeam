@@ -40,7 +40,7 @@ export function validate_password(password) {
 }
 
 export function are_password_equal(password, confirm_password) {
-    if (password != confirm_password)
+    if (password !== confirm_password)
         return [false, "Пароли не совпадают"];
     return [true, ""];
 }

@@ -1,6 +1,5 @@
 import {BasePage} from "../base_page.js";
 import template from "./balance.hbs?raw";
-import {is_login} from "../../api/auth.js";
 import {Header} from "../../components/Header/header.js";
 import {get_balance} from "../../api/balance.js";
 import {TotalBalance} from "../../components/TotalBalance/total_balace.js";
@@ -8,18 +7,17 @@ import "./balance.css";
 import Handlebars from "handlebars";
 import {IncomeBalance} from "../../components/IncomeBalance/income_balance.js";
 import {ExpensesBalance} from "../../components/ExpensesBalance/expenses_balance.js";
-import {router} from "../../main.js";
+import {router} from "../../router/router_instance.js";
 
 
 export class BalancePage extends BasePage {
     async render(root) {
-        let data = await is_login();
-        if (data["code"] !== 200) {
+        let balance = await get_balance();
+
+        if (balance["code"] === 401) {
             router.navigate("/login");
             return;
         }
-
-        let balance = await get_balance();
 
         let compiledTemplate = Handlebars.compile(template)
         let html = compiledTemplate({

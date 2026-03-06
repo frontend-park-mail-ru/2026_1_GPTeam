@@ -22,10 +22,6 @@ export class AuthForm extends BaseComponent {
             input.classList.add("invalid");
             input.classList.remove("valid");
         };
-        const mark_valid = (input) => {
-            input.classList.add("valid");
-            input.classList.remove("invalid");
-        }
 
         const allFields = [username, password, confirm_password, email].filter(f => f);
         allFields.forEach(f => f.style.borderColor = "#484FFF");
@@ -107,9 +103,9 @@ export class AuthForm extends BaseComponent {
             const data = await response.json();
 
             if (data.code === 200)
-                router.navigate("/budget");
+                router.navigate("/balance");
             else if (data.code === 405)
-                console.log(data["message"]);
+                console.error(data["message"]);
             else {
                 const mark_invalid = (input) => {
                     input.classList.add("invalid");
