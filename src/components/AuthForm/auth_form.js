@@ -12,29 +12,39 @@ export class AuthForm extends BaseComponent {
         this.mode = props.mode;
     }
 
-    show_password(e) {
-        let input;
-        let element = e.target;
-        if (element.classList.contains("eye_btn"))
-            input = document.getElementById("password_input");
-        else
-            input = document.getElementById("confirm_password_input");
+    _addEventListeners() {
+        const form = this.getElement();
+        const eye_btn = form.querySelector(".eye_btn");
+        const confirm_eye_btn = form.querySelector(".confirm_eye_btn");
+        const help_abc = form.querySelector(".help_abc");
+        const help_abc_text = form.querySelector("#help_abc_text");
+        const password = form.querySelector("#password_input");
+        const confirm_password = form.querySelector("#confirm_password_input");
 
-        let is_plain_text = input.type === "text";
-        if (is_plain_text)
-            input.type = "password";
-        else
-            input.type = "text";
-    }
+        if (eye_btn) {
+            this._on(eye_btn, "click", () => {
+                const isVisible = password.type === "text";
+                password.type = isVisible ? "password" : "text";
+                eye_btn.src = isVisible ? "/img/closed_eye.png" : "/img/opened_eye.png";
+            });
+        }
 
-    show_help_abc() {
-        let element = document.getElementById("help_abc_text");
-        element.style.visibility = "visible";
-    }
+        if (confirm_eye_btn && confirm_password) {
+            this._on(confirm_eye_btn, "click", () => {
+                const isVisible = confirm_password.type === "text";
+                confirm_password.type = isVisible ? "password" : "text";
+                confirm_eye_btn.src = isVisible ? "/img/closed_eye.png" : "/img/opened_eye.png";
+            });
+        }
 
-    hide_help_abc() {
-        let element = document.getElementById("help_abc_text");
-        element.style.visibility = "hidden";
+        if (help_abc && help_abc_text) {
+            this._on(help_abc, "mouseover", () => {
+                help_abc_text.style.visibility = "visible";
+            });
+            this._on(help_abc, "mouseout", () => {
+                help_abc_text.style.visibility = "hidden";
+            });
+        }
     }
 
     validate(fields, error_message) {
@@ -98,9 +108,7 @@ export class AuthForm extends BaseComponent {
         if (hasErrors) return;
 
         const isLogin = this.mode === "login";
-        const url = isLogin
-            ? "/auth/login"
-            : "/signup";
+        const url = isLogin ? "/auth/login" : "/signup";
 
         const payload = {
             username: username.value,
@@ -127,16 +135,16 @@ export class AuthForm extends BaseComponent {
             const response = await client(url, fetchOptions);
             const data = await response.json();
 
-            if (data.code === 200)
+            if (data.code === 200) {
                 router.navigate("/balance");
-            else if (data.code === 405)
+            } else if (data.code === 405) {
                 console.error(data["message"]);
-            else {
+            } else {
                 const mark_invalid = (input) => {
                     input.classList.add("invalid");
                     input.classList.remove("valid");
-                }
-                
+                };
+
                 if (data.errors && Array.isArray(data.errors)) {
                     data.errors.forEach(err => {
                         if (err.field === "username") mark_invalid(username);
