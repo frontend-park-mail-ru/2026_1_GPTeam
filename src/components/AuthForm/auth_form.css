@@ -15,7 +15,7 @@
     margin-bottom: 32px;
 }
 
-label {
+.card label {
     position: relative;
     height: 50px;
     display: block;
@@ -38,10 +38,6 @@ label {
 
 #password_input, #confirm_password_input {
     padding: 15px 40px 15px 20px;
-}
-
-input::-ms-reveal, input::-ms-clear {
-    display: none;
 }
 
 .eye_btn, .confirm_eye_btn, .help_abc {
@@ -127,6 +123,10 @@ input:-webkit-autofill {
     -webkit-box-shadow: 0 0 0 30px #191919 inset !important;
     box-shadow: 0 0 0 30px #191919 inset !important;
     -webkit-text-fill-color: #ffffff !important;
+}
+
+input::-ms-reveal, input::-ms-clear {
+    display: none;
 }
 
 .valid {

@@ -20,8 +20,8 @@ export class AuthForm extends BaseComponent {
         else
             input = document.getElementById("confirm_password_input");
 
-        let is_plaint_text = input.type === "text";
-        if (is_plaint_text)
+        let is_plain_text = input.type === "text";
+        if (is_plain_text)
             input.type = "password";
         else
             input.type = "text";
