@@ -27,6 +27,16 @@ export class AuthForm extends BaseComponent {
             input.type = "text";
     }
 
+    show_help_abc() {
+        let element = document.getElementById("help_abc_text");
+        element.style.visibility = "visible";
+    }
+
+    hide_help_abc() {
+        let element = document.getElementById("help_abc_text");
+        element.style.visibility = "hidden";
+    }
+
     validate(fields, error_message) {
         const { username, password, confirm_password, email } = fields;
         let errors = false;

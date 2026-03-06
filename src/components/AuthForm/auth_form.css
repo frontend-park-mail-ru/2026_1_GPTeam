@@ -44,7 +44,7 @@ input::-ms-reveal, input::-ms-clear {
     display: none;
 }
 
-.eye_btn, .confirm_eye_btn {
+.eye_btn, .confirm_eye_btn, .help_abc {
     text-align: center;
     line-height: 50px;
     width: 30px;
@@ -52,8 +52,14 @@ input::-ms-reveal, input::-ms-clear {
     position: absolute;
     right: 10px;
     top: 10px;
+    cursor: pointer;
 }
 
+#help_abc_text {
+    text-align: center;
+    margin-bottom: 5px;
+    visibility: hidden;
+}
 
 .input::placeholder {
     color: rgba(255, 255, 255, 0.3);

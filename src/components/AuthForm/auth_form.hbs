@@ -1,9 +1,12 @@
 <div class="card">
     <h3 class="title">{{#equal mode "login"}}Вход{{else}}Регистрация{{/equal}}</h3>
 
+    <p id="help_abc_text">Доступны символы латинского алфавита и цифры</p>
+
     <form>
         <label>
             <input class="input" id="username_input" type="text" name="username" placeholder="Логин" autocomplete="off">
+            <img class="help_abc" src="img/help.png" alt="?">
         </label>
         <label>
             <input class="input" id="password_input" type="password" name="password" placeholder="Пароль" autocomplete="off">

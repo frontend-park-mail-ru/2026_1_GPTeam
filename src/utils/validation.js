@@ -1,9 +1,9 @@
 export function validate_username(username) {
     if (username.length < 3)
-        return [false, "Имя должно быть минимум 3 символа"];
-    let ok = /^[a-zA-Zа-яА-Я0-9]+$/.test(username);
+        return [false, "Логин должен быть минимум 3 символа"];
+    let ok = /^[a-zA-Z0-9]+$/.test(username);
     if (!ok)
-        return [false, "Имя должно содержать только буквы или цифры"];
+        return [false, "Логин должен содержать только буквы латинского алфавита или цифры"];
     return [true, ""];
 }
 
