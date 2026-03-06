@@ -43,28 +43,20 @@ export class AuthForm extends BaseComponent {
             const [ok, error] = is_empty(field.value, name);
             if (!ok)
                 mark_invalid(field, error);
-            else
-                mark_valid(field);
         }
 
         let [ok, error] = validate_username(username.value);
         if (!ok)
             mark_invalid(username, error);
-        else
-            mark_valid(username);
 
         [ok, error] = validate_password(password.value);
         if (!ok)
             mark_invalid(password, error);
-        else
-            mark_valid(password);
 
         if (this.mode === "signup" && confirm_password) {
             [ok, error] = are_password_equal(password.value, confirm_password.value);
             if (!ok)
                 mark_invalid(confirm_password, error);
-            else
-                mark_valid(confirm_password);
         }
 
         return errors;
@@ -114,9 +106,11 @@ export class AuthForm extends BaseComponent {
             const response = await client(url, fetchOptions);
             const data = await response.json();
 
-            if (data.code === 200) {
+            if (data.code === 200)
                 router.navigate("/");
-            } else {
+            else if (data.code === 405)
+                console.log(data["message"]);
+            else {
                 const mark_invalid = (input) => {
                     input.classList.add("invalid");
                     input.classList.remove("valid");
