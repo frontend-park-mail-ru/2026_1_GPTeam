@@ -1,38 +1,43 @@
-<div class="card">
-    <h3 class="title">{{#equal mode "login"}}Вход{{else}}Регистрация{{/equal}}</h3>
+<div class="auth-wrapper">
+    <div class="auth-logo">
+        <span class="auth-logo__text">MoneyFirst</span>
+    </div>
+    <div class="card">
+        <h3 class="title">{{#equal mode "login"}}Вход{{else}}Регистрация{{/equal}}</h3>
 
-    <p id="help_abc_text">Доступны символы латинского алфавита и цифры</p>
+        <p id="help_abc_text">Доступны символы латинского алфавита и цифры</p>
 
-    <form>
-        <label>
-            <input class="input" id="username_input" type="text" name="username" placeholder="Логин" autocomplete="off">
-            <img class="help_abc" src="/img/help.png" alt="?">
-        </label>
-        <label>
-            <input class="input" id="password_input" type="password" name="password" placeholder="Пароль" autocomplete="off">
-            <img class="eye_btn" src="/img/closed_eye.png" alt="eye">
-        </label>
-
-        {{#equal mode "signup"}}
+        <form>
             <label>
-                <input class="input" id="confirm_password_input" type="password" name="confirm_password" placeholder="Пароль снова" autocomplete="off">
-                <img class="confirm_eye_btn" src="/img/closed_eye.png" alt="eye">
+                <input class="input" id="username_input" type="text" name="username" placeholder="Логин" autocomplete="off">
+                <img class="help_abc" src="/img/help.png" alt="?">
             </label>
             <label>
-                <input class="input" id="email_input" type="email" name="email" placeholder="Email" autocomplete="off">
+                <input class="input" id="password_input" type="password" name="password" placeholder="Пароль" autocomplete="off">
+                <img class="eye_btn" src="/img/closed_eye.png" alt="eye">
             </label>
-        {{/equal}}
 
-        <p class="error-message" id="error_message"></p>
+            {{#equal mode "signup"}}
+                <label>
+                    <input class="input" id="confirm_password_input" type="password" name="confirm_password" placeholder="Пароль снова" autocomplete="off">
+                    <img class="confirm_eye_btn" src="/img/closed_eye.png" alt="eye">
+                </label>
+                <label>
+                    <input class="input" id="email_input" type="email" name="email" placeholder="Email" autocomplete="off">
+                </label>
+            {{/equal}}
 
-        <input class="btn" type="submit" value="{{#equal mode "login"}}Войти{{else}}Зарегистрироваться{{/equal}}">
-    </form>
+            <p class="error-message" id="error_message"></p>
 
-    <p class="footer-text">
-        {{#equal mode "login"}}
-            Ещё нет аккаунта? <a href="/signup" data-link>Зарегистрироваться</a>
-        {{else}}
-            Уже есть аккаунт? <a href="/login" data-link>Войти</a>
-        {{/equal}}
-    </p>
+            <input class="btn" type="submit" value="{{#equal mode "login"}}Войти{{else}}Зарегистрироваться{{/equal}}">
+        </form>
+
+        <p class="footer-text">
+            {{#equal mode "login"}}
+                Ещё нет аккаунта? <a href="/signup" data-link>Зарегистрироваться</a>
+            {{else}}
+                Уже есть аккаунт? <a href="/login" data-link>Войти</a>
+            {{/equal}}
+        </p>
+    </div>
 </div>
