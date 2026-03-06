@@ -1,8 +1,9 @@
 import {BaseComponent} from "../base_component.js";
 import template from "./auth_form.hbs?raw";
-import "./auth_form.css"
-import "../../utils/helpers.js"
-import {is_empty, validate_username, validate_password, are_password_equal} from "../../utils/validation.js";
+import "./auth_form.css";
+import "../../utils/helpers.js" ;
+import {is_empty, validate_username, validate_password, are_password_equal} from "../../utils/validation.js"
+import { router } from "../../router/router_instance.js";
 
 export class AuthForm extends BaseComponent {
     constructor(props) {
@@ -108,7 +109,7 @@ export class AuthForm extends BaseComponent {
             const data = await response.json();
 
             if (data.code === 200) {
-                window.location.href = "/";
+                router.navigate("/budget"); //экспериментально перенаправляем на бюджет, т.к. после логина/регистрации обычно хотят попасть в приложение
             } else {
                 if (data.errors && Array.isArray(data.errors)) {
                     data.errors.forEach(err => {

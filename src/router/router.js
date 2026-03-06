@@ -19,6 +19,10 @@ export class Router {
         this._handleRoute();
     }
 
+    refresh() {
+        this._handleRoute();
+    }
+    
     _handleLinkClick(e) {
         const link = e.target.closest("[data-link]");
         if (!link) return;
