@@ -4,7 +4,7 @@ import "./auth_form.css"
 import "../../utils/helpers.js"
 import {is_empty, validate_username, validate_password, are_password_equal} from "../../utils/validation.js";
 import {client} from "../../api/client.js";
-import {router} from "../../main.js";
+import { router } from "../../router/router_instance.js";
 
 export class AuthForm extends BaseComponent {
     constructor(props) {
@@ -107,7 +107,7 @@ export class AuthForm extends BaseComponent {
             const data = await response.json();
 
             if (data.code === 200)
-                router.navigate("/");
+                router.navigate("/budget");
             else if (data.code === 405)
                 console.log(data["message"]);
             else {
