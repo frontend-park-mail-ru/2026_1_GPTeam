@@ -1,8 +1,9 @@
 import {BaseComponent} from "../base_component.js";
 import template from "./auth_form.hbs?raw";
-import "./auth_form.css";
-import "../../utils/helpers.js" ;
-import {is_empty, validate_username, validate_password, are_password_equal} from "../../utils/validation.js"
+import "./auth_form.css"
+import "../../utils/helpers.js"
+import {is_empty, validate_username, validate_password, are_password_equal} from "../../utils/validation.js";
+import {client} from "../../api/client.js";
 import { router } from "../../router/router_instance.js";
 
 export class AuthForm extends BaseComponent {
@@ -14,7 +15,17 @@ export class AuthForm extends BaseComponent {
     validate(fields, error_message) {
         const { username, password, confirm_password, email } = fields;
         let errors = false;
-        let errorText = "";
+
+        const mark_invalid = (input, error) => {
+            errors = true;
+            error_message.innerText = error;
+            input.classList.add("invalid");
+            input.classList.remove("valid");
+        };
+        const mark_valid = (input) => {
+            input.classList.add("valid");
+            input.classList.remove("invalid");
+        }
 
         const allFields = [username, password, confirm_password, email].filter(f => f);
         allFields.forEach(f => f.style.borderColor = "#484FFF");
@@ -30,37 +41,24 @@ export class AuthForm extends BaseComponent {
 
         for (const [field, name] of requiredFields) {
             const [ok, error] = is_empty(field.value, name);
-            if (!ok) {
-                errors = true;
-                field.style.borderColor = "red";
-                if (!errorText) errorText = error;
-            }
+            if (!ok)
+                mark_invalid(field, error);
         }
 
         let [ok, error] = validate_username(username.value);
-        if (!ok) {
-            errors = true;
-            username.style.borderColor = "red";
-            if (!errorText) errorText = error;
-        }
+        if (!ok)
+            mark_invalid(username, error);
 
         [ok, error] = validate_password(password.value);
-        if (!ok) {
-            errors = true;
-            password.style.borderColor = "red";
-            if (!errorText) errorText = error;
-        }
+        if (!ok)
+            mark_invalid(password, error);
 
         if (this.mode === "signup" && confirm_password) {
             [ok, error] = are_password_equal(password.value, confirm_password.value);
-            if (!ok) {
-                errors = true;
-                confirm_password.style.borderColor = "red";
-                if (!errorText) errorText = error;
-            }
+            if (!ok)
+                mark_invalid(confirm_password, error);
         }
 
-        error_message.innerText = errorText;
         return errors;
     }
 
@@ -80,8 +78,8 @@ export class AuthForm extends BaseComponent {
 
         const isLogin = this.mode === "login";
         const url = isLogin
-            ? "http://localhost:8080/auth/login"
-            : "http://localhost:8080/signup";
+            ? "/auth/login"
+            : "/signup";
 
         const payload = {
             username: username.value,
@@ -105,18 +103,25 @@ export class AuthForm extends BaseComponent {
         submit_input.disabled = true;
 
         try {
-            const response = await fetch(url, fetchOptions);
+            const response = await client(url, fetchOptions);
             const data = await response.json();
 
-            if (data.code === 200) {
-                router.navigate("/budget"); //экспериментально перенаправляем на бюджет, т.к. после логина/регистрации обычно хотят попасть в приложение
-            } else {
+            if (data.code === 200)
+                router.navigate("/budget");
+            else if (data.code === 405)
+                console.log(data["message"]);
+            else {
+                const mark_invalid = (input) => {
+                    input.classList.add("invalid");
+                    input.classList.remove("valid");
+                }
+                
                 if (data.errors && Array.isArray(data.errors)) {
                     data.errors.forEach(err => {
-                        if (err.field === "username") username.style.borderColor = "red";
-                        if (err.field === "password") password.style.borderColor = "red";
-                        if (err.field === "confirm_password") confirm_password.style.borderColor = "red";
-                        if (err.field === "email") email.style.borderColor = "red";
+                        if (err.field === "username") mark_invalid(username);
+                        if (err.field === "password") mark_invalid(password);
+                        if (err.field === "confirm_password") mark_invalid(confirm_password);
+                        if (err.field === "email") mark_invalid(email);
                     });
                 }
                 error_message.innerText = data.message || "Произошла ошибка";

@@ -1,18 +1,3 @@
-body {
-  background: #191919;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  min-height: 100vh;
-}
-
-.page__content {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  min-height: 100vh;
-}
-
 .card {
   background: #000000;
   border-radius: 20px;
@@ -105,4 +90,18 @@ body {
 .footer-text a {
   color: #484fff;
   text-decoration: none;
+}
+
+input:-webkit-autofill {
+  -webkit-box-shadow: 0 0 0 30px #191919 inset !important;
+  box-shadow: 0 0 0 30px #191919 inset !important;
+  -webkit-text-fill-color: #ffffff !important;
+}
+
+.valid {
+  border: #86E58A solid 1px !important;
+}
+
+.invalid {
+  border: #FF2222 solid 1px !important;
 }

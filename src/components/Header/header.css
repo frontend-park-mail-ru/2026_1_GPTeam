@@ -1,0 +1,22 @@
+.page__header div {
+    border: #484FFF solid 2px;
+    border-radius: 15px;
+    width: 70vw;
+    margin: auto;
+    padding: 15px 0;
+    display: flex;
+    justify-content: space-around;
+    background-color: black;
+}
+
+.header_link {
+    text-decoration: none;
+    color: white;
+    padding: 10px;
+}
+
+.active_header_link {
+    color: #484FFF;
+    background-color: #1C1A1A;
+    border-radius: 30px;
+}

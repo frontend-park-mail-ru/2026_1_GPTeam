@@ -16,16 +16,6 @@
   --border-glow: rgba(72,79,255,0.3);
 }
 
-html { scroll-behavior: smooth; }
-
-body {
-  font-family: 'Manrope', sans-serif;
-  background: var(--bg);
-  color: var(--white);
-  overflow-x: hidden;
-  line-height: 1.6;
-}
-
 .orb {
   position: absolute;
   border-radius: 50%;
@@ -200,6 +190,7 @@ h1 em {
   justify-content: center;
   margin-top: 44px;
   animation: fadeUp 0.7s 0.3s ease both;
+  width: 100%;
 }
 
 .cta-primary {
@@ -208,7 +199,7 @@ h1 em {
   color: white;
   border: none;
   border-radius: 50px;
-  font-size: 15px;
+  font-size: 26px;
   font-weight: 700;
   cursor: pointer;
   font-family: 'Manrope', sans-serif;
