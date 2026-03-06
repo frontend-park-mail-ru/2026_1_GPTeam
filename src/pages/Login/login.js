@@ -12,6 +12,7 @@ export class LoginPage extends BasePage {
         const form = new AuthForm({ mode: "login" });
         form.render(root.querySelector(".page__content"));
         form._on(form.getElement(), "submit", async (e) => form.submit(e));
+        form._on(form.getElement().querySelector(".eye_btn"), "click", async (e) => form.show_password(e));
         this._components.push(form);
     }
 }

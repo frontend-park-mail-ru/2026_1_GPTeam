@@ -1,25 +1,35 @@
 <div class="card">
-  <h3 class="title">{{#equal mode "login"}}Вход{{else}}Регистрация{{/equal}}</h3>
+    <h3 class="title">{{#equal mode "login"}}Вход{{else}}Регистрация{{/equal}}</h3>
 
-  <form>
-    <input class="input" id="username_input" type="text" name="username" placeholder="Имя" autocomplete="off">
-    <input class="input" id="password_input" type="password" name="password" placeholder="Пароль" autocomplete="off">
+    <form>
+        <label>
+            <input class="input" id="username_input" type="text" name="username" placeholder="Логин" autocomplete="off">
+        </label>
+        <label>
+            <input class="input" id="password_input" type="password" name="password" placeholder="Пароль" autocomplete="off">
+            <img class="eye_btn" src="/img/eye.png" alt="eye">
+        </label>
 
-    {{#equal mode "signup"}}
-      <input class="input" id="confirm_password_input" type="password" name="confirm_password" placeholder="Пароль снова" autocomplete="off">
-      <input class="input" id="email_input" type="email" name="email" placeholder="Email" autocomplete="off">
-    {{/equal}}
+        {{#equal mode "signup"}}
+            <label>
+                <input class="input" id="confirm_password_input" type="password" name="confirm_password" placeholder="Пароль снова" autocomplete="off">
+                <img class="confirm_eye_btn" src="/img/eye.png" alt="eye">
+            </label>
+            <label>
+                <input class="input" id="email_input" type="email" name="email" placeholder="Email" autocomplete="off">
+            </label>
+        {{/equal}}
 
-    <p class="error-message" id="error_message"></p>
+        <p class="error-message" id="error_message"></p>
 
-    <input class="btn" type="submit" value="{{#equal mode "login"}}Войти{{else}}Зарегистрироваться{{/equal}}">
-  </form>
+        <input class="btn" type="submit" value="{{#equal mode "login"}}Войти{{else}}Зарегистрироваться{{/equal}}">
+    </form>
 
-  <p class="footer-text">
-    {{#equal mode "login"}}
-      Ещё нет аккаунта? <a href="/signup" data-link>Зарегистрироваться</a>
-    {{else}}
-      Уже есть аккаунт? <a href="/login" data-link>Войти</a>
-    {{/equal}}
-  </p>
+    <p class="footer-text">
+        {{#equal mode "login"}}
+            Ещё нет аккаунта? <a href="/signup" data-link>Зарегистрироваться</a>
+        {{else}}
+            Уже есть аккаунт? <a href="/login" data-link>Войти</a>
+        {{/equal}}
+    </p>
 </div>

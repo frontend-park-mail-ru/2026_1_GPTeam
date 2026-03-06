@@ -12,6 +12,8 @@ export class SignupPage extends BasePage {
         const form = new AuthForm({ mode: "signup" });
         form.render(root.querySelector(".page__content"));
         form._on(form.getElement(), "submit", async (e) => form.submit(e));
+        form._on(form.getElement().querySelector(".eye_btn"), "click", async (e) => form.show_password(e));
+        form._on(form.getElement().querySelector(".confirm_eye_btn"), "click", async (e) => form.show_password(e));
         this._components.push(form);
     }
 }
