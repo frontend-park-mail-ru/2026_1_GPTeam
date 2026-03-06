@@ -2,6 +2,8 @@ import {BasePage} from "../base_page.js";
 import {Header} from "../../components/Header/header.js";
 import {is_login} from "../../api/auth.js";
 import template from "./profile.hbs?raw";
+import {router} from "../../main.js";
+
 
 export class ProfilePage extends BasePage {
     async render(root) {
@@ -14,7 +16,7 @@ export class ProfilePage extends BasePage {
 
         let data = await is_login();
         if (data["code"] !== 200) {
-            window.location.href = "/login";
+            router.navigate("/login");
             return;
         }
 

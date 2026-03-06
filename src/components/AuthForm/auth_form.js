@@ -4,6 +4,7 @@ import "./auth_form.css"
 import "../../utils/helpers.js"
 import {is_empty, validate_username, validate_password, are_password_equal} from "../../utils/validation.js";
 import {client} from "../../api/client.js";
+import {router} from "../../main.js";
 
 export class AuthForm extends BaseComponent {
     constructor(props) {
@@ -110,10 +111,11 @@ export class AuthForm extends BaseComponent {
         submit_input.disabled = true;
 
         try {
-            const data = await client(url, fetchOptions);
+            const response = await client(url, fetchOptions);
+            const data = await response.json();
 
             if (data.code === 200) {
-                window.location.href = "/";
+                router.navigate("/");
             } else {
                 const mark_invalid = (input) => {
                     input.classList.add("invalid");

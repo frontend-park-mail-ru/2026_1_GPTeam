@@ -8,12 +8,14 @@ import "./balance.css";
 import Handlebars from "handlebars";
 import {IncomeBalance} from "../../components/IncomeBalance/income_balance.js";
 import {ExpensesBalance} from "../../components/ExpensesBalance/expenses_balance.js";
+import {router} from "../../main.js";
+
 
 export class BalancePage extends BasePage {
     async render(root) {
         let data = await is_login();
         if (data["code"] !== 200) {
-            window.location.href = "/login";  // ToDo: navigate
+            router.navigate("/login");
             return;
         }
 
