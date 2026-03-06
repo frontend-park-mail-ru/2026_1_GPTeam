@@ -5,11 +5,13 @@ import { Modal } from "../../components/Modal/modal.js";
 import { ModalForm } from "../../components/ModalForm/modal_form.js";
 import "./budget.css";
 import { router } from "../../router/router_instance.js";
+import {Header} from "../../components/Header/header.js";
 
 export class BudgetPage extends BasePage {
     async render(root) {
         root.innerHTML = `
             <div class="page">
+                <header class="page__header"></header>
                 <main class="page__content">
                     <div class="budget-page">
                         <div class="budget-list" id="budget_list"></div>
@@ -18,6 +20,12 @@ export class BudgetPage extends BasePage {
                 </main>
             </div>
         `;
+
+        const header = new Header({
+            cur_page: "/budget",
+        });
+        header.render(root.querySelector(".page__header"));
+        this._components.push(header);
 
         await this._loadBudgets(root);
     }

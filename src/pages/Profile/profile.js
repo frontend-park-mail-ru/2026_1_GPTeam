@@ -15,7 +15,7 @@ export class ProfilePage extends BasePage {
     `;
 
         let data = await get_profile();
-        if (data["code"] !== 200) {
+        if (data["code"] === 401) {
             router.navigate("/login");
             return;
         }
