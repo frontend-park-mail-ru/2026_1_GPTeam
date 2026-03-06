@@ -6,6 +6,7 @@
     padding: 15px 0;
     display: flex;
     justify-content: space-around;
+    align-items: center;
     background-color: black;
 }
 
@@ -13,6 +14,14 @@
     text-decoration: none;
     color: white;
     padding: 10px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.header_link img {
+    width: 18px;
+    height: 18px;
 }
 
 .active_header_link {
