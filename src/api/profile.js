@@ -2,8 +2,8 @@ import {client} from "./client.js";
 import {is_login} from "./auth.js";
 
 
-export const get_balance = async function () {
-    let response = await client("/profile/balance", {
+export const get_profile = async function () {
+    let response = await client("/profile", {
         method: "GET",
         credentials: "include",
     })
@@ -11,7 +11,7 @@ export const get_balance = async function () {
     if (data.code === 401) {
         let login = await is_login();
         if (login) {
-            response = await client("/profile/balance", {
+            response = await client("/profile", {
                 method: "GET",
                 credentials: "include",
             })

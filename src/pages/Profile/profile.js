@@ -1,8 +1,8 @@
 import {BasePage} from "../base_page.js";
 import {Header} from "../../components/Header/header.js";
-import {is_login} from "../../api/auth.js";
 import template from "./profile.hbs?raw";
-import {router} from "../../main.js";
+import {router} from "../../router/router_instance.js";
+import {get_profile} from "../../api/profile.js";
 
 
 export class ProfilePage extends BasePage {
@@ -14,7 +14,7 @@ export class ProfilePage extends BasePage {
       </div>
     `;
 
-        let data = await is_login();
+        let data = await get_profile();
         if (data["code"] !== 200) {
             router.navigate("/login");
             return;

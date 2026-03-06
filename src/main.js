@@ -12,7 +12,7 @@ router
     .addRoute("/login", () => new LoginPage())
     .addRoute("/signup", () => new SignupPage())
     .addRoute("/profile", () => new ProfilePage())
-    .addRoute("/balance", () => new BalancePage());
+    .addRoute("/balance", () => new BalancePage())
     .addRoute("/budget", () => new BudgetPage());
 
 async function init() {
