@@ -382,3 +382,4 @@ $RECYCLE.BIN/
 *.lnk
 
 # End of https://www.toptal.com/developers/gitignore/api/windows,linux,webstorm+all,web,goland+all,visualstudiocode,node
+*.pem
