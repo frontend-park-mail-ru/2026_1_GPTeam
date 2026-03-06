@@ -26,10 +26,8 @@ export class AuthForm extends BaseComponent {
             input.classList.remove("invalid");
         }
 
-        username.style.borderColor = "#484FFF";
-        password.style.borderColor = "#484FFF";
-        if (confirm_password) confirm_password.style.borderColor = "#484FFF";
-        if (email) email.style.borderColor = "#484FFF";
+        const allFields = [username, password, confirm_password, email].filter(f => f);
+        allFields.forEach(f => f.style.borderColor = "#484FFF");
 
         const requiredFields = [
             [username, "Имя"],
@@ -74,65 +72,69 @@ export class AuthForm extends BaseComponent {
     async submit(e) {
         e.preventDefault();
 
-        const submit_input = this.getElement().querySelector("input[type='submit']");
-        const username = this.getElement().querySelector("#username_input");
-        const password = this.getElement().querySelector("#password_input");
-        const confirm_password = this.getElement().querySelector("#confirm_password_input");
-        const email = this.getElement().querySelector("#email_input");
-        const error_message = this.getElement().querySelector("#error_message");
+        const form = this.getElement();
+        const submit_input = form.querySelector("input[type='submit']");
+        const username = form.querySelector("#username_input");
+        const password = form.querySelector("#password_input");
+        const confirm_password = form.querySelector("#confirm_password_input");
+        const email = form.querySelector("#email_input");
+        const error_message = form.querySelector("#error_message");
 
-        const errors = this.validate({ username, password, confirm_password, email }, error_message);
-        if (errors) return;
+        const hasErrors = this.validate({ username, password, confirm_password, email }, error_message);
+        if (hasErrors) return;
 
         const isLogin = this.mode === "login";
         const url = isLogin
             ? "/auth/login"
             : "/signup";
 
-        const request_data = {
+        const payload = {
+            username: username.value,
+            password: password.value,
+        };
+
+        if (!isLogin) {
+            payload.email = email.value;
+            payload.confirm_password = confirm_password.value;
+        }
+
+        const fetchOptions = {
             method: "POST",
             credentials: "include",
-            headers: { "Content-Type": "application/json" },
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify(payload),
         };
-        if (isLogin)
-            request_data.body = JSON.stringify({
-                username: username.value,
-                password: password.value,
-            });
-        else
-            request_data.body = JSON.stringify({
-                username: username.value,
-                password: password.value,
-                email: email.value,
-            });
 
         submit_input.disabled = true;
-        const response = await client(url, request_data);
-        const data = await response.json();
 
-        if (data["code"] === 200) {
-            window.location.href = "/";
-        }
-        else if (data["code"] === 500) {
-            error_message.innerText = data["message"];
-        }
-        else if (data["code"] === 405) {
-            console.log(data["message"]);
-        }
-        else {
-            const mark_invalid = (input) => {
-                input.classList.add("invalid");
-                input.classList.remove("valid");
-            }
+        try {
+            const data = await client(url, fetchOptions);
 
-            for (const [_, error] of Object.entries(data["errors"])) {
-                if (error["field"] === "username") mark_invalid(username);
-                else if (error["field"] === "password") mark_invalid(password);
-                else if (error["field"] === "confirm_password" && confirm_password) mark_invalid(confirm_password);
-                else if (error["field"] === "email" && email) mark_invalid(email);
+            if (data.code === 200) {
+                window.location.href = "/";
+            } else {
+                const mark_invalid = (input) => {
+                    input.classList.add("invalid");
+                    input.classList.remove("valid");
+                }
+                
+                if (data.errors && Array.isArray(data.errors)) {
+                    data.errors.forEach(err => {
+                        if (err.field === "username") mark_invalid(username);
+                        if (err.field === "password") mark_invalid(password);
+                        if (err.field === "confirm_password") mark_invalid(confirm_password);
+                        if (err.field === "email") mark_invalid(email);
+                    });
+                }
+                error_message.innerText = data.message || "Произошла ошибка";
             }
-            error_message.innerText = data["message"];
+        } catch (err) {
+            console.error("Fetch error:", err);
+            error_message.innerText = "Сервер недоступен";
+        } finally {
+            submit_input.disabled = false;
         }
-        submit_input.disabled = false;
     }
 }
