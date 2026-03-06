@@ -12,6 +12,31 @@ export class AuthForm extends BaseComponent {
         this.mode = props.mode;
     }
 
+    show_password(e) {
+        let input;
+        let element = e.target;
+        if (element.classList.contains("eye_btn"))
+            input = document.getElementById("password_input");
+        else
+            input = document.getElementById("confirm_password_input");
+
+        let is_plain_text = input.type === "text";
+        if (is_plain_text)
+            input.type = "password";
+        else
+            input.type = "text";
+    }
+
+    show_help_abc() {
+        let element = document.getElementById("help_abc_text");
+        element.style.visibility = "visible";
+    }
+
+    hide_help_abc() {
+        let element = document.getElementById("help_abc_text");
+        element.style.visibility = "hidden";
+    }
+
     validate(fields, error_message) {
         const { username, password, confirm_password, email } = fields;
         let errors = false;

@@ -1,107 +1,138 @@
 .card {
-  background: #000000;
-  border-radius: 20px;
-  padding: 54px 48px;
-  width: 510px;
-  box-shadow:
-    0 0 30px rgba(72, 79, 255, 0.7),
+    background: #000000;
+    border-radius: 20px;
+    padding: 54px 48px;
+    width: 510px;
+    box-shadow: 0 0 30px rgba(72, 79, 255, 0.7),
     0 0 80px rgba(72, 79, 255, 0.3);
 }
 
 .title {
-  color: #ffffff;
-  font-size: 28px;
-  font-weight: 700;
-  text-align: center;
-  margin-bottom: 32px;
+    color: #ffffff;
+    font-size: 28px;
+    font-weight: 700;
+    text-align: center;
+    margin-bottom: 32px;
+}
+
+.card label {
+    position: relative;
+    height: 50px;
+    display: block;
+    margin-bottom: 15px;
 }
 
 .input {
-  width: 100%;
-  background: transparent;
-  border: 1px solid rgba(72, 79, 255, 0.5);
-  border-radius: 50px;
-  padding: 14px 22px;
-  color: #ffffff;
-  font-size: 16px;
-  margin-bottom: 14px;
-  outline: none;
-  transition: border-color 0.2s;
-  box-sizing: border-box;
+    width: 100%;
+    background: transparent;
+    border: 1px solid rgba(72, 79, 255, 0.5);
+    border-radius: 50px;
+    padding: 15px 20px 15px 20px;
+    color: #ffffff;
+    font-size: 16px;
+    outline: none;
+    transition: border-color 0.2s;
+    box-sizing: border-box;
+    margin-bottom: 14px;
+}
+
+#password_input, #confirm_password_input {
+    padding: 15px 40px 15px 20px;
+}
+
+.eye_btn, .confirm_eye_btn, .help_abc {
+    text-align: center;
+    line-height: 50px;
+    width: 30px;
+    height: 30px;
+    position: absolute;
+    right: 10px;
+    top: 10px;
+    cursor: pointer;
+}
+
+#help_abc_text {
+    text-align: center;
+    margin-bottom: 5px;
+    visibility: hidden;
 }
 
 .input::placeholder {
-  color: rgba(255, 255, 255, 0.3);
+    color: rgba(255, 255, 255, 0.3);
 }
 
 .input:focus {
-  border-color: #484fff;
-  box-shadow: 0 0 10px rgba(72, 79, 255, 0.3);
+    border-color: #484fff;
+    box-shadow: 0 0 10px rgba(72, 79, 255, 0.3);
 }
 
 .input.error {
-  border-color: red;
+    border-color: red;
 }
 
 .btn {
-  width: 100%;
-  background: #484fff;
-  color: #ffffff;
-  border: none;
-  border-radius: 50px;
-  padding: 16px;
-  font-size: 16px;
-  font-weight: 600;
-  cursor: pointer;
-  margin-top: 10px;
-  transition: all 0.2s;
-  box-shadow: 0 0 20px rgba(72, 79, 255, 0.5);
-  box-sizing: border-box;
+    width: 100%;
+    background: #484fff;
+    color: #ffffff;
+    border: none;
+    border-radius: 50px;
+    padding: 16px;
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+    margin-top: 10px;
+    transition: all 0.2s;
+    box-shadow: 0 0 20px rgba(72, 79, 255, 0.5);
+    box-sizing: border-box;
 }
 
 .btn:hover {
-  box-shadow: 0 0 36px rgba(72, 79, 255, 0.7);
-  transform: translateY(-1px);
+    box-shadow: 0 0 36px rgba(72, 79, 255, 0.7);
+    transform: translateY(-1px);
 }
 
 .btn:disabled {
-  background-color: gray;
-  box-shadow: none;
-  cursor: not-allowed;
-  transform: none;
+    background-color: gray;
+    box-shadow: none;
+    cursor: not-allowed;
+    transform: none;
 }
 
 .error-message {
-  color: red;
-  font-size: 14px;
-  text-align: center;
-  min-height: 20px;
-  margin-bottom: 8px;
-  overflow-wrap: break-word;
+    color: red;
+    font-size: 14px;
+    text-align: center;
+    min-height: 20px;
+    margin-bottom: 8px;
+    overflow-wrap: break-word;
 }
 
 .footer-text {
-  text-align: center;
-  font-size: 14px;
-  color: rgba(255, 255, 255, 0.4);
-  margin-top: 20px;
+    text-align: center;
+    font-size: 14px;
+    color: rgba(255, 255, 255, 0.4);
+    margin-top: 20px;
 }
 
 .footer-text a {
-  color: #484fff;
-  text-decoration: none;
+    color: #484fff;
+    text-decoration: none;
 }
 
 input:-webkit-autofill {
-  -webkit-box-shadow: 0 0 0 30px #191919 inset !important;
-  box-shadow: 0 0 0 30px #191919 inset !important;
-  -webkit-text-fill-color: #ffffff !important;
+    -webkit-box-shadow: 0 0 0 30px #191919 inset !important;
+    box-shadow: 0 0 0 30px #191919 inset !important;
+    -webkit-text-fill-color: #ffffff !important;
+}
+
+input::-ms-reveal, input::-ms-clear {
+    display: none;
 }
 
 .valid {
-  border: #86E58A solid 1px !important;
+    border: #86E58A solid 1px !important;
 }
 
 .invalid {
-  border: #FF2222 solid 1px !important;
+    border: #FF2222 solid 1px !important;
 }
