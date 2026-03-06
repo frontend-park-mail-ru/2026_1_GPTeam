@@ -2,6 +2,7 @@ import { BaseComponent } from "../base_component.js";
 import template from "./budget_form.hbs?raw";
 import "./budget_form.css";
 import { router } from "../../router/router_instance.js";
+import { client } from "../../api/client.js";
 
 export class BudgetForm extends BaseComponent {
   constructor(props) {
@@ -15,7 +16,7 @@ export class BudgetForm extends BaseComponent {
 
   async _fetchServerTime() {
     try {
-      const response = await fetch("http://localhost:8080/get_budgets", {
+      const response = await client("/get_budgets", {
         method: "GET",
         credentials: "include",
       });
@@ -120,7 +121,7 @@ export class BudgetForm extends BaseComponent {
 
     submit_input.disabled = true;
     try {
-      const response = await fetch("http://localhost:8080/budget", {
+      const response = await client("/budget", {
         method: "POST",
         credentials: "include",
         headers: { "Content-Type": "application/json" },

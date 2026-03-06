@@ -5,7 +5,8 @@ import { Modal } from "../../components/Modal/modal.js";
 import { ModalForm } from "../../components/ModalForm/modal_form.js";
 import "./budget.css";
 import { router } from "../../router/router_instance.js";
-import {Header} from "../../components/Header/header.js";
+import { Header } from "../../components/Header/header.js";
+import { client } from "../../api/client.js";
 
 export class BudgetPage extends BasePage {
     async render(root) {
@@ -37,7 +38,7 @@ export class BudgetPage extends BasePage {
 
     async _loadBudgets(root) {
         try {
-            const response = await fetch("http://localhost:8080/get_budgets", {
+            const response = await client("/get_budgets", {
                 method: "GET",
                 credentials: "include",
             });
@@ -63,7 +64,7 @@ export class BudgetPage extends BasePage {
         const list = root.querySelector("#budget_list");
         for (const id of ids) {
             try {
-                const response = await fetch(`http://localhost:8080/get_budget/${id}`, {
+                const response = await client(`/get_budget/${id}`, {
                     method: "GET",
                     credentials: "include",
                 });
@@ -112,7 +113,7 @@ export class BudgetPage extends BasePage {
 
     async _deleteBudget(id, modal) {
         try {
-            const response = await fetch(`http://localhost:8080/budget/${id}`, {
+            const response = await client(`/budget/${id}`, {
                 method: "DELETE",
                 credentials: "include",
             });
