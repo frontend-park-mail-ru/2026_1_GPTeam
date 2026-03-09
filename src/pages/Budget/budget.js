@@ -7,6 +7,7 @@ import "./budget.css";
 import { router } from "../../router/router_instance.js";
 import { Header } from "../../components/Header/header.js";
 import { client } from "../../api/client.js";
+import {is_login} from "../../api/auth.js";
 
 export class BudgetPage extends BasePage {
     async render(root) {
@@ -38,15 +39,23 @@ export class BudgetPage extends BasePage {
 
     async _loadBudgets(root) {
         try {
-            const response = await client("/get_budgets", {
+            let response = await client("/get_budgets", {
                 method: "GET",
                 credentials: "include",
             });
-            const data = await response.json();
+            let data = await response.json();
 
             if (data.code === 401) {
-                router.navigate("/login");
-                return;
+                let login = await is_login();
+                if (!login) {
+                    router.navigate("/login");
+                    return;
+                }
+                response = await client("/get_budgets", {
+                    method: "GET",
+                    credentials: "include",
+                });
+                data = await response.json();
             }
 
             if (data.code === 200 && data.ids && data.ids.length > 0) {
