@@ -19,6 +19,7 @@
     font-size: 14px;
     font-family: 'Manrope', sans-serif;
     gap: 6px;
+    border-radius: 30px;
 }
 
 .header_link_title {
@@ -27,7 +28,7 @@
     padding: 10px;
     display: flex;
     align-items: center;
-    font-size: 17px;
+    font-size: 18px;
     font-family: 'Manrope', sans-serif;
     gap: 6px;
     border-radius: 30px;
