@@ -151,6 +151,10 @@ nav {
     filter: brightness(0) saturate(100%) invert(34%) sepia(98%) saturate(1348%) hue-rotate(207deg) brightness(91%) contrast(94%);
 }
 
+.profile_icon_active {
+    background: none;
+}
+
 .hero {
     min-height: 100vh;
     display: flex;

@@ -10,7 +10,14 @@ export class Header extends BaseComponent {
     _afterRender() {
         let nav = document.getElementsByTagName("a");
         for (let elem of nav)
-            if (elem.getAttribute("href") === this._props.cur_page)
+            if (elem.getAttribute("href") === this._props.cur_page) {
                 elem.classList.add("active_header_link");
+                if (this._props.cur_page === "/profile") {
+                    let icon = elem.getElementsByTagName("img")[0];
+                    icon.src = "/icons/profile_active.svg";
+                    elem.classList.remove("profile_icon");
+                    elem.classList.add("profile_icon_active");
+                }
+            }
     }
 }
