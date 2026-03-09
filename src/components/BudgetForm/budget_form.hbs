@@ -14,9 +14,14 @@
             <input class="budget-form-input" id="target_input" type="number" step="any" name="target" placeholder="100" autocomplete="off">
         </label>
         <label>
-            <span>*Валюта</span>
-            <input class="budget-form-input" id="currency_input" type="text" name="currency" placeholder="RUB / USD / EUR" autocomplete="off">
+            *Валюта
+            <select class="budget-form-input" id="currency_input" name="currency">
+                {{#each currency_list}}
+                    <option class="currency_option" value="{{this}}">{{this}}</option>
+                {{/each}}
+            </select>
         </label>
+        <br>
         <label>
             <span>*Начало</span>
             <input class="budget-form-input" id="start_at_input" type="date" name="start_at">

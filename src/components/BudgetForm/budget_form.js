@@ -10,9 +10,11 @@ import {
     validate_start_date,
     validate_target_budget
 } from "../../utils/validation.js";
+import {currencies} from "../../store/store.js";
 
 export class BudgetForm extends BaseComponent {
     constructor(props) {
+        props.currency_list = currencies;
         super(template, props);
         this.serverTime = null;
     }

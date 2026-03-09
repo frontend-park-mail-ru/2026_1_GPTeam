@@ -48,6 +48,11 @@
     cursor: pointer;
 }
 
+.currency_option {
+    color: #7b7fff;
+    background-color: black;
+}
+
 .budget-form-btn {
     width: 100%;
     background: #484fff;

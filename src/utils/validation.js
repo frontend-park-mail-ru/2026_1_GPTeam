@@ -1,3 +1,5 @@
+import {currencies} from "../store/store.js";
+
 export function validate_username(username) {
     username = username.trim();
     if (username.length < 3)
@@ -68,8 +70,7 @@ export function validate_email(email) {
 
 export function validate_currency(currency) {
     currency = currency.trim().toUpperCase();
-    const allowed_currencies = ["RUB", "USD", "EUR"];
-    if (allowed_currencies.includes(currency))
+    if (currencies.includes(currency))
         return [true, ""];
     return [false, "Валюта не поддерживается"];
 }

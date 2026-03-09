@@ -21,6 +21,10 @@
     transition: background-color 0.2s;
 }
 
+.header_link_logo {
+    font-size: 18px;
+}
+
 .header_link:hover {
     background-color: #1C1A1A;
 }
