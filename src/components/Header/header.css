@@ -16,6 +16,19 @@
     padding: 10px;
     display: flex;
     align-items: center;
+    font-size: 14px;
+    font-family: 'Manrope', sans-serif;
+    gap: 6px;
+}
+
+.header_link_title {
+    text-decoration: none;
+    color: white;
+    padding: 10px;
+    display: flex;
+    align-items: center;
+    font-size: 17px;
+    font-family: 'Manrope', sans-serif;
     gap: 6px;
     border-radius: 30px;
     transition: background-color 0.2s;
@@ -30,8 +43,8 @@
 }
 
 .header_link img {
-    width: 18px;
-    height: 18px;
+    width: 30px;
+    height: 30px;
 }
 
 .active_header_link {

@@ -2,6 +2,7 @@
     display: flex;
     flex-direction: column;
     align-items: center;
+    font-family: 'Manrope', sans-serif;
 }
 
 .auth-logo {
@@ -45,7 +46,7 @@
 .input {
     width: 100%;
     background: transparent;
-    border: 1px solid rgba(72, 79, 255, 0.5);
+    border: 1px solid #484FFF;
     border-radius: 50px;
     padding: 15px 20px 15px 20px;
     color: #ffffff;
