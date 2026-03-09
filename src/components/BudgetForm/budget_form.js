@@ -4,6 +4,13 @@ import "./budget_form.css";
 import { router } from "../../router/router_instance.js";
 import { client } from "../../api/client.js";
 import { currencies } from "../../store/store.js";
+import {
+    is_empty,
+    validate_currency,
+    validate_end_date,
+    validate_start_date,
+    validate_target_budget
+} from "../../utils/validation.js";
 
 /**
  * Компонент формы создания или редактирования бюджета.
@@ -67,61 +74,63 @@ export class BudgetForm extends BaseComponent {
      * @returns {boolean} true, если найдены ошибки, иначе false.
      */
     validate(fields, error_message) {
-        const { title, target, currency, start_at, end_at } = fields;
+        const {title, description, target, currency, start_at, end_at} = fields;
         let errors = false;
         let errorText = "";
 
-        [title, target, currency, start_at, end_at].filter(f => f).forEach(f => f.style.borderColor = "rgba(72, 79, 255, 0.5)");
+        [title, description, target, currency, start_at, end_at].filter(f => f).forEach(f => f.style.borderColor = "rgba(72, 79, 255, 0.5)");
 
         const requiredFields = [
             [title, "Название"],
+            [description, "Описание"],
             [target, "Планируемый бюджет"],
             [currency, "Валюта"],
             [start_at, "Дата начала"],
-            [end_at, "Дата окончания"],
         ];
 
         for (const [field, name] of requiredFields) {
-            if (!field || !field.value) {
+            let [ok, error] = is_empty(field.value, name);
+            if (!ok) {
                 errors = true;
                 if (field) field.style.borderColor = "red";
-                if (!errorText) errorText = `${name} обязательно для заполнения`;
+                if (!errorText) errorText = error;
             }
         }
 
         if (currency && currency.value) {
-            if (!/^[a-zA-Z]+$/.test(currency.value)) {
+            let [ok, error] = validate_currency(currency.value);
+            if (!ok) {
                 errors = true;
                 currency.style.borderColor = "red";
-                if (!errorText) errorText = "Валюта должна содержать только латинские буквы";
+                if (!errorText) errorText = error;
             }
         }
 
         if (target && target.value) {
-            const targetNum = parseInt(target.value, 10);
-            if (isNaN(targetNum) || targetNum <= 0) {
+            let [ok, error] = validate_target_budget(target.value);
+            if (!ok) {
                 errors = true;
                 target.style.borderColor = "red";
-                if (!errorText) errorText = "Бюджет должен быть положительным числом";
+                if (!errorText) errorText = error;
+                console.log(error)
             }
         }
 
         if (start_at && start_at.value) {
-            const startDate = new Date(start_at.value);
-            if (this.serverTime && startDate < this.serverTime) {
+            let [ok, error] = validate_start_date(this.serverTime, start_at.value);
+            if (!ok) {
                 errors = true;
                 start_at.style.borderColor = "red";
-                if (!errorText) errorText = "Дата начала не может быть в прошлом";
+                if (!errorText) errorText = error;
             }
         }
 
         if (end_at && end_at.value && start_at && start_at.value) {
-            const startDate = new Date(start_at.value);
-            const endDate = new Date(end_at.value);
-            if (endDate < startDate) {
+            let [ok, error] = validate_end_date(start_at.value, end_at.value);
+            if (!ok) {
                 errors = true;
                 end_at.style.borderColor = "red";
-                if (!errorText) errorText = "Дата окончания должна быть позже даты начала";
+                if (!errorText) errorText = error;
             }
         }
 
@@ -149,7 +158,7 @@ export class BudgetForm extends BaseComponent {
         const end_at = form.querySelector("#end_at_input");
         const error_message = form.querySelector("#error_message");
 
-        const hasErrors = this.validate({ title, target, currency, start_at, end_at }, error_message);
+        const hasErrors = this.validate({ title, description, target, currency, start_at, end_at }, error_message);
         if (hasErrors) return;
 
         const payload = {
