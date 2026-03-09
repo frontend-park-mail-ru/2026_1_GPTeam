@@ -1,4 +1,5 @@
 export function validate_username(username) {
+    username = username.trim();
     if (username.length < 3)
         return [false, "Логин должен быть минимум 3 символа"];
     let ok = /^[a-zA-Z0-9]+$/.test(username);
@@ -34,19 +35,33 @@ function check_symbols(password) {
 }
 
 export function validate_password(password) {
+    password = password.trim();
     if (password.length < 8)
         return [false, "Пароль должен быть минимум 8 символов"];
     return check_symbols(password);
 }
 
 export function are_password_equal(password, confirm_password) {
+    password = password.trim();
+    confirm_password = confirm_password.trim();
     if (password !== confirm_password)
         return [false, "Пароли не совпадают"];
     return [true, ""];
 }
 
 export function is_empty(value, field_name) {
+    value = value.trim()
     if (value.length === 0)
         return [false, `${field_name} не может быть пустым`];
+    return [true, ""];
+}
+
+export function validate_email(email) {
+    email = email.trim();
+    if (email.length === 0 || email.length >= 255)
+        return [false, "Некорректный адрес электронной почты"];
+    let ok = /^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}$/.test(email);
+    if (!ok)
+        return [false, "Некорректный адрес электронной почты"];
     return [true, ""];
 }
