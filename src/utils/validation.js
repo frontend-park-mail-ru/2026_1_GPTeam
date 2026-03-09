@@ -82,6 +82,9 @@ export function validate_target_budget(target) {
         return [false, "Планируемый бюджет должен быть дробным числом"];
     if (target_value < 0)
         return [false, "Планируемый бюджет не может быть меньше 0"];
+    if (target_value > 1e18) {
+        return [false, "Значение не может быть больше 1e18"]
+    }
     return [true, ""];
 }
 
