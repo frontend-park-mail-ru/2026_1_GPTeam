@@ -2,7 +2,7 @@ import {BaseComponent} from "../base_component.js";
 import template from "./auth_form.hbs?raw";
 import "./auth_form.css"
 import "../../utils/helpers.js"
-import {is_empty, validate_username, validate_password, are_password_equal} from "../../utils/validation.js";
+import {is_empty, validate_username, validate_password, are_password_equal, validate_email} from "../../utils/validation.js";
 import {client} from "../../api/client.js";
 import { router } from "../../router/router_instance.js";
 
@@ -57,6 +57,9 @@ export class AuthForm extends BaseComponent {
             input.classList.add("invalid");
             input.classList.remove("valid");
         };
+        const mark_valid = (input) => {
+            input.classList.remove("invalid");
+        };
 
         const allFields = [username, password, confirm_password, email].filter(f => f);
         allFields.forEach(f => f.style.borderColor = "#484FFF");
@@ -71,6 +74,7 @@ export class AuthForm extends BaseComponent {
         ];
 
         for (const [field, name] of requiredFields) {
+            mark_valid(field);
             const [ok, error] = is_empty(field.value, name);
             if (!ok)
                 mark_invalid(field, error);
@@ -88,6 +92,10 @@ export class AuthForm extends BaseComponent {
             [ok, error] = are_password_equal(password.value, confirm_password.value);
             if (!ok)
                 mark_invalid(confirm_password, error);
+
+            [ok, error] = validate_email(email.value);
+            if (!ok)
+                mark_invalid(email, error);
         }
 
         return errors;
@@ -136,7 +144,7 @@ export class AuthForm extends BaseComponent {
             const data = await response.json();
 
             if (data.code === 200) {
-                router.navigate("/balance");
+                router.navigate("/profile");
             } else if (data.code === 405) {
                 console.error(data["message"]);
             } else {

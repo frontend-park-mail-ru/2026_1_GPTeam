@@ -1,6 +1,6 @@
 <div class="auth-wrapper">
     <div class="auth-logo">
-        <span class="auth-logo__text">MoneyFirst</span>
+        <a href="/" data-link class="auth-logo__text">MoneyFirst</a>
     </div>
     <div class="card">
         <h3 class="title">{{#equal mode "login"}}Вход{{else}}Регистрация{{/equal}}</h3>
@@ -10,17 +10,17 @@
         <form>
             <label>
                 <input class="input" id="username_input" type="text" name="username" placeholder="Логин" autocomplete="off">
-                <img class="help_abc" src="/public/img/help.png" alt="?">
+                <img class="help_abc" src="/img/help.png" alt="?">
             </label>
             <label>
                 <input class="input" id="password_input" type="password" name="password" placeholder="Пароль" autocomplete="off">
-                <img class="eye_btn" src="/public/img/closed_eye.png" alt="eye">
+                <img class="eye_btn" src="/img/closed_eye.png" alt="eye">
             </label>
 
             {{#equal mode "signup"}}
                 <label>
                     <input class="input" id="confirm_password_input" type="password" name="confirm_password" placeholder="Пароль снова" autocomplete="off">
-                    <img class="confirm_eye_btn" src="/public/img/closed_eye.png" alt="eye">
+                    <img class="confirm_eye_btn" src="/img/closed_eye.png" alt="eye">
                 </label>
                 <label>
                     <input class="input" id="email_input" type="email" name="email" placeholder="Email" autocomplete="off">

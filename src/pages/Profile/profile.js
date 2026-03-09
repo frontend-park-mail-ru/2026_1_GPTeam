@@ -3,6 +3,8 @@ import {Header} from "../../components/Header/header.js";
 import template from "./profile.hbs?raw";
 import {router} from "../../router/router_instance.js";
 import {get_profile} from "../../api/profile.js";
+import {logout} from "../../api/auth.js";
+import "./profile.css";
 
 
 export class ProfilePage extends BasePage {
@@ -25,5 +27,15 @@ export class ProfilePage extends BasePage {
         });
         header.render(root.querySelector(".page__header"));
         this._components.push(header);
+
+        let logout_btn = document.querySelector(".logout_btn");
+        logout_btn.addEventListener("click", async () => {
+            let ok = await logout();
+            if (ok) {
+                router.navigate("/");
+                return;
+            }
+            console.error("wrong tokens");
+        });
     }
 }

@@ -18,6 +18,8 @@ export class BudgetCard extends BaseComponent {
 
         const currency = (props.budget.currency || "RUB").toUpperCase();
 
+        let is_default_date = props.budget.end_at === "0001-01-01T00:00:00Z";
+
         super(template, {
             title: props.budget.title || "—",
             actual: props.budget.actual.toLocaleString("ru-RU"),
@@ -25,7 +27,7 @@ export class BudgetCard extends BaseComponent {
             currency,
             percent,
             start_at: formatDate(props.budget.start_at),
-            end_at: formatDate(props.budget.end_at),
+            end_at: is_default_date ? "нет" : formatDate(props.budget.end_at),
         });
 
         this._id = props.id;
