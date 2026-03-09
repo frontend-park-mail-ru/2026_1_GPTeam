@@ -16,8 +16,8 @@
 }
 
 .budget-card {
-  background: linear-gradient(135deg, rgba(72, 79, 255, 0.15), rgba(72, 79, 255, 0.05));
-  border: 1px solid rgba(72, 79, 255, 0.3);
+  background: linear-gradient(135deg, rgb(72 79 255 / 15%), rgb(72 79 255 / 5%));
+  border: 1px solid rgb(72 79 255 / 30%);
   border-radius: 16px;
   padding: 24px;
   width: 732px;
@@ -32,7 +32,7 @@
   height: 32px;
   border-radius: 50%;
   background: transparent;
-  border: 1px solid rgba(255, 71, 87, 0.5);
+  border: 1px solid rgb(255 71 87 / 50%);
   color: #ff4757;
   font-size: 18px;
   font-weight: 700;
@@ -45,9 +45,9 @@
 }
 
 .budget-card__delete-btn:hover {
-  background: rgba(255, 71, 87, 0.2);
+  background: rgb(255 71 87 / 20%);
   border-color: #ff4757;
-  box-shadow: 0 0 15px rgba(255, 71, 87, 0.5);
+  box-shadow: 0 0 15px rgb(255 71 87 / 50%);
 }
 
 .budget-card__header {
@@ -58,7 +58,7 @@
 }
 
 .budget-card__label {
-  color: rgba(255, 255, 255, 0.4);
+  color: rgb(255 255 255 / 40%);
   font-size: 11px;
   font-weight: 600;
   letter-spacing: 0.08em;
@@ -66,20 +66,13 @@
 }
 
 .budget-card__date {
-  color: rgba(255, 255, 255, 0.5);
+  color: rgb(255 255 255 / 50%);
   font-size: 12px;
-  margin: 4px 0 0 0;
-}
-
-.budget-card__amount {
-  color: #ffffff;
-  font-size: 36px;
-  font-weight: 700;
-  margin: 6px 0;
+  margin: 4px 0 0;
 }
 
 .budget-card__desc {
-  color: rgba(255, 255, 255, 0.5);
+  color: rgb(255 255 255 / 50%);
   font-size: 13px;
   margin: 0;
   max-width: 50%;
@@ -97,14 +90,14 @@
 
 .budget-card__progress-label,
 .budget-card__progress-percent {
-  color: rgba(255, 255, 255, 0.5);
+  color: rgb(255 255 255 / 50%);
   font-size: 13px;
 }
 
 .budget-card__progress-bar {
   width: 100%;
   height: 4px;
-  background: rgba(255, 255, 255, 0.07);
+  background: rgb(255 255 255 / 7%);
   border-radius: 2px;
   overflow: hidden;
 }
@@ -122,7 +115,7 @@
 }
 
 .budget-empty {
-  color: rgba(255, 255, 255, 0.4);
+  color: rgb(255 255 255 / 40%);
   font-size: 16px;
   text-align: center;
   padding: 40px;
@@ -130,7 +123,7 @@
 
 .budget-card__currency {
   display: inline-block;
-  color: rgba(255, 255, 255, 0.6);
+  color: rgb(255 255 255 / 60%);
   font-size: 18px;
   font-weight: 600;
   margin-right: 4px;
@@ -140,7 +133,7 @@
 }
 
 .budget-card__amount {
-  color: #ffffff;
+  color: #fff;
   font-size: 36px;
   font-weight: 700;
   margin: 6px 0;
@@ -152,7 +145,7 @@
 
 .budget-create-btn {
     background: #484fff;
-    color: #ffffff;
+    color: #fff;
     border: none;
     border-radius: 50px;
     padding: 14px 32px;
@@ -160,10 +153,10 @@
     font-weight: 600;
     cursor: pointer;
     transition: all 0.2s;
-    box-shadow: 0 0 20px rgba(72, 79, 255, 0.5);
+    box-shadow: 0 0 20px rgb(72 79 255 / 50%);
 }
 
 .budget-create-btn:hover {
-    box-shadow: 0 0 36px rgba(72, 79, 255, 0.7);
+    box-shadow: 0 0 36px rgb(72 79 255 / 70%);
     transform: translateY(-1px);
 }

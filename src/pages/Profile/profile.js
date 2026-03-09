@@ -6,8 +6,22 @@ import {get_profile} from "../../api/profile.js";
 import {logout} from "../../api/auth.js";
 import "./profile.css";
 
-
+/**
+ * Страница профиля пользователя.
+ * Отвечает за проверку прав доступа (авторизации), отображение личных данных 
+ * и рендеринг шапки с активным состоянием "/profile".
+ * * @class ProfilePage
+ * @extends BasePage
+ */
 export class ProfilePage extends BasePage {
+    /**
+     * Асинхронно рендерит страницу профиля.
+     * Сначала отрисовывает базовый каркас, затем запрашивает данные профиля.
+     * При получении ошибки 401 выполняет редирект на страницу входа.
+     * * @async
+     * @param {HTMLElement} root - Корневой элемент для отрисовки всей страницы.
+     * @returns {Promise<void>}
+     */
     async render(root) {
         root.innerHTML = `
       <div class="page">
@@ -16,12 +30,18 @@ export class ProfilePage extends BasePage {
       </div>
     `;
 
+        /** * Запрос данных профиля для проверки сессии.
+         * Если сервер возвращает 401, доступ к странице блокируется.
+         */
         let data = await get_profile();
         if (data["code"] === 401) {
             router.navigate("/login");
             return;
         }
 
+        /** * Инициализация навигационной панели.
+         * Устанавливаем cur_page для подсветки соответствующей ссылки в меню.
+         */
         const header = new Header({
             cur_page: "/profile",
         });

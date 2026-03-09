@@ -9,8 +9,22 @@ import {IncomeBalance} from "../../components/IncomeBalance/income_balance.js";
 import {ExpensesBalance} from "../../components/ExpensesBalance/expenses_balance.js";
 import {router} from "../../router/router_instance.js";
 
-
+/**
+ * Страница баланса пользователя.
+ * Отвечает за загрузку финансовых данных, проверку авторизации и 
+ * инициализацию дочерних компонентов (Header, TotalBalance, IncomeBalance, ExpensesBalance).
+ * * @class BalancePage
+ * @extends BasePage
+ */
 export class BalancePage extends BasePage {
+    /**
+     * Асинхронно рендерит страницу в корневой элемент.
+     * Выполняет запрос к API, при ошибке 401 перенаправляет на страницу логина.
+     * Настраивает сетку виджетов и вставляет скомпилированный шаблон.
+     * * @async
+     * @param {HTMLElement} root - Корневой элемент для отрисовки страницы.
+     * @returns {Promise<void>}
+     */
     async render(root) {
         let balance = await get_balance();
 

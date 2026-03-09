@@ -12,22 +12,38 @@
 }
 
 .budget-form-title {
-    color: #ffffff;
+    color: #fff;
     font-size: 28px;
     font-weight: 700;
     text-align: center;
     margin-bottom: 32px;
 }
 
+.budget-form-card label {
+    display: block;
+    color: rgb(255 255 255 / 70%);
+    font-size: 14px;
+    margin-bottom: 6px;
+}
+
+.input-wrapper {
+    position: relative;
+    margin-bottom: 15px;
+}
+
 .budget-form-input {
     width: 100%;
     background: transparent;
-    border: 1px solid rgba(72, 79, 255, 0.5);
+    border: 1px solid rgb(72 79 255 / 50%);
     border-radius: 50px;
     padding: 14px 22px;
-    color: #ffffff;
+    color: #fff;
     font-size: 16px;
+<<<<<<< HEAD
     margin-bottom: 16px;
+=======
+    margin-bottom: 0;
+>>>>>>> 3e902a2 (added linter and done linter fixes, added email validation, added full jsdoc, added labels)
     outline: none;
     transition: border-color 0.2s;
     box-sizing: border-box;
@@ -35,12 +51,12 @@
 }
 
 .budget-form-input::placeholder {
-    color: rgba(255, 255, 255, 0.3);
+    color: rgb(255 255 255 / 30%);
 }
 
 .budget-form-input:focus {
     border-color: #484fff;
-    box-shadow: 0 0 10px rgba(72, 79, 255, 0.3);
+    box-shadow: 0 0 10px rgb(72 79 255 / 30%);
 }
 
 .budget-form-input[type="datetime-local"]::-webkit-calendar-picker-indicator {
@@ -49,15 +65,21 @@
     cursor: pointer;
 }
 
+<<<<<<< HEAD
 .currency_option {
     color: #7b7fff;
     background-color: black;
+=======
+.budget-form-input[type="date"]::-webkit-calendar-picker-indicator {
+    filter: invert(0.7);
+    cursor: pointer;
+>>>>>>> 3e902a2 (added linter and done linter fixes, added email validation, added full jsdoc, added labels)
 }
 
 .budget-form-btn {
     width: 100%;
     background: #484fff;
-    color: #ffffff;
+    color: #fff;
     border: none;
     border-radius: 50px;
     padding: 16px;
@@ -66,12 +88,12 @@
     cursor: pointer;
     margin-top: 10px;
     transition: all 0.2s;
-    box-shadow: 0 0 20px rgba(72, 79, 255, 0.5);
+    box-shadow: 0 0 20px rgb(72 79 255 / 50%);
     box-sizing: border-box;
 }
 
 .budget-form-btn:hover {
-    box-shadow: 0 0 36px rgba(72, 79, 255, 0.7);
+    box-shadow: 0 0 36px rgb(72 79 255 / 70%);
     transform: translateY(-1px);
 }
 

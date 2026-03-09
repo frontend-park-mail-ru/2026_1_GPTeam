@@ -12,24 +12,23 @@
 .auth-logo__text {
     font-size: 60px;
     font-weight: 900;
-    background: linear-gradient(90deg, #ffffff 35%, #6369FF 100%);
-    -webkit-background-clip: text;
+    background: linear-gradient(90deg, #fff 35%, #6369FF 100%);
     -webkit-text-fill-color: transparent;
     background-clip: text;
     text-decoration: none;
 }
 
 .card {
-    background: #000000;
+    background: #000;
     border-radius: 20px;
     padding: 54px 48px;
     width: 510px;
-    box-shadow: 0 0 30px rgba(72, 79, 255, 0.7),
-    0 0 80px rgba(72, 79, 255, 0.3);
+    box-shadow: 0 0 30px rgb(72 79 255 / 70%),
+    0 0 80px rgb(72 79 255 / 30%);
 }
 
 .title {
-    color: #ffffff;
+    color: #fff;
     font-size: 28px;
     font-weight: 700;
     text-align: center;
@@ -37,24 +36,28 @@
 }
 
 .card label {
-    position: relative;
-    height: 50px;
     display: block;
+    color: rgb(255 255 255 / 70%);
+    font-size: 14px;
+    margin-bottom: 6px;
+}
+
+.input-wrapper {
+    position: relative;
     margin-bottom: 15px;
 }
 
 .input {
     width: 100%;
     background: transparent;
-    border: 1px solid #484FFF;
+    border: 1px solid rgb(72 79 255 / 50%);
     border-radius: 50px;
-    padding: 15px 20px 15px 20px;
-    color: #ffffff;
+    padding: 15px 20px;
+    color: #fff;
     font-size: 16px;
     outline: none;
     transition: border-color 0.2s;
     box-sizing: border-box;
-    margin-bottom: 14px;
 }
 
 #password_input, #confirm_password_input {
@@ -62,14 +65,19 @@
 }
 
 .eye_btn, .confirm_eye_btn, .help_abc {
-    text-align: center;
-    line-height: 50px;
-    width: 30px;
-    height: 30px;
+    width: 24px;
+    height: 24px;
     position: absolute;
-    right: 10px;
-    top: 10px;
+    right: 14px;
+    top: 50%;
+    transform: translateY(-50%);
     cursor: pointer;
+    opacity: 0.6;
+    transition: opacity 0.2s;
+}
+
+.eye_btn:hover, .confirm_eye_btn:hover, .help_abc:hover {
+    opacity: 1;
 }
 
 #help_abc_text {
@@ -79,12 +87,12 @@
 }
 
 .input::placeholder {
-    color: rgba(255, 255, 255, 0.3);
+    color: rgb(255 255 255 / 30%);
 }
 
 .input:focus {
     border-color: #484fff;
-    box-shadow: 0 0 10px rgba(72, 79, 255, 0.3);
+    box-shadow: 0 0 10px rgb(72 79 255 / 30%);
 }
 
 .input.error {
@@ -94,7 +102,7 @@
 .btn {
     width: 100%;
     background: #484fff;
-    color: #ffffff;
+    color: #fff;
     border: none;
     border-radius: 50px;
     padding: 16px;
@@ -103,12 +111,12 @@
     cursor: pointer;
     margin-top: 10px;
     transition: all 0.2s;
-    box-shadow: 0 0 20px rgba(72, 79, 255, 0.5);
+    box-shadow: 0 0 20px rgb(72 79 255 / 50%);
     box-sizing: border-box;
 }
 
 .btn:hover {
-    box-shadow: 0 0 36px rgba(72, 79, 255, 0.7);
+    box-shadow: 0 0 36px rgb(72 79 255 / 70%);
     transform: translateY(-1px);
 }
 
@@ -131,7 +139,7 @@
 .footer-text {
     text-align: center;
     font-size: 14px;
-    color: rgba(255, 255, 255, 0.4);
+    color: rgb(255 255 255 / 40%);
     margin-top: 20px;
 }
 
@@ -141,9 +149,8 @@
 }
 
 input:-webkit-autofill {
-    -webkit-box-shadow: 0 0 0 30px #191919 inset !important;
     box-shadow: 0 0 0 30px #191919 inset !important;
-    -webkit-text-fill-color: #ffffff !important;
+    -webkit-text-fill-color: #fff !important;
 }
 
 input::-ms-reveal, input::-ms-clear {
@@ -155,5 +162,5 @@ input::-ms-reveal, input::-ms-clear {
 }
 
 .invalid {
-    border: #FF2222 solid 1px !important;
+    border: #F22 solid 1px !important;
 }

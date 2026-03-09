@@ -2,16 +2,32 @@ import {BaseComponent} from "../base_component.js";
 import template from "./auth_form.hbs?raw";
 import "./auth_form.css"
 import "../../utils/helpers.js"
-import {is_empty, validate_username, validate_password, are_password_equal, validate_email} from "../../utils/validation.js";
-import {client} from "../../api/client.js";
+import { is_empty, validate_username, validate_password, are_password_equal, validate_email } from "../../utils/validation.js";
 import { router } from "../../router/router_instance.js";
+import { client } from "../../api/client.js";
 
+/**
+ * Компонент формы авторизации и регистрации.
+ * Управляет состоянием полей, валидацией на стороне клиента и отправкой данных на сервер.
+ * @class AuthForm
+ * @extends BaseComponent
+ */
 export class AuthForm extends BaseComponent {
+    /**
+     * Создает экземпляр формы.
+     * @param {Object} props - Свойства компонента.
+     * @param {"login"|"signup"} props.mode - Режим работы формы: авторизация или регистрация.
+     */
     constructor(props) {
         super(template, props);
         this.mode = props.mode;
     }
 
+    /**
+     * Устанавливает обработчики событий для элементов формы.
+     * Включает переключение видимости пароля и подсказки (tooltip).
+     * @private
+     */
     _addEventListeners() {
         const form = this.getElement();
         const eye_btn = form.querySelector(".eye_btn");
@@ -47,6 +63,13 @@ export class AuthForm extends BaseComponent {
         }
     }
 
+    /**
+     * Выполняет валидацию полей формы.
+     * Проверяет на пустоту, корректность логина/пароля, совпадение паролей и email в режиме signup.
+     * @param {Object} fields - Объект с DOM-элементами полей.
+     * @param {HTMLElement} error_message - Элемент для вывода текста ошибки.
+     * @returns {boolean} Возвращает true, если найдены ошибки, иначе false.
+     */
     validate(fields, error_message) {
         const { username, password, confirm_password, email } = fields;
         let errors = false;
@@ -98,14 +121,28 @@ export class AuthForm extends BaseComponent {
                 mark_invalid(email, error);
         }
 
+        if (this.mode === "signup" && email) {
+            [ok, error] = validate_email(email.value);
+            if (!ok)
+                mark_invalid(email, error);
+        }
+
         return errors;
     }
 
+    /**
+     * Обработчик отправки формы.
+     * Предотвращает стандартное поведение, вызывает валидацию и отправляет данные на сервер.
+     * При успехе перенаправляет пользователя на страницу баланса.
+     * @async
+     * @param {Event} e - Объект события submit.
+     * @returns {Promise<void>}
+     */
     async submit(e) {
         e.preventDefault();
 
         const form = this.getElement();
-        const submit_input = form.querySelector("input[type='submit']");
+        const submit_btn = form.querySelector("button[type='submit']");
         const username = form.querySelector("#username_input");
         const password = form.querySelector("#password_input");
         const confirm_password = form.querySelector("#confirm_password_input");
@@ -137,7 +174,7 @@ export class AuthForm extends BaseComponent {
             body: JSON.stringify(payload),
         };
 
-        submit_input.disabled = true;
+        submit_btn.disabled = true;
 
         try {
             const response = await client(url, fetchOptions);
@@ -167,7 +204,7 @@ export class AuthForm extends BaseComponent {
             console.error("Fetch error:", err);
             error_message.innerText = "Сервер недоступен";
         } finally {
-            submit_input.disabled = false;
+            submit_btn.disabled = false;
         }
     }
 }

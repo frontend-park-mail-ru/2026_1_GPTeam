@@ -1,5 +1,18 @@
+<<<<<<< HEAD
 import {currencies} from "../store/store.js";
 
+=======
+/**
+ * Валидирует имя пользователя (логин).
+ * Проверяет минимальную длину и допустимые символы (латиница и цифры).
+ * @function validate_username
+ * @param {string} username - Имя пользователя для проверки.
+ * @returns {[boolean, string]} Кортеж: [isValid, errorMessage].
+ *
+ * @example
+ * const [isValid, error] = validate_username('jo'); // [false, "Логин должен быть минимум 3 символа"]
+ */
+>>>>>>> 3e902a2 (added linter and done linter fixes, added email validation, added full jsdoc, added labels)
 export function validate_username(username) {
     username = username.trim();
     if (username.length < 3)
@@ -10,6 +23,14 @@ export function validate_username(username) {
     return [true, ""];
 }
 
+/**
+ * Внутренняя проверка состава символов в пароле.
+ * Проверяет наличие строчных, заглавных букв и цифр методом перебора.
+ * @function check_symbols
+ * @param {string} password - Пароль для проверки.
+ * @returns {[boolean, string]} Кортеж: [isValid, errorMessage].
+ * @private
+ */
 function check_symbols(password) {
     let has_lower = false;
     let has_upper = false;
@@ -36,6 +57,16 @@ function check_symbols(password) {
     return [true, ""];
 }
 
+/**
+ * Валидирует пароль на сложность и длину.
+ * Комбинирует проверку длины и вызов внутренней функции check_symbols.
+ * @function validate_password
+ * @param {string} password - Пароль для проверки.
+ * @returns {[boolean, string]} Кортеж: [isValid, errorMessage].
+ *
+ * @example
+ * const [isValid, error] = validate_password('123'); // [false, "Пароль должен быть минимум 8 символов"]
+ */
 export function validate_password(password) {
     password = password.trim();
     if (password.length < 8)
@@ -43,6 +74,14 @@ export function validate_password(password) {
     return check_symbols(password);
 }
 
+/**
+ * Сравнивает два пароля на идентичность.
+ * Используется на странице регистрации (SignupPage) для проверки подтверждения.
+ * @function are_password_equal
+ * @param {string} password - Основной пароль.
+ * @param {string} confirm_password - Повторно введенный пароль.
+ * @returns {[boolean, string]} Кортеж: [isEqual, errorMessage].
+ */
 export function are_password_equal(password, confirm_password) {
     password = password.trim();
     confirm_password = confirm_password.trim();
@@ -51,6 +90,13 @@ export function are_password_equal(password, confirm_password) {
     return [true, ""];
 }
 
+/**
+ * Проверяет поле на наличие контента.
+ * @function is_empty
+ * @param {string} value - Значение поля.
+ * @param {string} field_name - Человекочитаемое название поля для сообщения об ошибке.
+ * @returns {[boolean, string]} Кортеж: [isNotEmpty, errorMessage].
+ */
 export function is_empty(value, field_name) {
     value = value.trim();
     if (value.length === 0)
@@ -58,6 +104,7 @@ export function is_empty(value, field_name) {
     return [true, ""];
 }
 
+<<<<<<< HEAD
 export function validate_email(email) {
     email = email.trim();
     if (email.length === 0 || email.length >= 255)
@@ -107,3 +154,40 @@ export function validate_end_date(start_date_str, end_date_str) {
         return [false, "Дата окончания должна быть позже даты начала"];
     return [true, ""];
 }
+=======
+/**
+ * Валидирует адрес электронной почты.
+ * Проверяет наличие символа @, корректного домена и допустимых символов.
+ * @function validate_email
+ * @param {string} email - Адрес электронной почты для проверки.
+ * @returns {[boolean, string]} Кортеж: [isValid, errorMessage].
+ *
+ * @example
+ * const [isValid, error] = validate_email('user@example.com'); // [true, ""]
+ * const [isValid, error] = validate_email('userexample.com');  // [false, "Email должен содержать символ @"]
+ */
+export function validate_email(email) {
+    if (!email.includes("@"))
+        return [false, "Email должен содержать символ @"];
+
+    const [local, domain] = email.split("@");
+
+    if (!local || local.length === 0)
+        return [false, "Email не должен начинаться с символа @"];
+
+    if (!domain || !domain.includes("."))
+        return [false, "Email должен содержать домен, например: example.com"];
+
+    const domain_parts = domain.split(".");
+    const tld = domain_parts[domain_parts.length - 1];
+
+    if (!tld || tld.length < 2)
+        return [false, "Некорректное доменное расширение в Email"];
+
+    const ok = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/.test(email);
+    if (!ok)
+        return [false, "Email содержит недопустимые символы"];
+
+    return [true, ""];
+}
+>>>>>>> 3e902a2 (added linter and done linter fixes, added email validation, added full jsdoc, added labels)
