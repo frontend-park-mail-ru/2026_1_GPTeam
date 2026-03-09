@@ -1,76 +1,41 @@
 <div class="budget-form-card">
-<<<<<<< HEAD
     <h3 class="budget-form-title">Новый бюджет</h3>
     <form>
-        <label>
-            <span>*Название</span>
+        <label for="title_input">Название</label>
+        <div class="input-wrapper">
             <input class="budget-form-input" id="title_input" type="text" name="title" placeholder="Название" autocomplete="off">
-        </label>
-        <label>
-            <span>*Описание</span>
+        </div>
+
+        <label for="description_input">Описание</label>
+        <div class="input-wrapper">
             <input class="budget-form-input" id="description_input" type="text" name="description" placeholder="Описание" autocomplete="off">
-        </label>
-        <label>
-            <span>*Планируемый бюджет</span>
+        </div>
+
+        <label for="target_input">Планируемый бюджет</label>
+        <div class="input-wrapper">
             <input class="budget-form-input" id="target_input" type="number" step="any" name="target" placeholder="100" autocomplete="off">
-        </label>
-        <label>
-            *Валюта
+        </div>
+
+        <label for="currency_input">Валюта</label>
+        <div class="input-wrapper">
             <select class="budget-form-input" id="currency_input" name="currency">
                 {{#each currency_list}}
                     <option class="currency_option" value="{{this}}">{{this}}</option>
                 {{/each}}
             </select>
-        </label>
-        <br>
-        <label>
-            <span>*Начало</span>
+        </div>
+
+        <label for="start_at_input">Начало</label>
+        <div class="input-wrapper">
             <input class="budget-form-input" id="start_at_input" type="date" name="start_at">
-        </label>
-        <label>
-            <span>Конец</span>
+        </div>
+
+        <label for="end_at_input">Конец</label>
+        <div class="input-wrapper">
             <input class="budget-form-input" id="end_at_input" type="date" name="end_at">
-        </label>
+        </div>
+
         <p class="budget-form-error" id="error_message"></p>
-        <input class="budget-form-btn" type="submit" value="Создать бюджет">
+        <button class="budget-form-btn" type="submit">Создать бюджет</button>
     </form>
-=======
-  <h3 class="budget-form-title">Новый бюджет</h3>
-  <form>
-
-    <label for="title_input">Название</label>
-    <div class="input-wrapper">
-      <input class="budget-form-input" id="title_input" type="text" name="title" placeholder="Название" autocomplete="off">
-    </div>
-
-    <label for="description_input">Описание</label>
-    <div class="input-wrapper">
-      <input class="budget-form-input" id="description_input" type="text" name="description" placeholder="Описание" autocomplete="off">
-    </div>
-
-    <label for="target_input">Планируемый бюджет</label>
-    <div class="input-wrapper">
-      <input class="budget-form-input" id="target_input" type="number" name="target" placeholder="Планируемый бюджет" autocomplete="off">
-    </div>
-
-    <label for="currency_input">Валюта (USD, RUB...)</label>
-    <div class="input-wrapper">
-      <input class="budget-form-input" id="currency_input" type="text" name="currency" placeholder="Валюта (USD, RUB...)" autocomplete="off">
-    </div>
-
-    <label for="start_at_input">Дата начала</label>
-    <div class="input-wrapper">
-      <input class="budget-form-input" id="start_at_input" type="date" name="start_at">
-    </div>
-
-    <label for="end_at_input">Дата окончания</label>
-    <div class="input-wrapper">
-      <input class="budget-form-input" id="end_at_input" type="date" name="end_at">
-    </div>
-
-    <p class="budget-form-error" id="error_message"></p>
-
-    <button class="budget-form-btn" type="submit">Создать бюджет</button>
-  </form>
->>>>>>> 3e902a2 (added linter and done linter fixes, added email validation, added full jsdoc, added labels)
 </div>

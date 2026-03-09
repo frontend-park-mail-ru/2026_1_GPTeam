@@ -31,10 +31,6 @@ export class LoginPage extends BasePage {
         form.render(root.querySelector(".page__content"));
 
         form._on(form.getElement(), "submit", async (e) => form.submit(e));
-<<<<<<< HEAD
-=======
-
->>>>>>> 3e902a2 (added linter and done linter fixes, added email validation, added full jsdoc, added labels)
         this._components.push(form);
     }
 }

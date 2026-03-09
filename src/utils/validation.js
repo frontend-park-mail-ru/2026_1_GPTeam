@@ -1,18 +1,5 @@
-<<<<<<< HEAD
 import {currencies} from "../store/store.js";
 
-=======
-/**
- * Валидирует имя пользователя (логин).
- * Проверяет минимальную длину и допустимые символы (латиница и цифры).
- * @function validate_username
- * @param {string} username - Имя пользователя для проверки.
- * @returns {[boolean, string]} Кортеж: [isValid, errorMessage].
- *
- * @example
- * const [isValid, error] = validate_username('jo'); // [false, "Логин должен быть минимум 3 символа"]
- */
->>>>>>> 3e902a2 (added linter and done linter fixes, added email validation, added full jsdoc, added labels)
 export function validate_username(username) {
     username = username.trim();
     if (username.length < 3)
@@ -104,7 +91,6 @@ export function is_empty(value, field_name) {
     return [true, ""];
 }
 
-<<<<<<< HEAD
 export function validate_email(email) {
     email = email.trim();
     if (email.length === 0 || email.length >= 255)
@@ -154,40 +140,3 @@ export function validate_end_date(start_date_str, end_date_str) {
         return [false, "Дата окончания должна быть позже даты начала"];
     return [true, ""];
 }
-=======
-/**
- * Валидирует адрес электронной почты.
- * Проверяет наличие символа @, корректного домена и допустимых символов.
- * @function validate_email
- * @param {string} email - Адрес электронной почты для проверки.
- * @returns {[boolean, string]} Кортеж: [isValid, errorMessage].
- *
- * @example
- * const [isValid, error] = validate_email('user@example.com'); // [true, ""]
- * const [isValid, error] = validate_email('userexample.com');  // [false, "Email должен содержать символ @"]
- */
-export function validate_email(email) {
-    if (!email.includes("@"))
-        return [false, "Email должен содержать символ @"];
-
-    const [local, domain] = email.split("@");
-
-    if (!local || local.length === 0)
-        return [false, "Email не должен начинаться с символа @"];
-
-    if (!domain || !domain.includes("."))
-        return [false, "Email должен содержать домен, например: example.com"];
-
-    const domain_parts = domain.split(".");
-    const tld = domain_parts[domain_parts.length - 1];
-
-    if (!tld || tld.length < 2)
-        return [false, "Некорректное доменное расширение в Email"];
-
-    const ok = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/.test(email);
-    if (!ok)
-        return [false, "Email содержит недопустимые символы"];
-
-    return [true, ""];
-}
->>>>>>> 3e902a2 (added linter and done linter fixes, added email validation, added full jsdoc, added labels)
