@@ -2,13 +2,13 @@
     background: transparent;
     border-radius: 20px;
     padding: 0;
-    font-family: 'Manrope', sans-serif;
+    font-family: Manrope, sans-serif;
     width: 510px;
 }
 
 .budget-form-card label span {
     margin-left: 15px;
-    color: rgba(255, 255, 255, 0.8);
+    color: rgb(255 255 255 / 80%);
 }
 
 .budget-form-title {
@@ -39,11 +39,7 @@
     padding: 14px 22px;
     color: #fff;
     font-size: 16px;
-<<<<<<< HEAD
     margin-bottom: 16px;
-=======
-    margin-bottom: 0;
->>>>>>> 3e902a2 (added linter and done linter fixes, added email validation, added full jsdoc, added labels)
     outline: none;
     transition: border-color 0.2s;
     box-sizing: border-box;
@@ -65,15 +61,9 @@
     cursor: pointer;
 }
 
-<<<<<<< HEAD
 .currency_option {
     color: #7b7fff;
     background-color: black;
-=======
-.budget-form-input[type="date"]::-webkit-calendar-picker-indicator {
-    filter: invert(0.7);
-    cursor: pointer;
->>>>>>> 3e902a2 (added linter and done linter fixes, added email validation, added full jsdoc, added labels)
 }
 
 .budget-form-btn {

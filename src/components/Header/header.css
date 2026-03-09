@@ -17,7 +17,7 @@
     display: flex;
     align-items: center;
     font-size: 14px;
-    font-family: 'Manrope', sans-serif;
+    font-family: Manrope, sans-serif;
     gap: 6px;
     border-radius: 30px;
 }
@@ -29,7 +29,7 @@
     display: flex;
     align-items: center;
     font-size: 18px;
-    font-family: 'Manrope', sans-serif;
+    font-family: Manrope, sans-serif;
     gap: 6px;
     border-radius: 30px;
     transition: background-color 0.2s;
