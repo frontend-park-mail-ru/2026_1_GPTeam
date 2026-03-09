@@ -144,7 +144,7 @@ export class AuthForm extends BaseComponent {
             const data = await response.json();
 
             if (data.code === 200) {
-                router.navigate("/balance");
+                router.navigate("/profile");
             } else if (data.code === 405) {
                 console.error(data["message"]);
             } else {
