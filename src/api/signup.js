@@ -19,7 +19,7 @@ import { client } from "./client.js"
  * }
  */
 export const signup = async function (username, password, confirm_password, email) {
-    const response = await client("/signup",  {
+    const response = await client("/auth/signup",  {
         method: "POST",
         credentials: "include",
         headers: {
