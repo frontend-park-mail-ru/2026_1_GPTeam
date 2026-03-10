@@ -1,0 +1,55 @@
+.page__header div {
+    border: #484FFF solid 2px;
+    border-radius: 15px;
+    width: 70vw;
+    margin: auto;
+    padding: 15px 0;
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    background-color: black;
+}
+
+.header_link {
+    text-decoration: none;
+    color: white;
+    padding: 10px;
+    display: flex;
+    align-items: center;
+    font-size: 14px;
+    font-family: Manrope, sans-serif;
+    gap: 6px;
+    border-radius: 30px;
+}
+
+.header_link_title {
+    text-decoration: none;
+    color: white;
+    padding: 10px;
+    display: flex;
+    align-items: center;
+    font-size: 18px;
+    font-family: Manrope, sans-serif;
+    gap: 6px;
+    border-radius: 30px;
+    transition: background-color 0.2s;
+}
+
+.header_link_logo {
+    font-size: 18px;
+}
+
+.header_link:hover {
+    background-color: #1C1A1A;
+}
+
+.header_link img {
+    width: 30px;
+    height: 30px;
+}
+
+.active_header_link {
+    color: #484FFF;
+    background-color: #1C1A1A;
+    border-radius: 30px;
+}

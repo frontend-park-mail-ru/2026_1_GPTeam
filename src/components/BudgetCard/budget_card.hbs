@@ -1,0 +1,32 @@
+<div class="budget-card">
+  <button class="budget-card__delete-btn" title="Удалить бюджет" type="button">×</button>
+  <div class="budget-card__header">
+    <div>
+      <span class="budget-card__label">Фактический</span>
+      <p class="budget-card__date">Дата начала: {{start_at}}</p>
+    </div>
+    <div style="text-align: right;">
+      <span class="budget-card__label">Планируемый</span>
+      <p class="budget-card__date">Дата окончания: {{end_at}}</p>
+    </div>
+  </div>
+  <div class="budget-card__header">
+    <span class="budget-card__amount">
+      <span class="budget-card__currency">{{currency}} </span>{{actual}}
+    </span>
+    <span class="budget-card__amount">
+      <span class="budget-card__currency">{{currency}} </span>{{target}}
+    </span>
+  </div>
+  <div class="budget-card__header">
+    <p class="budget-card__desc">{{title}}</p>
+    <p class="budget-card__desc">Запланированный лимит</p>
+  </div>
+  <div class="budget-card__progress-row">
+    <span class="budget-card__progress-label">Использовано бюджета</span>
+    <span class="budget-card__progress-percent">{{percent}}%</span>
+  </div>
+  <div class="budget-card__progress-bar">
+    <div class="budget-card__progress-fill" style="width: {{percent}}%"></div>
+  </div>
+</div>

@@ -1,0 +1,57 @@
+<div class="auth-wrapper">
+    <div class="auth-logo">
+        <a href="/" data-link class="auth-logo__text">MoneyFirst</a>
+    </div>
+    <div class="card">
+        {{#equal mode "login"}}
+            <h3 class="title">Вход</h3>
+        {{else}}
+            <h3 class="title">Регистрация</h3>
+        {{/equal}}
+
+        <p id="help_abc_text">Доступны символы латинского алфавита и цифры</p>
+
+        <form>
+            <label for="username_input">Логин</label>
+            <div class="input-wrapper">
+                <input class="input" id="username_input" type="text" name="username" placeholder="Логин" autocomplete="off">
+                <img class="help_abc" src="/icons/question.svg" alt="Справка">
+            </div>
+
+            <label for="password_input">Пароль</label>
+            <div class="input-wrapper">
+                <input class="input" id="password_input" type="password" name="password" placeholder="Пароль" autocomplete="off">
+                <img class="eye_btn" src="/icons/closed_eye.svg" alt="Показать пароль">
+            </div>
+
+            {{#equal mode "signup"}}
+                <label for="confirm_password_input">Повторите пароль</label>
+                <div class="input-wrapper">
+                    <input class="input" id="confirm_password_input" type="password" name="confirm_password" placeholder="Пароль снова" autocomplete="off">
+                    <img class="confirm_eye_btn" src="/icons/closed_eye.svg" alt="Показать пароль">
+                </div>
+
+                <label for="email_input">Email</label>
+                <div class="input-wrapper">
+                    <input class="input" id="email_input" type="text" name="email" placeholder="Email" autocomplete="off">
+                </div>
+            {{/equal}}
+
+            <p class="error-message" id="error_message"></p>
+
+            {{#equal mode "login"}}
+                <button class="btn" type="submit">Войти</button>
+            {{else}}
+                <button class="btn" type="submit">Зарегистрироваться</button>
+            {{/equal}}
+        </form>
+
+        <p class="footer-text">
+            {{#equal mode "login"}}
+                Ещё нет аккаунта? <a href="/signup" data-link>Зарегистрироваться</a>
+            {{else}}
+                Уже есть аккаунт? <a href="/login" data-link>Войти</a>
+            {{/equal}}
+        </p>
+    </div>
+</div>

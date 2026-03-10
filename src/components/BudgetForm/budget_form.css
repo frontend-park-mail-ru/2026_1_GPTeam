@@ -1,0 +1,123 @@
+.budget-form-card {
+    background: transparent;
+    border-radius: 20px;
+    padding: 0;
+    font-family: Manrope, sans-serif;
+    width: 510px;
+}
+
+.budget-form-card label span {
+    margin-left: 15px;
+    color: rgba(255, 255, 255, 0.6);
+}
+
+.budget-form-title {
+    color: #fff;
+    font-size: 28px;
+    font-weight: 700;
+    text-align: center;
+    margin-bottom: 32px;
+}
+
+.budget-form-card label {
+    display: block;
+    color: rgb(255 255 255 / 70%);
+    font-size: 14px;
+    margin-bottom: 6px;
+}
+
+.input-wrapper {
+    position: relative;
+    margin-bottom: 15px;
+}
+
+.budget-form-input {
+    width: 100%;
+    background: transparent;
+    border: 1px solid rgb(72 79 255 / 50%);
+    border-radius: 50px;
+    padding: 14px 22px;
+    color: #fff;
+    font-size: 16px;
+    margin-bottom: 16px;
+    outline: none;
+    transition: border-color 0.2s;
+    box-sizing: border-box;
+    margin-top: 5px;
+}
+
+.budget-form-input::placeholder {
+    color: rgb(255 255 255 / 30%);
+}
+
+.budget-form-input:focus {
+    border-color: #484fff;
+    box-shadow: 0 0 10px rgb(72 79 255 / 30%);
+}
+
+.budget-form-input[type="datetime-local"]::-webkit-calendar-picker-indicator {
+    filter: invert(1);
+    opacity: 0.5;
+    cursor: pointer;
+}
+
+.currency_option {
+    color: #7b7fff;
+    background-color: black;
+}
+
+.budget-form-btn {
+    width: 100%;
+    background: #484fff;
+    color: #fff;
+    border: none;
+    border-radius: 50px;
+    padding: 16px;
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+    margin-top: 10px;
+    transition: all 0.2s;
+    box-shadow: 0 0 20px rgb(72 79 255 / 50%);
+    box-sizing: border-box;
+}
+
+.budget-form-btn:hover {
+    box-shadow: 0 0 36px rgb(72 79 255 / 70%);
+    transform: translateY(-1px);
+}
+
+.budget-form-btn:disabled {
+    background-color: gray;
+    box-shadow: none;
+    cursor: not-allowed;
+    transform: none;
+}
+
+.budget-form-error {
+    color: red;
+    font-size: 14px;
+    text-align: center;
+    min-height: 20px;
+    margin-bottom: 8px;
+    overflow-wrap: break-word;
+}
+
+.budget-form-input option {
+    background: #191919;
+    color: #fff;
+}
+
+select.budget-form-input {
+    appearance: none;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='rgba(255,255,255,0.5)' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 16px center;
+    padding-right: 40px;
+    cursor: pointer;
+}
+
+.budget-form-input[type="date"]::-webkit-calendar-picker-indicator {
+    filter: invert(0.7);
+    cursor: pointer;
+}
