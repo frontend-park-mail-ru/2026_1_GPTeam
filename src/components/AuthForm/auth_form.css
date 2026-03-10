@@ -10,10 +10,13 @@
 }
 
 .auth-logo__text {
-    font-size: 60px;
+    display: inline-block;
+    margin-top: 60px;
+    font-size: 85.5px;
     font-weight: 900;
     background: linear-gradient(90deg, #fff 35%, #6369FF 100%);
     -webkit-text-fill-color: transparent;
+    font-family: 'Semantic', sans-serif;
     background-clip: text;
     text-decoration: none;
 }
@@ -28,9 +31,10 @@
 }
 
 .title {
-    color: #fff;
-    font-size: 28px;
-    font-weight: 700;
+    color: #ffffff;
+    font-size: 36px;
+    font-weight: 600;
+    font-family: 'Inter', sans-serif;
     text-align: center;
     margin-bottom: 32px;
 }
@@ -82,7 +86,9 @@
 
 #help_abc_text {
     text-align: center;
-    margin-bottom: 5px;
+    margin-bottom: 10px;
+    font-family: 'Inter', sans-serif;
+    color: rgba(255, 255, 255, 0.5);
     visibility: hidden;
 }
 
@@ -139,7 +145,7 @@
 .footer-text {
     text-align: center;
     font-size: 14px;
-    color: rgb(255 255 255 / 40%);
+    color: rgba(255, 255, 255, 0.5);
     margin-top: 20px;
 }
 
