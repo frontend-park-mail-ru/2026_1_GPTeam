@@ -2,9 +2,9 @@ import {BaseComponent} from "../base_component.js";
 import template from "./auth_form.hbs?raw";
 import "./auth_form.css"
 import "../../utils/helpers.js"
-import { is_empty, validate_username, validate_password, are_password_equal, validate_email } from "../../utils/validation.js";
+import {is_empty, validate_username, validate_password, are_password_equal, validate_email} from "../../utils/validation.js";
+import {client} from "../../api/client.js";
 import { router } from "../../router/router_instance.js";
-import { client } from "../../api/client.js";
 
 /**
  * Компонент формы авторизации и регистрации.
@@ -41,7 +41,7 @@ export class AuthForm extends BaseComponent {
             this._on(eye_btn, "click", () => {
                 const isVisible = password.type === "text";
                 password.type = isVisible ? "password" : "text";
-                eye_btn.src = isVisible ? "/icons/closed_eye.svg" : "/icons/opened_eye.svg";
+                eye_btn.src = isVisible ? "/img/closed_eye.png" : "/img/opened_eye.png";
             });
         }
 
@@ -49,7 +49,7 @@ export class AuthForm extends BaseComponent {
             this._on(confirm_eye_btn, "click", () => {
                 const isVisible = confirm_password.type === "text";
                 confirm_password.type = isVisible ? "password" : "text";
-                confirm_eye_btn.src = isVisible ? "/icons/closed_eye.svg" : "/icons/opened_eye.svg";
+                confirm_eye_btn.src = isVisible ? "/img/closed_eye.png" : "/img/opened_eye.png";
             });
         }
 
@@ -133,7 +133,7 @@ export class AuthForm extends BaseComponent {
     /**
      * Обработчик отправки формы.
      * Предотвращает стандартное поведение, вызывает валидацию и отправляет данные на сервер.
-     * При успехе перенаправляет пользователя на страницу баланса.
+     * При успехе перенаправляет пользователя на страницу профиля.
      * @async
      * @param {Event} e - Объект события submit.
      * @returns {Promise<void>}
@@ -181,7 +181,7 @@ export class AuthForm extends BaseComponent {
             const data = await response.json();
 
             if (data.code === 200) {
-                router.navigate("/balance");
+                router.navigate("/profile");
             } else if (data.code === 405) {
                 console.error(data["message"]);
             } else {
