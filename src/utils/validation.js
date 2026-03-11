@@ -161,6 +161,9 @@ export function validate_target_budget(target) {
 export function validate_start_date(server_time, date_str) {
     date_str = date_str.trim();
     let date = new Date(date_str);
+    let server_date = new Date(server_time);
+    date.setTime(server_date.getTime())
+    console.log(date, server_date);
     if (date < server_time)
         return [false, "Дата начала не может быть в прошлом"];
     return [true, ""];
