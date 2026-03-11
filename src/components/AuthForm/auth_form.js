@@ -153,7 +153,7 @@ export class AuthForm extends BaseComponent {
         if (hasErrors) return;
 
         const isLogin = this.mode === "login";
-        const url = isLogin ? "/auth/login" : "/auth/signup";
+        const url = isLogin ? "/auth/login" : "/signup";
 
         const payload = {
             username: username.value,
