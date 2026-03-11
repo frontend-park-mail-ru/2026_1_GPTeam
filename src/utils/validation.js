@@ -1,5 +1,11 @@
 import {currencies} from "../store/store.js";
 
+/**
+ * Проверка логина на использование только разрешённых символов.
+ * @function validate_username
+ * @param {string} username - Логин.
+ * @returns {[boolean, string]} Кортеж: [valid, errorMessage].
+ */
 export function validate_username(username) {
     username = username.trim();
     if (username.length < 3)
@@ -91,6 +97,13 @@ export function is_empty(value, field_name) {
     return [true, ""];
 }
 
+/**
+ * Проверка на корректность почты.
+ * @function validate_email
+ * @param {string} email - Почта для проверки.
+ * @returns {[boolean, string]} Кортеж: [isValid, errorMessage].
+ * @private
+ */
 export function validate_email(email) {
     email = email.trim();
     if (email.length === 0 || email.length >= 255)
@@ -101,6 +114,13 @@ export function validate_email(email) {
     return [true, ""];
 }
 
+/**
+ * Проверка на корректность валюты. Доступны только варианты из хранилища.
+ * @function validate_currency
+ * @param {string} currency - Валюта для проверки.
+ * @returns {[boolean, string]} Кортеж: [isValid, errorMessage].
+ * @private
+ */
 export function validate_currency(currency) {
     currency = currency.trim().toUpperCase();
     if (currencies.includes(currency))
@@ -108,6 +128,14 @@ export function validate_currency(currency) {
     return [false, "Валюта не поддерживается"];
 }
 
+/**
+ * Проверка на корректность введённого бюджета.
+ * Это должно быть положительное число (целое или дробное), но не больше 1e18.
+ * @function validate_target_budget
+ * @param {string} target - Значение для проверки.
+ * @returns {[boolean, string]} Кортеж: [isValid, errorMessage].
+ * @private
+ */
 export function validate_target_budget(target) {
     target = target.trim();
     let target_value = parseFloat(target);
@@ -121,6 +149,15 @@ export function validate_target_budget(target) {
     return [true, ""];
 }
 
+/**
+ * Проверка на корректность введённой даты начала бюджета.
+ * Она не может быть в прошлом.
+ * @function validate_start_date
+ * @param {string} server_time - Текущее время сервера.
+ * @param {string} date_str - Дата, которую ввёл пользователь.
+ * @returns {[boolean, string]} Кортеж: [isValid, errorMessage].
+ * @private
+ */
 export function validate_start_date(server_time, date_str) {
     date_str = date_str.trim();
     let date = new Date(date_str);
@@ -129,6 +166,15 @@ export function validate_start_date(server_time, date_str) {
     return [true, ""];
 }
 
+/**
+ * Проверка на корректность введённой даты начала бюджета.
+ * Она может быть пустой. Но если она не пустая, то она обязана быть больше даты начала.
+ * @function validate_end_date
+ * @param {string} start_date_str - Дата начала бюджета.
+ * @param {string} end_date_str - Дата конца бюджета.
+ * @returns {[boolean, string]} Кортеж: [isValid, errorMessage].
+ * @private
+ */
 export function validate_end_date(start_date_str, end_date_str) {
     start_date_str = start_date_str.trim();
     end_date_str = end_date_str.trim();

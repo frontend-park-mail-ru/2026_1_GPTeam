@@ -4,6 +4,7 @@
     border: none;
     border-radius: 10px;
     background-color: rgb(0 0 0 / 0%);
+    cursor: pointer;
 }
 
 .logout_btn:hover, .logout_btn:focus, .logout_btn:active {

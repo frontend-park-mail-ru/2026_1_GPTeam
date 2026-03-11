@@ -22,6 +22,15 @@ export const is_login = async function () {
     return data.code === 200;
 }
 
+
+/**
+ * Разлогинивает пользователя.
+ * Отправляет POST запрос на /auth/logout с учетными данными.
+ * * @async
+ * @function logout
+ * @returns {Promise<boolean>} true если операция прошла успешно (код 200), иначе false
+ * @throws {Error} Если сетевой запрос завершился неудачей или парсинг JSON не удался
+ */
 export const logout = async function () {
     let response = await client("/auth/logout", {
         method: "POST",
