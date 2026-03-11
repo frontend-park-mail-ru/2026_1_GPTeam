@@ -151,23 +151,29 @@ export function validate_target_budget(target) {
 
 /**
  * Проверка на корректность введённой даты начала бюджета.
- * Она не может быть в прошлом.
+ * Она не может быть в прошлом относительно текущего времени сервера.
  * @function validate_start_date
- * @param {string} server_time - Текущее время сервера.
- * @param {string} date_str - Дата, которую ввёл пользователь.
+ * @param {string} server_time - Текущее время сервера в формате, поддерживаемом Date().
+ * @param {string} date_str - Дата начала, введённая пользователем.
  * @returns {[boolean, string]} Кортеж: [isValid, errorMessage].
- * @private
  */
 export function validate_start_date(server_time, date_str) {
     date_str = date_str.trim();
     let date = new Date(date_str);
     let server_date = new Date(server_time);
-    date.setTime(server_date.getTime())
-    console.log(date, server_date);
-    if (date < server_time)
+
+    if (isNaN(date.getTime()))
+        return [false, "Некорректная дата"];
+
+    if (date < server_date)
         return [false, "Дата начала не может быть в прошлом"];
+
+    if (date - server_date > 5 * 365.25 * 24 * 60 * 60 * 1000)
+        return [false, "Дата начала не может быть больше 5 лет от текущей даты"];
+
     return [true, ""];
 }
+
 
 /**
  * Проверка на корректность введённой даты начала бюджета.
@@ -187,5 +193,7 @@ export function validate_end_date(start_date_str, end_date_str) {
     let end_date = new Date(end_date_str);
     if (end_date < start_date)
         return [false, "Дата окончания должна быть позже даты начала"];
+    if (end_date - start_date > 5 * 365.25 * 24 * 60 * 60 * 1000)
+        return [false, "Период между датами не может превышать 5 лет"];
     return [true, ""];
 }

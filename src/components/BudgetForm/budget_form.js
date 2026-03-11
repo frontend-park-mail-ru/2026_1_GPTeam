@@ -82,7 +82,6 @@ export class BudgetForm extends BaseComponent {
 
         const requiredFields = [
             [title, "Название"],
-            [description, "Описание"],
             [target, "Планируемый бюджет"],
             [currency, "Валюта"],
             [start_at, "Дата начала"],
