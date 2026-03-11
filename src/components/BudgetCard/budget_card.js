@@ -42,7 +42,7 @@ export class BudgetCard extends BaseComponent {
 
         super(template, {
             title: props.budget.title || "—",
-            description: props.budget.description || "",  // ← добавь эту строку
+            description: props.budget.description || "",
             actual: props.budget.actual.toLocaleString("ru-RU"),
             target: props.budget.target.toLocaleString("ru-RU"),
             currency,
