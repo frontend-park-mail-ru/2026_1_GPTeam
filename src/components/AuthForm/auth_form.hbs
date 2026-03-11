@@ -18,6 +18,13 @@
                 <img class="help_abc" src="/icons/question.svg" alt="Справка">
             </div>
 
+            {{#equal mode "signup"}}
+                <label for="email_input">Email</label>
+                <div class="input-wrapper">
+                    <input class="input" id="email_input" type="text" name="email" placeholder="Email" autocomplete="off">
+                </div>
+            {{/equal}}
+
             <label for="password_input">Пароль</label>
             <div class="input-wrapper">
                 <input class="input" id="password_input" type="password" name="password" placeholder="Пароль" autocomplete="off">
@@ -29,11 +36,6 @@
                 <div class="input-wrapper">
                     <input class="input" id="confirm_password_input" type="password" name="confirm_password" placeholder="Пароль снова" autocomplete="off">
                     <img class="confirm_eye_btn" src="/icons/closed_eye.svg" alt="Показать пароль">
-                </div>
-
-                <label for="email_input">Email</label>
-                <div class="input-wrapper">
-                    <input class="input" id="email_input" type="text" name="email" placeholder="Email" autocomplete="off">
                 </div>
             {{/equal}}
 

@@ -1,22 +1,22 @@
 <div class="budget-form-card">
     <h3 class="budget-form-title">Новый бюджет</h3>
     <form>
-        <label for="title_input">*Название</label>
+        <label for="title_input">Название</label>
         <div class="input-wrapper">
             <input class="budget-form-input" id="title_input" type="text" name="title" placeholder="Название" autocomplete="off">
         </div>
 
-        <label for="description_input">*Описание</label>
+        <label for="description_input">Описание</label>
         <div class="input-wrapper">
             <input class="budget-form-input" id="description_input" type="text" name="description" placeholder="Описание" autocomplete="off">
         </div>
 
-        <label for="target_input">*Планируемый бюджет</label>
+        <label for="target_input">Планируемый бюджет</label>
         <div class="input-wrapper">
             <input class="budget-form-input" id="target_input" type="number" step="any" name="target" placeholder="100" autocomplete="off">
         </div>
 
-        <label for="currency_input">*Валюта</label>
+        <label for="currency_input">Валюта</label>
         <div class="input-wrapper">
             <select class="budget-form-input" id="currency_input" name="currency">
                 {{#each currency_list}}
@@ -25,12 +25,12 @@
             </select>
         </div>
 
-        <label for="start_at_input">*Начало</label>
+        <label for="start_at_input">Начало</label>
         <div class="input-wrapper">
             <input class="budget-form-input" id="start_at_input" type="date" name="start_at">
         </div>
 
-        <label for="end_at_input">Конец</label>
+        <label for="end_at_input">Конец (необязательно)</label>
         <div class="input-wrapper">
             <input class="budget-form-input" id="end_at_input" type="date" name="end_at">
         </div>
