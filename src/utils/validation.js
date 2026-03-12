@@ -161,6 +161,7 @@ export function validate_start_date(server_time, date_str) {
     date_str = date_str.trim();
     let date = new Date(date_str);
     let server_date = new Date(server_time);
+    date.setTime(server_date.getTime());
 
     if (isNaN(date.getTime()))
         return [false, "Некорректная дата"];
@@ -173,7 +174,6 @@ export function validate_start_date(server_time, date_str) {
 
     return [true, ""];
 }
-
 
 /**
  * Проверка на корректность введённой даты начала бюджета.
