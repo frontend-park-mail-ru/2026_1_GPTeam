@@ -22,6 +22,9 @@
     <p class="budget-card__desc">{{title}}</p>
     <p class="budget-card__desc">Запланированный лимит</p>
   </div>
+  {{#if description}}
+  <p class="budget-card__subdesc">{{description}}</p>
+  {{/if}}
   <div class="budget-card__progress-row">
     <span class="budget-card__progress-label">Использовано бюджета</span>
     <span class="budget-card__progress-percent">{{percent}}%</span>
