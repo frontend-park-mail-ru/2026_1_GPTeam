@@ -21,8 +21,11 @@
   border-radius: 16px;
   padding: 24px;
   width: 732px;
+  max-width: 100%;
+  box-sizing: border-box;
   font-family: Manrope, sans-serif;
   position: relative;
+  overflow: hidden;
 }
 
 .budget-card__delete-btn {
@@ -54,8 +57,38 @@
 .budget-card__header {
   display: flex;
   justify-content: space-between;
+  align-items: flex-start;
   margin-bottom: 16px;
   margin-top: 24px;
+  gap: 16px;
+  min-width: 0;
+}
+
+.budget-card__header > div:first-child {
+  flex: 1 1 0;
+  min-width: 0;
+  overflow: hidden;
+}
+
+.budget-card__header > div:last-child {
+  flex: 0 0 auto;
+  text-align: right;
+  white-space: nowrap;
+}
+
+.budget-card__header > span:first-child {
+  flex: 1 1 0;
+  min-width: 0;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
+
+.budget-card__header > span:last-child,
+.budget-card__header > p:last-child {
+  flex: 0 0 auto;
+  white-space: nowrap;
+  text-align: right;
 }
 
 .budget-card__label {
@@ -70,15 +103,43 @@
   color: rgb(255 255 255 / 50%);
   font-size: 12px;
   margin: 4px 0 0;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.budget-card__amount {
+  color: #fff;
+  font-size: 36px;
+  font-weight: 700;
+  margin: 6px 0;
+  display: flex;
+  align-items: baseline;
+  min-width: 0;
+  overflow: hidden;
+  white-space: nowrap;
+}
+
+.budget-card__currency {
+  display: inline-block;
+  color: rgb(255 255 255 / 60%);
+  font-size: 18px;
+  font-weight: 600;
+  margin-right: 4px;
+  vertical-align: middle;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
 }
 
 .budget-card__desc {
   color: rgb(255 255 255 / 50%);
   font-size: 13px;
   margin: 0;
-  max-width: 50%;
   overflow: hidden;
   text-overflow: ellipsis;
+  white-space: nowrap;
+  display: block;
+  width: 100%;
 }
 
 .budget-card__progress-row {
@@ -122,42 +183,20 @@
   padding: 40px;
 }
 
-.budget-card__currency {
-  display: inline-block;
-  color: rgb(255 255 255 / 60%);
-  font-size: 18px;
-  font-weight: 600;
-  margin-right: 4px;
-  vertical-align: middle;
-  text-transform: uppercase;
-  letter-spacing: 0.05em;
-}
-
-.budget-card__amount {
-  color: #fff;
-  font-size: 36px;
-  font-weight: 700;
-  margin: 6px 0;
-  display: flex;
-  align-items: baseline;
-  max-width: 50%;
-  overflow: hidden;
-}
-
 .budget-create-btn {
-    background: #484fff;
-    color: #fff;
-    border: none;
-    border-radius: 50px;
-    padding: 14px 32px;
-    font-size: 16px;
-    font-weight: 600;
-    cursor: pointer;
-    transition: all 0.2s;
-    box-shadow: 0 0 20px rgb(72 79 255 / 50%);
+  background: #484fff;
+  color: #fff;
+  border: none;
+  border-radius: 50px;
+  padding: 14px 32px;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+  box-shadow: 0 0 20px rgb(72 79 255 / 50%);
 }
 
 .budget-create-btn:hover {
-    box-shadow: 0 0 36px rgb(72 79 255 / 70%);
-    transform: translateY(-1px);
+  box-shadow: 0 0 36px rgb(72 79 255 / 70%);
+  transform: translateY(-1px);
 }
