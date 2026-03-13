@@ -1,5 +1,6 @@
 import { BaseComponent } from "../base_component.js";
 import template from "./budget_card.hbs?raw";
+import "./budget_card.css";
 
 /**
  * Компонент карточки бюджета.
