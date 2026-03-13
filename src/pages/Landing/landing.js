@@ -15,7 +15,10 @@ import { router } from "../../router/router_instance.js";
  */
 export class LandingPage extends BasePage {
     /**
-     * Рендерит лендинг и навешивает обработчик на кнопку "Начать бесплатно".
+     * Рендерит лендинг и навешивает обработчики.
+     * — Кнопка профиля: авторизованные → /profile, остальные → /login
+     * — Индикатор: зелёный «Вы вошли» или красный «Вы не вошли»
+     * — CTA-кнопки: авторизованные → /balance, остальные → /signup
      *
      * @async
      * @param {HTMLElement} root - Корневой DOM-элемент, в который отрисовывается страница.
@@ -24,10 +27,31 @@ export class LandingPage extends BasePage {
     async render(root) {
         root.innerHTML = template;
 
-        root.querySelectorAll(".cta-primary").forEach(btn => {
-            btn.addEventListener("click", async (e) => {
+        const authorized = await is_login();
+
+        const indicatorIn  = root.querySelector("#auth-indicator-in");
+        const indicatorOut = root.querySelector("#auth-indicator-out");
+
+        if (authorized) {
+            if (indicatorIn)  indicatorIn.style.display  = "inline-flex";
+            if (indicatorOut) indicatorOut.style.display = "none";
+        } else {
+            if (indicatorOut) indicatorOut.style.display = "inline-flex";
+            if (indicatorIn)  indicatorIn.style.display  = "none";
+        }
+
+        const profileBtn = root.querySelector("#profile-btn");
+        if (profileBtn) {
+            profileBtn.style.cursor = "pointer";
+            profileBtn.addEventListener("click", (e) => {
                 e.preventDefault();
-                const authorized = await is_login();
+                router.navigate(authorized ? "/profile" : "/login");
+            });
+        }
+
+        root.querySelectorAll(".cta-primary").forEach(btn => {
+            btn.addEventListener("click", (e) => {
+                e.preventDefault();
                 router.navigate(authorized ? "/balance" : "/signup");
             });
         });

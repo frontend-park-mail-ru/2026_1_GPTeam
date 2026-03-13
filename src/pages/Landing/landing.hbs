@@ -1,6 +1,18 @@
 <div class="site-logo">
     <div>MF</div>
-    <a href="/profile" data-link><img class="profile_icon" src="/icons/profile.svg" alt="профиль"></a>
+    <div class="logo-right">
+        <div class="auth-indicator auth-indicator--out" id="auth-indicator-out" style="display:none;">
+            <span class="auth-dot auth-dot--red"></span>
+            <span class="auth-label">Вы не вошли в аккаунт</span>
+            <a href="/login" data-link class="auth-link auth-link--red">Войти →</a>
+        </div>
+        <div class="auth-indicator" id="auth-indicator-in" style="display:none;">
+            <span class="auth-dot"></span>
+            <span class="auth-label">Вы вошли в аккаунт</span>
+            <a href="/balance" data-link class="auth-link">Перейти →</a>
+        </div>
+        <a id="profile-btn"><img class="profile_icon" src="/icons/profile.svg" alt="профиль"></a>
+    </div>
 </div>
 
 <section class="hero">
@@ -141,7 +153,6 @@
 
 <div class="divider"></div>
 
-<!-- TESTIMONIALS -->
 <section class="testimonials">
   <div class="section-label">Отзывы</div>
   <h2 class="section-title">Нам доверяют тысячи<br>людей по всей России</h2>
