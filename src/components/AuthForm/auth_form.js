@@ -153,7 +153,7 @@ export class AuthForm extends BaseComponent {
         if (hasErrors) return;
 
         const isLogin = this.mode === "login";
-        const url = isLogin ? "/auth/login" : "/signup";
+        const url = isLogin ? "/auth/login" : "/auth/signup";
 
         const payload = {
             username: username.value,
@@ -181,7 +181,7 @@ export class AuthForm extends BaseComponent {
             const data = await response.json();
 
             if (data.code === 200) {
-                router.navigate("/profile");
+                router.navigate("/balance");
             } else if (data.code === 405) {
                 console.error(data["message"]);
             } else {
