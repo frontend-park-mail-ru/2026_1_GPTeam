@@ -8,8 +8,6 @@
 }
 
 .budget_value {
-    max-width: 100%;
+    max-width: 90%;
     overflow-wrap: break-word;
-    word-wrap: break-word;
-    word-break: break-word;
 }
