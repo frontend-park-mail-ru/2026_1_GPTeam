@@ -17,18 +17,22 @@ export function validate_username(username) {
 }
 
 /**
- * Внутренняя проверка состава символов в пароле.
- * Проверяет наличие строчных, заглавных букв и цифр методом перебора.
- * @function check_symbols
+ * Валидирует пароль на длину и состав символов.
+ * @function validate_password
  * @param {string} password - Пароль для проверки.
  * @returns {[boolean, string]} Кортеж: [isValid, errorMessage].
- * @private
+ *
+ * @example
+ * const [isValid, error] = validate_password('123'); // [false, "Пароль должен содержать..."]
  */
-function check_symbols(password) {
+export function validate_password(password) {
+    password = password.trim();
+
     let has_lower = false;
     let has_upper = false;
     let has_digit = false;
     let has_invalid = false;
+
     for (let symbol of password) {
         if ("a" <= symbol && symbol <= "z")
             has_lower = true;
@@ -39,32 +43,11 @@ function check_symbols(password) {
         else
             has_invalid = true;
     }
-    if (!has_upper)
-        return [false, "В пароле нет заглавной буквы"];
-    if (!has_lower)
-        return [false, "В пароле нет строчной буквы"];
-    if (!has_digit)
-        return [false, "В пароле нет цифры"];
-    if (has_invalid)
-        return [false, "Пароль должен содержать только буквы латинского алфавита и цифры"];
-    return [true, ""];
-}
 
-/**
- * Валидирует пароль на сложность и длину.
- * Комбинирует проверку длины и вызов внутренней функции check_symbols.
- * @function validate_password
- * @param {string} password - Пароль для проверки.
- * @returns {[boolean, string]} Кортеж: [isValid, errorMessage].
- *
- * @example
- * const [isValid, error] = validate_password('123'); // [false, "Пароль должен быть минимум 8 символов"]
- */
-export function validate_password(password) {
-    password = password.trim();
-    if (password.length < 8)
-        return [false, "Пароль должен быть минимум 8 символов"];
-    return check_symbols(password);
+    if (password.length < 8 || !has_upper || !has_lower || !has_digit || has_invalid)
+        return [false, "Пароль должен содержать заглавные и строчные буквы латинского алфавита и цифры (не менее 8 символов)"];
+
+    return [true, ""];
 }
 
 /**
