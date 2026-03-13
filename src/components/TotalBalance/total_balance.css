@@ -32,3 +32,10 @@
     font-size: 22px;
     font-weight: 600;
 }
+
+.balance__value {
+    max-width: 100%;
+    overflow-wrap: break-word;
+    word-wrap: break-word;
+    word-break: break-word;
+}
