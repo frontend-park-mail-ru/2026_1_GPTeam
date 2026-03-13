@@ -9,13 +9,14 @@
             <h3 class="title">Регистрация</h3>
         {{/equal}}
 
-        <p id="help_abc_text">Доступны символы латинского алфавита и цифры</p>
-
         <form>
             <label for="username_input">Логин</label>
             <div class="input-wrapper">
                 <input class="input" id="username_input" type="text" name="username" placeholder="Логин" autocomplete="off">
-                <img class="help_abc" src="/icons/question.svg" alt="Справка">
+                <div class="help-wrap">
+                    <img class="help_abc" src="/icons/question.svg" alt="Справка">
+                    <div class="help-tooltip" id="help_abc_text">Доступны символы латинского алфавита и цифры</div>
+                </div>
             </div>
 
             {{#equal mode "signup"}}

@@ -76,7 +76,7 @@ export function are_password_equal(password, confirm_password) {
 export function is_empty(value, field_name) {
     value = value.trim();
     if (value.length === 0)
-        return [false, `${field_name} не может быть пустым`];
+        return [false, `Введите ${field_name.toLowerCase()}`];
     return [true, ""];
 }
 
@@ -91,9 +91,13 @@ export function validate_email(email) {
     email = email.trim();
     if (email.length === 0 || email.length >= 255)
         return [false, "Некорректный адрес электронной почты"];
-    let ok = /^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}$/.test(email);
-    if (!ok)
+
+    const latin = /^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}$/;
+    const cyrillic = /^[а-яёА-ЯЁ0-9._%+-]+@[а-яёА-ЯЁ0-9.-]+\.[а-яёА-ЯЁ]{2,}$/;
+
+    if (!latin.test(email) && !cyrillic.test(email))
         return [false, "Некорректный адрес электронной почты"];
+
     return [true, ""];
 }
 
@@ -124,11 +128,10 @@ export function validate_target_budget(target) {
     let target_value = parseFloat(target);
     if (isNaN(target_value))
         return [false, "Планируемый бюджет должен быть дробным числом"];
-    if (target_value < 0)
-        return [false, "Планируемый бюджет не может быть меньше 0"];
-    if (target_value > 1e18) {
-        return [false, "Значение не может быть больше 1e18"]
-    }
+    if (target_value <= 0)
+        return [false, "Планируемый бюджет должен быть больше 0"];
+    if (target_value > 1e18)
+        return [false, "Планируемый бюджет слишком большой"];
     return [true, ""];
 }
 
@@ -162,7 +165,7 @@ export function validate_start_date(server_time, date_str) {
 }
 
 /**
- * Проверка на корректность введённой даты начала бюджета.
+ * Проверка на корректность введённой даты конца бюджета.
  * Она может быть пустой. Но если она не пустая, то она обязана быть больше даты начала.
  * @function validate_end_date
  * @param {string} start_date_str - Дата начала бюджета.
