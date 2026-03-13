@@ -152,12 +152,14 @@ export class BudgetPage extends BasePage {
 
     /**
      * Обрабатывает нажатие на кнопку удаления: вызывает модальное окно подтверждения.
+     * Обрезает название бюджета до 50 символов для корректного отображения в модалке.
      * @private
      */
     _handleDelete(id, title) {
+        const shortTitle = title.length > 50 ? title.slice(0, 50) + "..." : title;
         const modal = new Modal({
             title: "Удалить бюджет?",
-            message: `Вы точно хотите удалить бюджет "${title}"? Это действие нельзя отменить.`,
+            message: `Вы точно хотите удалить бюджет "${shortTitle}"? Это действие нельзя отменить.`,
             cancelText: "Отмена",
             confirmText: "Удалить",
             onConfirm: () => this._deleteBudget(id, modal),

@@ -5,22 +5,26 @@
       <span class="budget-card__label">Фактический</span>
       <p class="budget-card__date">Дата начала: {{start_at}}</p>
     </div>
-    <div style="text-align: right;">
+    <div>
       <span class="budget-card__label">Планируемый</span>
       <p class="budget-card__date">Дата окончания: {{end_at}}</p>
     </div>
   </div>
   <div class="budget-card__header">
     <span class="budget-card__amount">
-      <span class="budget-card__currency">{{currency}} </span><span class="budget_value">{{actual}}</span>
+      <span class="budget-card__currency">{{currency}} </span>{{actual}}
     </span>
     <span class="budget-card__amount">
-      <span class="budget-card__currency">{{currency}} </span><span class="budget_value">{{target}}</span>
+      <span class="budget-card__currency">{{currency}} </span>{{target}}
     </span>
   </div>
   <div class="budget-card__header">
-    <p class="budget-card__desc">{{title}}</p>
-    <p class="budget-card__desc">Запланированный лимит</p>
+    <div>
+      <p class="budget-card__desc">{{title}}</p>
+    </div>
+    <div>
+      <p class="budget-card__desc">Запланированный лимит</p>
+    </div>
   </div>
   {{#if description}}
   <p class="budget-card__subdesc">{{description}}</p>

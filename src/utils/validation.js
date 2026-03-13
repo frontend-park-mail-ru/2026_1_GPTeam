@@ -161,7 +161,10 @@ export function validate_start_date(server_time, date_str) {
     date_str = date_str.trim();
     let date = new Date(date_str);
     let server_date = new Date(server_time);
-    date.setTime(server_date.getTime());
+    date.setHours(server_date.getHours());
+    date.setMinutes(server_date.getMinutes());
+    date.setSeconds(server_date.getSeconds());
+    date.setMilliseconds(server_date.getMilliseconds());
 
     if (isNaN(date.getTime()))
         return [false, "Некорректная дата"];

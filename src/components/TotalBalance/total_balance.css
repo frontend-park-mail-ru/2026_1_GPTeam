@@ -34,8 +34,6 @@
 }
 
 .balance__value {
-    max-width: 100%;
+    max-width: 84%;
     overflow-wrap: break-word;
-    word-wrap: break-word;
-    word-break: break-word;
 }
