@@ -65,7 +65,8 @@ export class AuthForm extends BaseComponent {
 
     /**
      * Выполняет валидацию полей формы.
-     * Проверяет на пустоту, корректность логина/пароля, совпадение паролей и email в режиме signup.
+     * В режиме login проверяет только что поля не пустые.
+     * В режиме signup проверяет логин, пароль, совпадение паролей и email.
      * @param {Object} fields - Объект с DOM-элементами полей.
      * @param {HTMLElement} error_message - Элемент для вывода текста ошибки.
      * @returns {boolean} Возвращает true, если найдены ошибки, иначе false.
@@ -88,7 +89,7 @@ export class AuthForm extends BaseComponent {
         allFields.forEach(f => f.style.borderColor = "#484FFF");
 
         const requiredFields = [
-            [username, "Имя"],
+            [username, "Логин"],
             [password, "Пароль"],
             ...(this.mode === "signup" ? [
                 [confirm_password, "Подтверждение пароля"],
@@ -103,25 +104,19 @@ export class AuthForm extends BaseComponent {
                 mark_invalid(field, error);
         }
 
-        let [ok, error] = validate_username(username.value);
-        if (!ok)
-            mark_invalid(username, error);
+        if (this.mode === "signup") {
+            let [ok, error] = validate_username(username.value);
+            if (!ok)
+                mark_invalid(username, error);
 
-        [ok, error] = validate_password(password.value);
-        if (!ok)
-            mark_invalid(password, error);
+            [ok, error] = validate_password(password.value);
+            if (!ok)
+                mark_invalid(password, error);
 
-        if (this.mode === "signup" && confirm_password) {
             [ok, error] = are_password_equal(password.value, confirm_password.value);
             if (!ok)
                 mark_invalid(confirm_password, error);
 
-            [ok, error] = validate_email(email.value);
-            if (!ok)
-                mark_invalid(email, error);
-        }
-
-        if (this.mode === "signup" && email) {
             [ok, error] = validate_email(email.value);
             if (!ok)
                 mark_invalid(email, error);
@@ -133,7 +128,7 @@ export class AuthForm extends BaseComponent {
     /**
      * Обработчик отправки формы.
      * Предотвращает стандартное поведение, вызывает валидацию и отправляет данные на сервер.
-     * При успехе перенаправляет пользователя на страницу профиля.
+     * При успехе перенаправляет пользователя на страницу баланса.
      * @async
      * @param {Event} e - Объект события submit.
      * @returns {Promise<void>}
@@ -198,7 +193,7 @@ export class AuthForm extends BaseComponent {
                         if (err.field === "email") mark_invalid(email);
                     });
                 }
-                error_message.innerText = data.message || "Произошла ошибка";
+                error_message.innerText = isLogin ? "Неверный логин или пароль" : (data.message || "Произошла ошибка");
             }
         } catch (err) {
             console.error("Fetch error:", err);

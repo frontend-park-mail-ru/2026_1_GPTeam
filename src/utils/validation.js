@@ -17,18 +17,22 @@ export function validate_username(username) {
 }
 
 /**
- * Внутренняя проверка состава символов в пароле.
- * Проверяет наличие строчных, заглавных букв и цифр методом перебора.
- * @function check_symbols
+ * Валидирует пароль на длину и состав символов.
+ * @function validate_password
  * @param {string} password - Пароль для проверки.
  * @returns {[boolean, string]} Кортеж: [isValid, errorMessage].
- * @private
+ *
+ * @example
+ * const [isValid, error] = validate_password('123'); // [false, "Пароль должен содержать..."]
  */
-function check_symbols(password) {
+export function validate_password(password) {
+    password = password.trim();
+
     let has_lower = false;
     let has_upper = false;
     let has_digit = false;
     let has_invalid = false;
+
     for (let symbol of password) {
         if ("a" <= symbol && symbol <= "z")
             has_lower = true;
@@ -39,32 +43,11 @@ function check_symbols(password) {
         else
             has_invalid = true;
     }
-    if (!has_upper)
-        return [false, "В пароле нет заглавной буквы"];
-    if (!has_lower)
-        return [false, "В пароле нет строчной буквы"];
-    if (!has_digit)
-        return [false, "В пароле нет цифры"];
-    if (has_invalid)
-        return [false, "Пароль должен содержать только буквы латинского алфавита и цифры"];
-    return [true, ""];
-}
 
-/**
- * Валидирует пароль на сложность и длину.
- * Комбинирует проверку длины и вызов внутренней функции check_symbols.
- * @function validate_password
- * @param {string} password - Пароль для проверки.
- * @returns {[boolean, string]} Кортеж: [isValid, errorMessage].
- *
- * @example
- * const [isValid, error] = validate_password('123'); // [false, "Пароль должен быть минимум 8 символов"]
- */
-export function validate_password(password) {
-    password = password.trim();
-    if (password.length < 8)
-        return [false, "Пароль должен быть минимум 8 символов"];
-    return check_symbols(password);
+    if (password.length < 8 || !has_upper || !has_lower || !has_digit || has_invalid)
+        return [false, "Пароль должен содержать заглавные и строчные буквы латинского алфавита и цифры (не менее 8 символов)"];
+
+    return [true, ""];
 }
 
 /**
@@ -93,7 +76,7 @@ export function are_password_equal(password, confirm_password) {
 export function is_empty(value, field_name) {
     value = value.trim();
     if (value.length === 0)
-        return [false, `${field_name} не может быть пустым`];
+        return [false, `Введите ${field_name.toLowerCase()}`];
     return [true, ""];
 }
 
@@ -108,9 +91,11 @@ export function validate_email(email) {
     email = email.trim();
     if (email.length === 0 || email.length >= 255)
         return [false, "Некорректный адрес электронной почты"];
-    let ok = /^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}$/.test(email);
+
+    let ok = /^[A-Za-zа-яёА-ЯЁ0-9._%+-]+@[A-Za-zа-яёА-ЯЁ0-9.-]+\.[A-Za-zа-яёА-ЯЁ]{2,}$/.test(email);
     if (!ok)
         return [false, "Некорректный адрес электронной почты"];
+
     return [true, ""];
 }
 
@@ -141,11 +126,10 @@ export function validate_target_budget(target) {
     let target_value = parseFloat(target);
     if (isNaN(target_value))
         return [false, "Планируемый бюджет должен быть дробным числом"];
-    if (target_value < 0)
-        return [false, "Планируемый бюджет не может быть меньше 0"];
-    if (target_value > 1e18) {
-        return [false, "Значение не может быть больше 1e18"]
-    }
+    if (target_value <= 0)
+        return [false, "Планируемый бюджет должен быть больше 0"];
+    if (target_value > 1e18)
+        return [false, "Планируемый бюджет слишком большой"];
     return [true, ""];
 }
 
@@ -161,7 +145,10 @@ export function validate_start_date(server_time, date_str) {
     date_str = date_str.trim();
     let date = new Date(date_str);
     let server_date = new Date(server_time);
-    date.setTime(server_date.getTime());
+    date.setHours(server_date.getHours());
+    date.setMinutes(server_date.getMinutes());
+    date.setSeconds(server_date.getSeconds());
+    date.setMilliseconds(server_date.getMilliseconds());
 
     if (isNaN(date.getTime()))
         return [false, "Некорректная дата"];
@@ -176,7 +163,7 @@ export function validate_start_date(server_time, date_str) {
 }
 
 /**
- * Проверка на корректность введённой даты начала бюджета.
+ * Проверка на корректность введённой даты конца бюджета.
  * Она может быть пустой. Но если она не пустая, то она обязана быть больше даты начала.
  * @function validate_end_date
  * @param {string} start_date_str - Дата начала бюджета.
