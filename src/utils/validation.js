@@ -92,10 +92,8 @@ export function validate_email(email) {
     if (email.length === 0 || email.length >= 255)
         return [false, "Некорректный адрес электронной почты"];
 
-    const latin = /^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}$/;
-    const cyrillic = /^[а-яёА-ЯЁ0-9._%+-]+@[а-яёА-ЯЁ0-9.-]+\.[а-яёА-ЯЁ]{2,}$/;
-
-    if (!latin.test(email) && !cyrillic.test(email))
+    let ok = /^[A-Za-zа-яёА-ЯЁ0-9._%+-]+@[A-Za-zа-яёА-ЯЁ0-9.-]+\.[A-Za-zа-яёА-ЯЁ]{2,}$/.test(email);
+    if (!ok)
         return [false, "Некорректный адрес электронной почты"];
 
     return [true, ""];
