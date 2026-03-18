@@ -3,7 +3,7 @@ import template from "./budget_form.hbs?raw";
 import "./budget_form.css";
 import { router } from "../../router/router_instance.js";
 import { client } from "../../api/client.js";
-import { currencies } from "../../store/store.js";
+import { get_currencies } from "../../store/store.js";
 import {
     is_empty,
     validate_currency,
@@ -25,7 +25,7 @@ export class BudgetForm extends BaseComponent {
      * @param {Object} props - Свойства компонента.
      */
     constructor(props) {
-        props.currency_list = currencies;
+        props.currency_list = get_currencies();
         super(template, props);
         /**
          * Текущее время сервера. Используется для валидации, чтобы пользователь
