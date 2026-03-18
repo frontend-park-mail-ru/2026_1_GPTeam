@@ -1,13 +1,13 @@
 import { client } from "./client.js";
 import { is_login } from "./auth.js";
+import type { SimpleResponse } from "../types/interfaces.js";
 
 /**
  * Ответ сервера с данными профиля.
  */
-interface ProfileResponse {
-    code: number;
-    username?: string;
-    email?: string;
+interface ProfileResponse extends SimpleResponse {
+  username?: string;
+  email?: string;
 }
 
 /**
@@ -27,20 +27,20 @@ interface ProfileResponse {
  * }
  */
 export const get_profile = async (): Promise<ProfileResponse> => {
-    const response = await client("/profile", {
+  const response = await client("/profile", {
+    method: "GET",
+    credentials: "include",
+  });
+  const data: ProfileResponse = await response.json();
+  if (data.code === 401) {
+    const login = await is_login();
+    if (login) {
+      const retryResponse = await client("/profile", {
         method: "GET",
         credentials: "include",
-    });
-    const data: ProfileResponse = await response.json();
-    if (data.code === 401) {
-        const login = await is_login();
-        if (login) {
-            const retryResponse = await client("/profile", {
-                method: "GET",
-                credentials: "include",
-            });
-            return await retryResponse.json();
-        }
+      });
+      return await retryResponse.json();
     }
-    return data;
-}
+  }
+  return data;
+};

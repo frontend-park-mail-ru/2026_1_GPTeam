@@ -1,12 +1,5 @@
-import { client } from "./client.js"
-
-/**
- * Ответ от сервера с кодом операции.
- */
-interface ApiResponse {
-    code: number;
-    message?: string;
-}
+import { client } from "./client.js";
+import type { SimpleResponse } from "../types/interfaces.js";
 
 /**
  * Проверяет, авторизован ли пользователь, путём обновления токена.
@@ -24,13 +17,13 @@ interface ApiResponse {
  * }
  */
 export const is_login = async (): Promise<boolean> => {
-    const response = await client("/auth/refresh", {
-        method: "POST",
-        credentials: "include",
-    });
-    const data: ApiResponse = await response.json();
-    return data.code === 200;
-}
+  const response = await client("/auth/refresh", {
+    method: "POST",
+    credentials: "include",
+  });
+  const data: SimpleResponse = await response.json();
+  return data.code === 200;
+};
 
 /**
  * Разлогинивает пользователя.
@@ -48,10 +41,10 @@ export const is_login = async (): Promise<boolean> => {
  * }
  */
 export const logout = async (): Promise<boolean> => {
-    const response = await client("/auth/logout", {
-        method: "POST",
-        credentials: "include",
-    });
-    const data: ApiResponse = await response.json();
-    return data.code === 200;
-}
+  const response = await client("/auth/logout", {
+    method: "POST",
+    credentials: "include",
+  });
+  const data: SimpleResponse = await response.json();
+  return data.code === 200;
+};
