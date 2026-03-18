@@ -1,16 +1,18 @@
-import {currencies} from "../store/store.js";
+import { currencies } from "../store/store.js";
+
+type ValidationResult = [boolean, string];
 
 /**
  * Проверка логина на использование только разрешённых символов.
  * @function validate_username
  * @param {string} username - Логин.
- * @returns {[boolean, string]} Кортеж: [valid, errorMessage].
+ * @returns {ValidationResult} Кортеж: [valid, errorMessage].
  */
-export function validate_username(username) {
+export function validate_username(username: string): ValidationResult {
     username = username.trim();
     if (username.length < 3)
         return [false, "Логин должен быть минимум 3 символа"];
-    let ok = /^[a-zA-Z0-9]+$/.test(username);
+    const ok = /^[a-zA-Z0-9]+$/.test(username);
     if (!ok)
         return [false, "Логин должен содержать только буквы латинского алфавита или цифры"];
     return [true, ""];
@@ -20,12 +22,12 @@ export function validate_username(username) {
  * Валидирует пароль на длину и состав символов.
  * @function validate_password
  * @param {string} password - Пароль для проверки.
- * @returns {[boolean, string]} Кортеж: [isValid, errorMessage].
+ * @returns {ValidationResult} Кортеж: [isValid, errorMessage].
  *
  * @example
  * const [isValid, error] = validate_password('123'); // [false, "Пароль должен содержать..."]
  */
-export function validate_password(password) {
+export function validate_password(password: string): ValidationResult {
     password = password.trim();
 
     let has_lower = false;
@@ -33,7 +35,7 @@ export function validate_password(password) {
     let has_digit = false;
     let has_invalid = false;
 
-    for (let symbol of password) {
+    for (const symbol of password) {
         if ("a" <= symbol && symbol <= "z")
             has_lower = true;
         else if ("A" <= symbol && symbol <= "Z")
@@ -52,13 +54,12 @@ export function validate_password(password) {
 
 /**
  * Сравнивает два пароля на идентичность.
- * Используется на странице регистрации (SignupPage) для проверки подтверждения.
  * @function are_password_equal
  * @param {string} password - Основной пароль.
  * @param {string} confirm_password - Повторно введенный пароль.
- * @returns {[boolean, string]} Кортеж: [isEqual, errorMessage].
+ * @returns {ValidationResult} Кортеж: [isEqual, errorMessage].
  */
-export function are_password_equal(password, confirm_password) {
+export function are_password_equal(password: string, confirm_password: string): ValidationResult {
     password = password.trim();
     confirm_password = confirm_password.trim();
     if (password !== confirm_password)
@@ -71,9 +72,9 @@ export function are_password_equal(password, confirm_password) {
  * @function is_empty
  * @param {string} value - Значение поля.
  * @param {string} field_name - Человекочитаемое название поля для сообщения об ошибке.
- * @returns {[boolean, string]} Кортеж: [isNotEmpty, errorMessage].
+ * @returns {ValidationResult} Кортеж: [isNotEmpty, errorMessage].
  */
-export function is_empty(value, field_name) {
+export function is_empty(value: string, field_name: string): ValidationResult {
     value = value.trim();
     if (value.length === 0)
         return [false, `Введите ${field_name.toLowerCase()}`];
@@ -84,10 +85,9 @@ export function is_empty(value, field_name) {
  * Проверка на корректность почты.
  * @function validate_email
  * @param {string} email - Почта для проверки.
- * @returns {[boolean, string]} Кортеж: [isValid, errorMessage].
- * @private
+ * @returns {ValidationResult} Кортеж: [isValid, errorMessage].
  */
-export function validate_email(email) {
+export function validate_email(email: string): ValidationResult {
     email = email.trim();
     if (email.length === 0 || email.length >= 255)
         return [false, "Некорректный адрес электронной почты"];
@@ -103,10 +103,9 @@ export function validate_email(email) {
  * Проверка на корректность валюты. Доступны только варианты из хранилища.
  * @function validate_currency
  * @param {string} currency - Валюта для проверки.
- * @returns {[boolean, string]} Кортеж: [isValid, errorMessage].
- * @private
+ * @returns {ValidationResult} Кортеж: [isValid, errorMessage].
  */
-export function validate_currency(currency) {
+export function validate_currency(currency: string): ValidationResult {
     currency = currency.trim().toUpperCase();
     if (currencies.includes(currency))
         return [true, ""];
@@ -115,15 +114,13 @@ export function validate_currency(currency) {
 
 /**
  * Проверка на корректность введённого бюджета.
- * Это должно быть положительное число (целое или дробное), но не больше 1e18.
  * @function validate_target_budget
  * @param {string} target - Значение для проверки.
- * @returns {[boolean, string]} Кортеж: [isValid, errorMessage].
- * @private
+ * @returns {ValidationResult} Кортеж: [isValid, errorMessage].
  */
-export function validate_target_budget(target) {
+export function validate_target_budget(target: string): ValidationResult {
     target = target.trim();
-    let target_value = parseFloat(target);
+    const target_value = parseFloat(target);
     if (isNaN(target_value))
         return [false, "Планируемый бюджет должен быть дробным числом"];
     if (target_value <= 0)
@@ -135,16 +132,15 @@ export function validate_target_budget(target) {
 
 /**
  * Проверка на корректность введённой даты начала бюджета.
- * Она не может быть в прошлом относительно текущего времени сервера.
  * @function validate_start_date
  * @param {string} server_time - Текущее время сервера в формате, поддерживаемом Date().
  * @param {string} date_str - Дата начала, введённая пользователем.
- * @returns {[boolean, string]} Кортеж: [isValid, errorMessage].
+ * @returns {ValidationResult} Кортеж: [isValid, errorMessage].
  */
-export function validate_start_date(server_time, date_str) {
+export function validate_start_date(server_time: string, date_str: string): ValidationResult {
     date_str = date_str.trim();
-    let date = new Date(date_str);
-    let server_date = new Date(server_time);
+    const date = new Date(date_str);
+    const server_date = new Date(server_time);
     date.setHours(server_date.getHours());
     date.setMinutes(server_date.getMinutes());
     date.setSeconds(server_date.getSeconds());
@@ -156,7 +152,7 @@ export function validate_start_date(server_time, date_str) {
     if (date < server_date)
         return [false, "Дата начала не может быть в прошлом"];
 
-    if (date - server_date > 5 * 365.25 * 24 * 60 * 60 * 1000)
+    if (date.getTime() - server_date.getTime() > 5 * 365.25 * 24 * 60 * 60 * 1000)
         return [false, "Дата начала не может быть больше 5 лет от текущей даты"];
 
     return [true, ""];
@@ -164,23 +160,21 @@ export function validate_start_date(server_time, date_str) {
 
 /**
  * Проверка на корректность введённой даты конца бюджета.
- * Она может быть пустой. Но если она не пустая, то она обязана быть больше даты начала.
  * @function validate_end_date
  * @param {string} start_date_str - Дата начала бюджета.
  * @param {string} end_date_str - Дата конца бюджета.
- * @returns {[boolean, string]} Кортеж: [isValid, errorMessage].
- * @private
+ * @returns {ValidationResult} Кортеж: [isValid, errorMessage].
  */
-export function validate_end_date(start_date_str, end_date_str) {
+export function validate_end_date(start_date_str: string, end_date_str: string): ValidationResult {
     start_date_str = start_date_str.trim();
     end_date_str = end_date_str.trim();
     if (end_date_str === "")
         return [true, ""];
-    let start_date = new Date(start_date_str);
-    let end_date = new Date(end_date_str);
+    const start_date = new Date(start_date_str);
+    const end_date = new Date(end_date_str);
     if (end_date < start_date)
         return [false, "Дата окончания должна быть позже даты начала"];
-    if (end_date - start_date > 5 * 365.25 * 24 * 60 * 60 * 1000)
+    if (end_date.getTime() - start_date.getTime() > 5 * 365.25 * 24 * 60 * 60 * 1000)
         return [false, "Период между датами не может превышать 5 лет"];
     return [true, ""];
 }

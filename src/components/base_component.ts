@@ -2,28 +2,35 @@ import Handlebars from "handlebars";
 
 /**
  * Базовый класс для всех компонентов пользовательского интерфейса.
- * Реализует логику жизненного цикла, компиляцию Handlebars-шаблонов, 
+ * Реализует логику жизненного цикла, компиляцию Handlebars-шаблонов,
  * управление событиями и вложенными компонентами.
- * * @class BaseComponent
+ * @class BaseComponent
  */
 export class BaseComponent {
+    /** @private */
+    private _compiledTemplate: HandlebarsTemplateDelegate;
+    /** @protected */
+    protected _props: Record<string, unknown>;
+    /** @protected */
+    protected _element: HTMLElement | null;
+    /** @protected */
+    protected _container: HTMLElement | null;
+    /** @private */
+    private _listeners: { element: HTMLElement; event: string; handler: EventListener }[];
+    /** @private */
+    private _children: BaseComponent[];
+
     /**
      * Конструктор BaseComponent.
      * @param {string} template - Строка Handlebars-шаблона.
-     * @param {Object} [props={}] - Начальные свойства и данные для шаблона.
+     * @param {Record<string, unknown>} props - Начальные свойства и данные для шаблона.
      */
-    constructor(template, props = {}) {
-        /** @private */
+    constructor(template: string, props: Record<string, unknown> = {}) {
         this._compiledTemplate = Handlebars.compile(template);
-        /** @protected */
         this._props = { ...props };
-        /** @protected @type {HTMLElement|null} */
         this._element = null;
-        /** @protected @type {HTMLElement|null} */
         this._container = null;
-        /** @private */
         this._listeners = [];
-        /** @private */
         this._children = [];
     }
 
@@ -33,7 +40,7 @@ export class BaseComponent {
      * @param {HTMLElement} container - DOM-элемент, в который будет помещен компонент.
      * @returns {void}
      */
-    render(container) {
+    render(container: HTMLElement): void {
         this._container = container;
         this._element = this._createElement();
         this._container.appendChild(this._element);
@@ -44,10 +51,10 @@ export class BaseComponent {
     /**
      * Обновляет состояние компонента новыми свойствами и выполняет перерендер.
      * Перед обновлением производит очистку текущих слушателей и дочерних компонентов.
-     * @param {Object} newProps - Объект с новыми свойствами для слияния с текущими.
+     * @param {Record<string, unknown>} newProps - Объект с новыми свойствами для слияния с текущими.
      * @returns {void}
      */
-    update(newProps) {
+    update(newProps: Record<string, unknown>): void {
         Object.assign(this._props, newProps);
 
         if (!this._element || !this._container) return;
@@ -66,7 +73,7 @@ export class BaseComponent {
      * Полностью удаляет компонент из DOM и очищает все связанные ресурсы.
      * @returns {void}
      */
-    destroy() {
+    destroy(): void {
         this._cleanup();
         this._element?.remove();
         this._element = null;
@@ -75,10 +82,22 @@ export class BaseComponent {
 
     /**
      * Возвращает корневой DOM-элемент скомпилированного компонента.
-     * @returns {HTMLElement|null}
+     * @returns {HTMLElement | null}
      */
-    getElement() {
+    getElement(): HTMLElement | null {
         return this._element;
+    }
+
+    /**
+     * Публичный метод для регистрации обработчика события снаружи компонента.
+     * Делегирует вызов защищённому методу _on для корректного отслеживания слушателей.
+     * @param {HTMLElement} element - Элемент, на который вешается событие.
+     * @param {string} event - Тип события (например, "submit").
+     * @param {EventListener} handler - Функция-обработчик.
+     * @returns {void}
+     */
+    on(element: HTMLElement, event: string, handler: EventListener): void {
+        this._on(element, event, handler);
     }
 
     /**
@@ -86,14 +105,14 @@ export class BaseComponent {
      * Предназначен для переопределения в дочерних классах.
      * @protected
      */
-    _addEventListeners() {}
+    protected _addEventListeners(): void {}
 
     /**
      * Метод жизненного цикла, вызываемый сразу после вставки элемента в DOM.
      * Предназначен для манипуляций с DOM или инициализации сторонних библиотек.
      * @protected
      */
-    _afterRender() {}
+    protected _afterRender(): void {}
 
     /**
      * Регистрирует обработчик события на элементе и сохраняет его для автоматической очистки.
@@ -101,9 +120,9 @@ export class BaseComponent {
      * @protected
      * @param {HTMLElement} element - Элемент, на который вешается событие.
      * @param {string} event - Тип события (например, "click").
-     * @param {Function} handler - Функция-обработчик.
+     * @param {EventListener} handler - Функция-обработчик.
      */
-    _on(element, event, handler) {
+    protected _on(element: HTMLElement, event: string, handler: EventListener): void {
         if (!element) {
             console.warn("_on: element is null, event:", event);
             return;
@@ -120,12 +139,12 @@ export class BaseComponent {
      * @param {string} selector - CSS-селектор целевых элементов.
      * @param {Function} handler - Функция-обработчик.
      */
-    _delegate(event, selector, handler) {
+    protected _delegate(event: string, selector: string, handler: (e: Event, target: HTMLElement) => void): void {
         if (!this._element) return;
 
-        const wrapper = (e) => {
-            const target = e.target.closest(selector);
-            if (target && this._element.contains(target)) {
+        const wrapper: EventListener = (e: Event) => {
+            const target = (e.target as HTMLElement).closest(selector) as HTMLElement;
+            if (target && this._element!.contains(target)) {
                 handler.call(this, e, target);
             }
         };
@@ -139,8 +158,8 @@ export class BaseComponent {
      * @param {BaseComponent} child - Экземпляр дочернего компонента.
      * @param {string} selector - CSS-селектор контейнера внутри текущего элемента.
      */
-    _renderChild(child, selector) {
-        const container = this._element?.querySelector(selector);
+    protected _renderChild(child: BaseComponent, selector: string): void {
+        const container = this._element?.querySelector<HTMLElement>(selector);
         if (!container) {
             console.warn(`_renderChild: selector "${selector}" не найден`);
             return;
@@ -155,7 +174,7 @@ export class BaseComponent {
      * @private
      * @returns {HTMLElement}
      */
-    _createElement() {
+    private _createElement(): HTMLElement {
         const html = this._compiledTemplate(this._props).trim();
         const temp = document.createElement("div");
         temp.innerHTML = html;
@@ -168,7 +187,7 @@ export class BaseComponent {
             );
         }
 
-        return temp.firstElementChild;
+        return temp.firstElementChild as HTMLElement;
     }
 
     /**
@@ -176,7 +195,7 @@ export class BaseComponent {
      * вызывает destroy() для всех вложенных дочерних компонентов.
      * @private
      */
-    _cleanup() {
+    private _cleanup(): void {
         this._listeners.forEach(({ element, event, handler }) => {
             element.removeEventListener(event, handler);
         });

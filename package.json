@@ -10,15 +10,20 @@
     "lint:css": "stylelint \"**/*.css\"",
     "lint:js": "eslint .",
     "lint:hbs": "ember-template-lint .",
-    "lint": "npm run lint:css && npm run lint:js && npm run lint:hbs"
+    "lint:ts": "tsc --noEmit",
+    "lint": "npm run lint:css && npm run lint:js && npm run lint:hbs && npm run lint:ts"
   },
   "devDependencies": {
     "@eslint/js": "^10.0.1",
+    "@types/handlebars": "^4.1.0",
+    "@types/node": "^25.5.0",
     "ember-template-lint": "^7.9.3",
     "eslint": "^10.0.3",
     "globals": "^17.4.0",
+    "jiti": "^2.6.1",
     "stylelint": "^17.4.0",
     "stylelint-config-standard": "^40.0.0",
+    "typescript": "^5.9.3",
     "vite": "^7.3.1"
   },
   "dependencies": {

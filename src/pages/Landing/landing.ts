@@ -24,23 +24,23 @@ export class LandingPage extends BasePage {
      * @param {HTMLElement} root - Корневой DOM-элемент, в который отрисовывается страница.
      * @returns {Promise<void>}
      */
-    async render(root) {
+    async render(root: HTMLElement): Promise<void> {
         root.innerHTML = template;
 
         const authorized = await is_login();
 
-        const indicatorIn  = root.querySelector("#auth-indicator-in");
-        const indicatorOut = root.querySelector("#auth-indicator-out");
+        const indicatorIn = root.querySelector<HTMLElement>("#auth-indicator-in");
+        const indicatorOut = root.querySelector<HTMLElement>("#auth-indicator-out");
 
         if (authorized) {
-            if (indicatorIn)  indicatorIn.style.display  = "inline-flex";
+            if (indicatorIn) indicatorIn.style.display = "inline-flex";
             if (indicatorOut) indicatorOut.style.display = "none";
         } else {
             if (indicatorOut) indicatorOut.style.display = "inline-flex";
-            if (indicatorIn)  indicatorIn.style.display  = "none";
+            if (indicatorIn) indicatorIn.style.display = "none";
         }
 
-        const profileBtn = root.querySelector("#profile-btn");
+        const profileBtn = root.querySelector<HTMLElement>("#profile-btn");
         if (profileBtn) {
             profileBtn.style.cursor = "pointer";
             profileBtn.addEventListener("click", (e) => {
@@ -49,7 +49,7 @@ export class LandingPage extends BasePage {
             });
         }
 
-        root.querySelectorAll(".cta-primary").forEach(btn => {
+        root.querySelectorAll<HTMLElement>(".cta-primary").forEach(btn => {
             btn.addEventListener("click", (e) => {
                 e.preventDefault();
                 router.navigate(authorized ? "/balance" : "/signup");

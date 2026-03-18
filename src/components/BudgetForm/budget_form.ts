@@ -12,6 +12,30 @@ import {
     validate_target_budget
 } from "../../utils/validation.js";
 
+interface BudgetFormProps extends Record<string, unknown> {
+    currency_list?: string[];
+}
+
+interface BudgetFormFields {
+    title: HTMLInputElement | null;
+    description: HTMLInputElement | null;
+    target: HTMLInputElement | null;
+    currency: HTMLInputElement | null;
+    start_at: HTMLInputElement | null;
+    end_at: HTMLInputElement | null;
+}
+
+interface ServerError {
+    field: string;
+    message: string;
+}
+
+interface BudgetResponse {
+    code: number;
+    message?: string;
+    errors?: ServerError[];
+}
+
 /**
  * Компонент формы создания или редактирования бюджета.
  * Отвечает за сбор данных, сложную валидацию дат относительно серверного времени
@@ -21,17 +45,19 @@ import {
  */
 export class BudgetForm extends BaseComponent {
     /**
-     * Создает экземпляр формы бюджета.
-     * @param {Object} props - Свойства компонента.
+     * Текущее время сервера. Используется для валидации, чтобы пользователь
+     * не мог создать бюджет в прошлом относительно сервера.
+     * @type {Date | null}
      */
-    constructor(props) {
+    private serverTime: Date | null;
+
+    /**
+     * Создает экземпляр формы бюджета.
+     * @param {BudgetFormProps} props - Свойства компонента.
+     */
+    constructor(props: BudgetFormProps) {
         props.currency_list = currencies;
         super(template, props);
-        /**
-         * Текущее время сервера. Используется для валидации, чтобы пользователь
-         * не мог создать бюджет в прошлом относительно сервера.
-         * @type {Date|null}
-         */
         this.serverTime = null;
     }
 
@@ -39,9 +65,9 @@ export class BudgetForm extends BaseComponent {
      * Выполняется после первичного рендеринга компонента.
      * Инициирует запрос серверного времени.
      * @async
-     * @private
+     * @protected
      */
-    async _afterRender() {
+    protected async _afterRender(): Promise<void> {
         await this._fetchServerTime();
     }
 
@@ -51,7 +77,7 @@ export class BudgetForm extends BaseComponent {
      * @async
      * @private
      */
-    async _fetchServerTime() {
+    private async _fetchServerTime(): Promise<void> {
         try {
             const response = await client("/get_budgets", {
                 method: "GET",
@@ -67,38 +93,40 @@ export class BudgetForm extends BaseComponent {
 
     /**
      * Выполняет валидацию полей ввода.
-     * Проверяет обязательность заполнения, формат валюты (латиница),
+     * Проверяет обязательность заполнения, формат валюты,
      * положительность суммы и хронологическую последовательность дат.
-     * @param {Object} fields - Объект с DOM-элементами полей формы.
+     * @param {BudgetFormFields} fields - Объект с DOM-элементами полей формы.
      * @param {HTMLElement} error_message - Элемент для вывода текста ошибки.
      * @returns {boolean} true, если найдены ошибки, иначе false.
      */
-    validate(fields, error_message) {
-        const {title, description, target, currency, start_at, end_at} = fields;
+    validate(fields: BudgetFormFields, error_message: HTMLElement): boolean {
+        const { title, description, target, currency, start_at, end_at } = fields;
         let errors = false;
         let errorText = "";
 
-        [title, description, target, currency, start_at, end_at].filter(f => f).forEach(f => f.style.borderColor = "rgba(72, 79, 255, 0.5)");
+        [title, description, target, currency, start_at, end_at]
+            .filter((f): f is HTMLInputElement => f !== null)
+            .forEach(f => f.style.borderColor = "rgba(72, 79, 255, 0.5)");
 
-        const requiredFields = [
-            [title, "Название"],
-            [description, "Описание"],
-            [target, "Планируемый бюджет"],
-            [currency, "Валюта"],
-            [start_at, "Дата начала"],
+        const requiredFields: [HTMLInputElement, string][] = [
+            [title!, "Название"],
+            [description!, "Описание"],
+            [target!, "Планируемый бюджет"],
+            [currency!, "Валюта"],
+            [start_at!, "Дата начала"],
         ];
 
         for (const [field, name] of requiredFields) {
-            let [ok, error] = is_empty(field.value, name);
+            const [ok, error] = is_empty(field.value, name);
             if (!ok) {
                 errors = true;
-                if (field) field.style.borderColor = "red";
+                field.style.borderColor = "red";
                 if (!errorText) errorText = error;
             }
         }
 
-        if (currency && currency.value) {
-            let [ok, error] = validate_currency(currency.value);
+        if (currency?.value) {
+            const [ok, error] = validate_currency(currency.value);
             if (!ok) {
                 errors = true;
                 currency.style.borderColor = "red";
@@ -106,18 +134,18 @@ export class BudgetForm extends BaseComponent {
             }
         }
 
-        if (target && target.value) {
-            let [ok, error] = validate_target_budget(target.value);
+        if (target?.value) {
+            const [ok, error] = validate_target_budget(target.value);
             if (!ok) {
                 errors = true;
                 target.style.borderColor = "red";
                 if (!errorText) errorText = error;
-                console.log(error)
+                console.log(error);
             }
         }
 
-        if (start_at && start_at.value) {
-            let [ok, error] = validate_start_date(this.serverTime, start_at.value);
+        if (start_at?.value) {
+            const [ok, error] = validate_start_date(this.serverTime!.toISOString(), start_at.value);
             if (!ok) {
                 errors = true;
                 start_at.style.borderColor = "red";
@@ -125,8 +153,8 @@ export class BudgetForm extends BaseComponent {
             }
         }
 
-        if (end_at && end_at.value && start_at && start_at.value) {
-            let [ok, error] = validate_end_date(start_at.value, end_at.value);
+        if (end_at?.value && start_at?.value) {
+            const [ok, error] = validate_end_date(start_at.value, end_at.value);
             if (!ok) {
                 errors = true;
                 end_at.style.borderColor = "red";
@@ -146,31 +174,37 @@ export class BudgetForm extends BaseComponent {
      * @param {Event} e - Объект события.
      * @returns {Promise<void>}
      */
-    async submit(e) {
+    async submit(e: Event): Promise<void> {
         e.preventDefault();
+
         const form = this.getElement();
-        const submit_btn = form.querySelector("button[type='submit']");
-        const title = form.querySelector("#title_input");
-        const description = form.querySelector("#description_input");
-        const target = form.querySelector("#target_input");
-        const currency = form.querySelector("#currency_input");
-        const start_at = form.querySelector("#start_at_input");
-        const end_at = form.querySelector("#end_at_input");
-        const error_message = form.querySelector("#error_message");
+        if (!form) return;
+
+        const submit_btn = form.querySelector<HTMLButtonElement>("button[type='submit']");
+        const title = form.querySelector<HTMLInputElement>("#title_input");
+        const description = form.querySelector<HTMLInputElement>("#description_input");
+        const target = form.querySelector<HTMLInputElement>("#target_input");
+        const currency = form.querySelector<HTMLInputElement>("#currency_input");
+        const start_at = form.querySelector<HTMLInputElement>("#start_at_input");
+        const end_at = form.querySelector<HTMLInputElement>("#end_at_input");
+        const error_message = form.querySelector<HTMLElement>("#error_message");
+
+        if (!error_message) return;
 
         const hasErrors = this.validate({ title, description, target, currency, start_at, end_at }, error_message);
         if (hasErrors) return;
 
         const payload = {
-            title: title.value,
-            description: description.value,
-            target: parseInt(target.value, 10),
-            currency: currency.value,
-            start_at: start_at.value ? new Date(start_at.value).toISOString() : null,
-            end_at: end_at.value ? new Date(end_at.value).toISOString() : null,
+            title: title!.value,
+            description: description!.value,
+            target: parseInt(target!.value, 10),
+            currency: currency!.value,
+            start_at: start_at!.value ? new Date(start_at!.value).toISOString() : null,
+            end_at: end_at!.value ? new Date(end_at!.value).toISOString() : null,
         };
 
-        submit_btn.disabled = true;
+        if (submit_btn) submit_btn.disabled = true;
+
         try {
             const response = await client("/budget", {
                 method: "POST",
@@ -178,24 +212,25 @@ export class BudgetForm extends BaseComponent {
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify(payload),
             });
-            const data = await response.json();
+            const data: BudgetResponse = await response.json();
+
             if (data.code === 200) {
                 router.refresh();
             } else {
                 if (data.errors && Array.isArray(data.errors)) {
                     data.errors.forEach(err => {
-                        if (err.field === "title") title.style.borderColor = "red";
-                        if (err.field === "target") target.style.borderColor = "red";
-                        if (err.field === "currency") currency.style.borderColor = "red";
+                        if (err.field === "title" && title) title.style.borderColor = "red";
+                        if (err.field === "target" && target) target.style.borderColor = "red";
+                        if (err.field === "currency" && currency) currency.style.borderColor = "red";
                     });
                 }
-                error_message.innerText = data.message || "Произошла ошибка";
+                error_message.innerText = data.message ?? "Произошла ошибка";
             }
         } catch (err) {
             console.error("Fetch error:", err);
             error_message.innerText = "Сервер недоступен";
         } finally {
-            submit_btn.disabled = false;
+            if (submit_btn) submit_btn.disabled = false;
         }
     }
 }

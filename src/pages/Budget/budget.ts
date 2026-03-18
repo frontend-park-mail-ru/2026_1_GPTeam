@@ -7,25 +7,52 @@ import "./budget.css";
 import { router } from "../../router/router_instance.js";
 import { Header } from "../../components/Header/header.js";
 import { client } from "../../api/client.js";
-import {is_login} from "../../api/auth.js";
+import { is_login } from "../../api/auth.js";
+
+/**
+ * Ответ сервера со списком ID бюджетов.
+ */
+interface BudgetListResponse {
+    code: number;
+    ids?: number[];
+}
+
+/**
+ * Ответ сервера с данными одного бюджета.
+ */
+interface BudgetItemResponse {
+    code: number;
+    budget?: Record<string, unknown>;
+    message?: string;
+}
+
+/**
+ * Ответ сервера на удаление бюджета.
+ */
+interface DeleteResponse {
+    code: number;
+    message?: string;
+}
 
 /**
  * Страница управления бюджетами.
  * Обеспечивает отображение списка активных бюджетов, их удаление через модальные окна
  * и создание новых (как в инлайн-режиме, так и в модальном окне).
- * * @class BudgetPage
+ *
+ * @class BudgetPage
  * @extends BasePage
  */
 export class BudgetPage extends BasePage {
     /**
      * Основной метод рендеринга страницы.
-     * Инициализирует общую структуру, хедер с подсветкой текущей страницы 
+     * Инициализирует общую структуру, хедер с подсветкой текущей страницы
      * и запускает загрузку данных бюджетов.
-     * * @async
+     *
+     * @async
      * @param {HTMLElement} root - Корневой элемент для отрисовки.
      * @returns {Promise<void>}
      */
-    async render(root) {
+    async render(root: HTMLElement): Promise<void> {
         root.innerHTML = `
             <div class="page">
                 <header class="page__header"></header>
@@ -38,14 +65,8 @@ export class BudgetPage extends BasePage {
             </div>
         `;
 
-        /** * Обработка хедера: 
-         * Передаем cur_page: "/budget", чтобы компонент Header 
-         * автоматически добавил класс 'active_header_link' нужной ссылке.
-         */
-        const header = new Header({
-            cur_page: "/budget",
-        });
-        header.render(root.querySelector(".page__header"));
+        const header = new Header({ cur_page: "/budget" });
+        header.render(root.querySelector<HTMLElement>(".page__header")!);
         this._components.push(header);
 
         await this._loadBudgets(root);
@@ -54,8 +75,10 @@ export class BudgetPage extends BasePage {
     /**
      * Очистка страницы при переходе.
      * Вызывает базовую очистку и принудительно удаляет модальные оверлеи из body.
+     *
+     * @returns {void}
      */
-    destroy() {
+    destroy(): void {
         super.destroy();
         document.querySelectorAll(".modal-overlay, .modal-form-overlay").forEach(el => el.remove());
     }
@@ -63,19 +86,21 @@ export class BudgetPage extends BasePage {
     /**
      * Загружает идентификаторы бюджетов.
      * Если бюджеты есть — рендерит их карточки, если нет — показывает пустую форму.
+     *
      * @private
      * @async
+     * @returns {Promise<void>}
      */
-    async _loadBudgets(root) {
+    private async _loadBudgets(root: HTMLElement): Promise<void> {
         try {
             let response = await client("/get_budgets", {
                 method: "GET",
                 credentials: "include",
             });
-            let data = await response.json();
+            let data: BudgetListResponse = await response.json();
 
             if (data.code === 401) {
-                let login = await is_login();
+                const login = await is_login();
                 if (!login) {
                     router.navigate("/login");
                     return;
@@ -100,21 +125,27 @@ export class BudgetPage extends BasePage {
 
     /**
      * Рендерит карточки бюджетов на основе полученных ID.
+     *
      * @private
      * @async
+     * @param {HTMLElement} root - Корневой элемент страницы.
+     * @param {number[]} ids - Список ID бюджетов.
+     * @returns {Promise<void>}
      */
-    async _loadBudgetCards(root, ids) {
-        const list = root.querySelector("#budget_list");
+    private async _loadBudgetCards(root: HTMLElement, ids: number[]): Promise<void> {
+        const list = root.querySelector<HTMLElement>("#budget_list");
+        if (!list) return;
+
         for (const id of ids) {
             try {
                 const response = await client(`/get_budget/${id}`, {
                     method: "GET",
                     credentials: "include",
                 });
-                const data = await response.json();
-                if (data.code === 200) {
+                const data: BudgetItemResponse = await response.json();
+                if (data.code === 200 && data.budget) {
                     const card = new BudgetCard({
-                        budget: data.budget,
+                        budget: data.budget as never,
                         id,
                         onDelete: (id, title) => this._handleDelete(id, title),
                     });
@@ -129,23 +160,30 @@ export class BudgetPage extends BasePage {
 
     /**
      * Рендерит форму создания бюджета прямо в основной контент.
+     *
      * @private
+     * @param {HTMLElement} root - Корневой элемент страницы.
+     * @returns {void}
      */
-    _renderInlineForm(root) {
+    private _renderInlineForm(root: HTMLElement): void {
         const form = new BudgetForm({});
-        form.render(root.querySelector("#budget_content"));
-        form._on(form.getElement(), "submit", async (e) => form.submit(e));
+        form.render(root.querySelector<HTMLElement>("#budget_content")!);
+        form.on(form.getElement()!, "submit", async (e) => form.submit(e));
         this._components.push(form);
     }
 
     /**
      * Рендерит кнопку для открытия модального окна создания бюджета.
+     *
      * @private
+     * @param {HTMLElement} root - Корневой элемент страницы.
+     * @returns {void}
      */
-    _renderCreateButton(root) {
-        const container = root.querySelector("#budget_content");
+    private _renderCreateButton(root: HTMLElement): void {
+        const container = root.querySelector<HTMLElement>("#budget_content");
+        if (!container) return;
         container.innerHTML = `<button class="budget-create-btn" id="create_budget_btn">+ Создать бюджет</button>`;
-        container.querySelector("#create_budget_btn").addEventListener("click", () => {
+        container.querySelector<HTMLButtonElement>("#create_budget_btn")?.addEventListener("click", () => {
             this._renderModalForm();
         });
     }
@@ -153,9 +191,13 @@ export class BudgetPage extends BasePage {
     /**
      * Обрабатывает нажатие на кнопку удаления: вызывает модальное окно подтверждения.
      * Обрезает название бюджета до 50 символов для корректного отображения в модалке.
+     *
      * @private
+     * @param {number} id - ID бюджета.
+     * @param {string} title - Название бюджета.
+     * @returns {void}
      */
-    _handleDelete(id, title) {
+    private _handleDelete(id: number, title: string): void {
         const shortTitle = title.length > 50 ? title.slice(0, 50) + "..." : title;
         const modal = new Modal({
             title: "Удалить бюджет?",
@@ -170,16 +212,20 @@ export class BudgetPage extends BasePage {
 
     /**
      * Удаляет бюджет через API и обновляет страницу.
+     *
      * @private
      * @async
+     * @param {number} id - ID бюджета для удаления.
+     * @param {Modal} modal - Экземпляр модального окна для закрытия после удаления.
+     * @returns {Promise<void>}
      */
-    async _deleteBudget(id, modal) {
+    private async _deleteBudget(id: number, modal: Modal): Promise<void> {
         try {
             const response = await client(`/budget/${id}`, {
                 method: "DELETE",
                 credentials: "include",
             });
-            const data = await response.json();
+            const data: DeleteResponse = await response.json();
             if (data.code === 200) {
                 modal.destroy();
                 router.refresh();
@@ -193,17 +239,20 @@ export class BudgetPage extends BasePage {
 
     /**
      * Отрисовывает модальное окно с формой создания бюджета.
+     *
      * @private
+     * @returns {void}
      */
-    _renderModalForm() {
+    private _renderModalForm(): void {
         const modal = new ModalForm({
             onClose: () => modal.destroy(),
         });
         modal.render(document.body);
 
         const form = new BudgetForm({});
-        form.render(modal.getFormContainer());
-        form._on(form.getElement(), "submit", async (e) => form.submit(e));
+        const container = modal.getFormContainer();
+        if (container) form.render(container);
+        form.on(form.getElement()!, "submit", async (e) => form.submit(e));
         this._components.push(form);
     }
 }
