@@ -5,7 +5,9 @@ import "../../utils/helpers.js";
 import { is_empty, validate_username, validate_password, are_password_equal, validate_email } from "../../utils/validation.js";
 import { client } from "../../api/client.js";
 import { router } from "../../router/router_instance.js";
+import { is_login } from "../../api/auth.js";
 import type { AuthResponse as AuthResponseType, FieldError } from "../../types/interfaces.js";
+
 
 interface AuthFormProps {
   mode: "login" | "signup";
@@ -20,15 +22,33 @@ interface AuthFormProps {
 export class AuthForm extends BaseComponent {
   private mode: "login" | "signup";
 
-  /**
-   * Создает экземпляр формы.
-   * @param {AuthFormProps} props - Свойства компонента.
+/**
+   * Создает экземпляр формы и инициирует проверку статуса авторизации.
+   * Если пользователь уже авторизован, выполняет редирект на страницу баланса.
+   * * @param {AuthFormProps} props - Свойства компонента, включая режим (login/signup).
    */
   constructor(props: AuthFormProps) {
     super(template, props);
     this.mode = props.mode;
+
+    this._checkAuth();
   }
 
+  /**
+   * Проверяет статус авторизации пользователя асинхронно.
+   * @private
+   */
+  private async _checkAuth(): Promise<void> {
+    try {
+      const isLoggedIn = await is_login();
+      if (isLoggedIn) {
+        router.navigate("/balance");
+      }
+    } catch (err) {
+      console.error("Ошибка при проверке авторизации:", err);
+    }
+  } 
+  
   /**
    * Устанавливает обработчики событий для элементов формы.
    * @protected
