@@ -12,7 +12,8 @@ import "./styles/global.css";
 import { LandingPage } from "./pages/Landing/landing.js";
 import { ProfilePage } from "./pages/Profile/profile.js";
 import { BalancePage } from "./pages/Balance/balance.js";
-import { ProfileEditPage } from "./pages/ProfileEdit/profile_edit.js";
+import { ProfileEditPage } from "./pages/ProfileEdit/profile_edit.js"
+import { OperationsPage } from "./pages/Operations/operations.js";
 
 
 /**
@@ -27,7 +28,8 @@ router
     .addRoute("/profile", () => new ProfilePage())
     .addRoute("/balance", () => new BalancePage())
     .addRoute("/budget", () => new BudgetPage())
-    .addRoute("/profile/edit", () => new ProfileEditPage());
+    .addRoute("/profile/edit", () => new ProfileEditPage())
+    .addRoute("/operations", () => new OperationsPage());
 
 /**
  * Инициализирует приложение и запускает обработку текущего URL.
