@@ -12,6 +12,8 @@ import "./styles/global.css";
 import { LandingPage } from "./pages/Landing/landing.js";
 import { ProfilePage } from "./pages/Profile/profile.js";
 import { BalancePage } from "./pages/Balance/balance.js";
+import { OperationsPage } from "./pages/Operations/operations.js";
+
 
 /**
  * Конфигурация маршрутизатора.
@@ -24,7 +26,8 @@ router
     .addRoute("/signup", () => new SignupPage())
     .addRoute("/profile", () => new ProfilePage())
     .addRoute("/balance", () => new BalancePage())
-    .addRoute("/budget", () => new BudgetPage());
+    .addRoute("/budget", () => new BudgetPage())
+    .addRoute("/operations", () => new OperationsPage());
 
 /**
  * Инициализирует приложение и запускает обработку текущего URL.
