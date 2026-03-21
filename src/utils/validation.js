@@ -1,4 +1,4 @@
-import {currencies} from "../store/store.js";
+import {get_currencies} from "../store/store.js";
 
 /**
  * Проверка логина на использование только разрешённых символов.
@@ -108,6 +108,7 @@ export function validate_email(email) {
  */
 export function validate_currency(currency) {
     currency = currency.trim().toUpperCase();
+    let currencies = get_currencies();
     if (currencies.includes(currency))
         return [true, ""];
     return [false, "Валюта не поддерживается"];
