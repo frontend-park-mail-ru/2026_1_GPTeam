@@ -1,10 +1,9 @@
 import { BasePage } from "../base_page.js";
-import template from "./profile_edit.hbs?raw";
+import template from "./avatar_edit.hbs?raw";
 import { Header } from "../../components/Header/header.js";
-import { ProfileAvatar } from "../../components/ProfileAvatar/profile_avatar.js";
-import { ProfileEditForm } from "../../components/ProfileEditForm/profile_edit_form.js";
+import { AvatarEditForm } from "../../components/AvatarEditForm/avatar_edit_form.js";
 import { router } from "../../router/router_instance.js";
-import "./profile_edit.css";
+import "./avatar_edit.css";
 import Handlebars from "handlebars";
 import type { SimpleResponse } from "../../types/interfaces.js";
 import { get_profile } from "../../api/profile.js";
@@ -19,14 +18,14 @@ interface ProfileApiResponse extends SimpleResponse {
 }
 
 /**
- * Страница редактирования профиля пользователя.
- * Инициализирует Header, ProfileAvatar и ProfileEditForm.
- * Показывает toast при успехе или ошибке.
+ * Страница редактирования аватара.
+ * Загружает данные профиля для получения инициалов.
+ * При ошибке 401 перенаправляет на логин.
  *
- * @class ProfileEditPage
+ * @class AvatarEditPage
  * @extends BasePage
  */
-export class ProfileEditPage extends BasePage {
+export class AvatarEditPage extends BasePage {
     private _showToast(root: HTMLElement, type: "success" | "error", delay = 3000): void {
         const toast = root.querySelector<HTMLElement>(
             type === "success" ? "#toast-success" : "#toast-error"
@@ -44,7 +43,7 @@ export class ProfileEditPage extends BasePage {
             return;
         }
 
-        const profile = data.user;
+        const initials = data.user.username.slice(0, 2).toUpperCase();
 
         const compiledTemplate = Handlebars.compile(template);
         root.innerHTML = `
@@ -58,26 +57,8 @@ export class ProfileEditPage extends BasePage {
         header.render(root.querySelector<HTMLElement>(".page__header")!);
         this._components.push(header);
 
-        const avatar = new ProfileAvatar({
-            username: profile.username,
-            email: profile.email,
-        });
-        avatar.render(root.querySelector<HTMLElement>(".profile-edit__avatar")!);
-        this._components.push(avatar);
-
-        const changeBtn = root.querySelector<HTMLElement>("#avatar-change-btn");
-        if (changeBtn) {
-            changeBtn.addEventListener("click", () => {
-                router.navigate("/profile/avatar");
-            });
-        }
-
-        const avatarName = root.querySelector<HTMLElement>(".profile-avatar__name");
-        const avatarEmail = root.querySelector<HTMLElement>(".profile-avatar__email");
-        if (avatarName) avatarName.style.display = "none";
-        if (avatarEmail) avatarEmail.style.display = "none";
-
-        const form = new ProfileEditForm({
+        const form = new AvatarEditForm({
+            initials,
             onSuccess: () => {
                 this._showToast(root, "success");
                 setTimeout(() => router.navigate("/profile"), 2000);
@@ -86,7 +67,7 @@ export class ProfileEditPage extends BasePage {
                 this._showToast(root, "error");
             },
         });
-        form.render(root.querySelector<HTMLElement>(".profile-edit__form-container")!);
+        form.render(root.querySelector<HTMLElement>(".avatar-edit__form-container")!);
         this._components.push(form);
     }
 }

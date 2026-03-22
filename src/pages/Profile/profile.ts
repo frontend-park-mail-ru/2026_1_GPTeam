@@ -6,14 +6,18 @@ import { ProfileInfo } from "../../components/ProfileInfo/profile_info.js";
 import { router } from "../../router/router_instance.js";
 import "./profile.css";
 import Handlebars from "handlebars";
-import type { User, SimpleResponse } from "../../types/interfaces.js";
+import type { SimpleResponse } from "../../types/interfaces.js";
 import { Modal } from "../../components/Modal/modal.js";
+import { get_profile } from "../../api/profile.js";
+import { logout } from "../../api/auth.js";
 
-/** Ответ API на запрос профиля. */
-interface ProfileResponse extends SimpleResponse {
-    username: User["username"];
-    email: User["email"];
-    created_at: User["created_at"];
+interface ProfileApiResponse extends SimpleResponse {
+    user: {
+        username: string;
+        email: string;
+        created_at: string;
+        avatar_url: string;
+    };
 }
 
 /**
@@ -26,26 +30,27 @@ interface ProfileResponse extends SimpleResponse {
  * @extends BasePage
  */
 export class ProfilePage extends BasePage {
-    /**
-     * Асинхронно рендерит страницу профиля в корневой элемент.
-     *
-     * @async
-     * @param {HTMLElement} root - Корневой DOM-элемент для отрисовки страницы.
-     * @returns {Promise<void>}
-     */
     async render(root: HTMLElement): Promise<void> {
-        // TODO: заменить на get_profile() когда появится эндпоинт
-        const profile: ProfileResponse = {
-            code: 200,
-            username: "username",
-            email: "user@email.com",
-            created_at: "1 января 2026",
-        };
+        const data = await get_profile() as ProfileApiResponse;
 
-        if (profile.code === 401) {
+        if (data.code === 401) {
             router.navigate("/login");
             return;
         }
+
+        const profile = data.user;
+
+        const formatDate = (isoDate: string): string => {
+            const date = new Date(isoDate);
+            return date.toLocaleDateString("ru-RU", {
+                day: "numeric",
+                month: "long",
+                year: "numeric",
+            });
+        };
+
+        const truncate = (str: string, max: number): string =>
+            str.length > max ? str.slice(0, max) + "..." : str;
 
         const compiledTemplate = Handlebars.compile(template);
         root.innerHTML = `
@@ -66,10 +71,17 @@ export class ProfilePage extends BasePage {
         avatar.render(root.querySelector<HTMLElement>(".profile__avatar")!);
         this._components.push(avatar);
 
+        const changeBtn = root.querySelector<HTMLElement>("#avatar-change-btn");
+        if (changeBtn) {
+            changeBtn.addEventListener("click", () => {
+                router.navigate("/profile/avatar");
+            });
+        }
+
         const info = new ProfileInfo({
-            username: profile.username,
-            email: profile.email,
-            created_at: profile.created_at,
+            username: truncate(profile.username, 10),
+            email: truncate(profile.email, 10),
+            created_at: formatDate(profile.created_at),
         });
         info.render(root.querySelector<HTMLElement>(".profile__info")!);
         this._components.push(info);
@@ -88,7 +100,7 @@ export class ProfilePage extends BasePage {
                     cancelText: "Отмена",
                     onConfirm: async () => {
                         modal.destroy();
-                        // TODO: await logout();
+                        await logout();
                         router.navigate("/");
                     },
                     onCancel: () => {
