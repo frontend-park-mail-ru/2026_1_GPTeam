@@ -16,7 +16,7 @@
     font-weight: 900;
     background: linear-gradient(90deg, #fff 35%, #6369FF 100%);
     -webkit-text-fill-color: transparent;
-    font-family: Semantic, sans-serif;
+    font-family: 'Semantic', sans-serif;
     background-clip: text;
     text-decoration: none;
 }
@@ -31,10 +31,10 @@
 }
 
 .title {
-    color: #fff;
+    color: #ffffff;
     font-size: 36px;
     font-weight: 600;
-    font-family: Inter, sans-serif;
+    font-family: 'Inter', sans-serif;
     text-align: center;
     margin-bottom: 32px;
 }
@@ -68,7 +68,11 @@
     padding: 15px 40px 15px 20px;
 }
 
-.eye_btn, .confirm_eye_btn, .help_abc {
+#email_input {
+    padding: 15px 44px 15px 20px;
+}
+
+.eye_btn, .confirm_eye_btn {
     width: 24px;
     height: 24px;
     position: absolute;
@@ -80,7 +84,19 @@
     transition: opacity 0.2s;
 }
 
-.eye_btn:hover, .confirm_eye_btn:hover, .help_abc:hover {
+.eye_btn:hover, .confirm_eye_btn:hover {
+    opacity: 1;
+}
+
+.help_abc, .help_email, .help_password {
+    width: 24px;
+    height: 24px;
+    cursor: pointer;
+    opacity: 0.6;
+    transition: opacity 0.2s;
+}
+
+.help_abc:hover, .help_email:hover, .help_password:hover {
     opacity: 1;
 }
 
@@ -106,9 +122,8 @@
     align-items: center;
 }
 
-.help-wrap .help_abc {
-    position: static;
-    transform: none;
+.help-wrap--password {
+    right: 42px;
 }
 
 .help-tooltip {
@@ -190,7 +205,7 @@
 .footer-text {
     text-align: center;
     font-size: 14px;
-    color: rgb(255 255 255 / 50%);
+    color: rgba(255, 255, 255, 0.5);
     margin-top: 20px;
 }
 

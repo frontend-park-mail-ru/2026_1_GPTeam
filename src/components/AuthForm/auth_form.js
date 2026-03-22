@@ -41,7 +41,7 @@ export class AuthForm extends BaseComponent {
             this._on(eye_btn, "click", () => {
                 const isVisible = password.type === "text";
                 password.type = isVisible ? "password" : "text";
-                eye_btn.src = isVisible ? "/img/closed_eye.png" : "/img/opened_eye.png";
+                eye_btn.src = isVisible ? "/icons/closed_eye.svg" : "/icons/opened_eye.svg";
             });
         }
 
@@ -49,7 +49,7 @@ export class AuthForm extends BaseComponent {
             this._on(confirm_eye_btn, "click", () => {
                 const isVisible = confirm_password.type === "text";
                 confirm_password.type = isVisible ? "password" : "text";
-                confirm_eye_btn.src = isVisible ? "/img/closed_eye.png" : "/img/opened_eye.png";
+                confirm_eye_btn.src = isVisible ? "/icons/closed_eye.svg" : "/icons/opened_eye.svg";
             });
         }
 

@@ -1,0 +1,37 @@
+.profile-info-cards {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+    width: 100%;
+}
+
+.profile-info-card {
+    background: rgb(255 255 255 / 3%);
+    border: 1px solid rgb(255 255 255 / 8%);
+    border-radius: 20px;
+    padding: 28px;
+}
+
+.profile-info-card--wide {
+    grid-column: span 2;
+}
+
+.profile-info-card__label {
+    font-size: 12px;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 1.5px;
+    color: rgb(255 255 255 / 30%);
+    margin-bottom: 10px;
+    font-family: Manrope, sans-serif;
+}
+
+.profile-info-card__value {
+    font-size: 18px;
+    font-weight: 600;
+    color: #fff;
+    font-family: Manrope, sans-serif;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
