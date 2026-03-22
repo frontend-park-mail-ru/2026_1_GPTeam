@@ -23,6 +23,10 @@
                 <label for="email_input">Email</label>
                 <div class="input-wrapper">
                     <input class="input" id="email_input" type="text" name="email" placeholder="Email" autocomplete="off">
+                    <div class="help-wrap">
+                        <img class="help_email" src="/icons/question.svg" alt="Справка">
+                        <div class="help-tooltip">Формат: email@email.com или почта@почта.рф</div>
+                    </div>
                 </div>
             {{/equal}}
 
@@ -30,6 +34,12 @@
             <div class="input-wrapper">
                 <input class="input" id="password_input" type="password" name="password" placeholder="Пароль" autocomplete="off">
                 <img class="eye_btn" src="/icons/closed_eye.svg" alt="Показать пароль">
+                {{#equal mode "signup"}}
+                    <div class="help-wrap help-wrap--password">
+                        <img class="help_password" src="/icons/question.svg" alt="Справка">
+                        <div class="help-tooltip">Минимум 8 символов, заглавная буква и цифра</div>
+                    </div>
+                {{/equal}}
             </div>
 
             {{#equal mode "signup"}}
