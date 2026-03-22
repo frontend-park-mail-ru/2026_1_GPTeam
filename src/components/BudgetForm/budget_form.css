@@ -6,6 +6,11 @@
     width: 510px;
 }
 
+.budget-form-card label span {
+    margin-left: 15px;
+    color: rgba(255, 255, 255, 0.6);
+}
+
 .budget-form-title {
     color: #fff;
     font-size: 28px;

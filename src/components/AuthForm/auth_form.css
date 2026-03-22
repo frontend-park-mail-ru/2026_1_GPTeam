@@ -16,7 +16,7 @@
     font-weight: 900;
     background: linear-gradient(90deg, #fff 35%, #6369FF 100%);
     -webkit-text-fill-color: transparent;
-    font-family: Semantic, sans-serif;
+    font-family: 'Semantic', sans-serif;
     background-clip: text;
     text-decoration: none;
 }
@@ -31,10 +31,10 @@
 }
 
 .title {
-    color: #fff;
+    color: #ffffff;
     font-size: 36px;
     font-weight: 600;
-    font-family: Inter, sans-serif;
+    font-family: 'Inter', sans-serif;
     text-align: center;
     margin-bottom: 32px;
 }
@@ -205,7 +205,7 @@
 .footer-text {
     text-align: center;
     font-size: 14px;
-    color: rgb(255 255 255 / 50%);
+    color: rgba(255, 255, 255, 0.5);
     margin-top: 20px;
 }
 
