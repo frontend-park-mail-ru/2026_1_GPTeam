@@ -61,7 +61,7 @@ export const get_profile = async (): Promise<ProfileResponse> => {
  */
 export const update_profile = async (body: UpdateProfileRequest): Promise<ProfileResponse> => {
     const response = await client("/profile", {
-        method: "PUT",
+        method: "PATCH",
         credentials: "include",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(body),
@@ -71,7 +71,7 @@ export const update_profile = async (body: UpdateProfileRequest): Promise<Profil
         const login = await is_login();
         if (login) {
             const retryResponse = await client("/profile", {
-                method: "PUT",
+                method: "PATCH",
                 credentials: "include",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify(body),
