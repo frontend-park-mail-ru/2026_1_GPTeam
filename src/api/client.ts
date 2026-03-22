@@ -6,19 +6,23 @@ export const SERVER_URL: string = import.meta.env.VITE_SERVER_URL;
 
 /**
  * HTTP клиент для выполнения запросов к серверу.
- * Конкатенирует базовый URL сервера с переданным путём.
+ * Конкатенирует базовый URL сервера с переданным путём и 
+ * автоматически добавляет credentials: "include" для работы с куками.
  *
  * @function client
  * @param {string} url - Относительный путь API (например: "/profile/balance")
  * @param {RequestInit} [data] - Опции запроса (метод, заголовки, тело и т.д.)
  * @returns {Promise<Response>} Promise, разрешающийся объектом Response
  * @throws {TypeError} Если сетевое соединение прервано или URL невалиден
- *
- * @example
- * const response = await client("/profile", {
- *   method: 'GET',
- *   credentials: 'include'
- * });
  */
-export const client = (url: string, data?: RequestInit): Promise<Response> =>
-    fetch(SERVER_URL + url, data);
+export const client = (url: string, data: RequestInit = {}): Promise<Response> => {
+    const mergedOptions: RequestInit = {
+        credentials: "include",
+        ...data,
+        headers: {
+            ...data.headers,
+        },
+    };
+
+    return fetch(SERVER_URL + url, mergedOptions);
+};

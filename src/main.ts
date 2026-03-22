@@ -13,7 +13,7 @@ import { LandingPage } from "./pages/Landing/landing.js";
 import { ProfilePage } from "./pages/Profile/profile.js";
 import { BalancePage } from "./pages/Balance/balance.js";
 import { ProfileEditPage } from "./pages/ProfileEdit/profile_edit.js";
-
+import { AvatarEditPage } from "./pages/AvatarEdit/avatar_edit.js";
 
 /**
  * Конфигурация маршрутизатора.
@@ -27,13 +27,14 @@ router
     .addRoute("/profile", () => new ProfilePage())
     .addRoute("/balance", () => new BalancePage())
     .addRoute("/budget", () => new BudgetPage())
-    .addRoute("/profile/edit", () => new ProfileEditPage());
+    .addRoute("/profile/edit", () => new ProfileEditPage())
+    .addRoute("/profile/avatar", () => new AvatarEditPage());
 
 /**
  * Инициализирует приложение и запускает обработку текущего URL.
- * * @async
+ * @async
  * @function init
- * @description Вызывает метод start у роутера, который определяет, 
+ * @description Вызывает метод start у роутера, который определяет,
  * какую страницу отрисовать при первой загрузке или обновлении окна браузера.
  * @returns {Promise<void>}
  */

@@ -9,6 +9,7 @@ import {
     are_password_equal,
 } from "../../utils/validation.js";
 import { router } from "../../router/router_instance.js";
+import { update_profile } from "../../api/profile.js";
 
 interface ProfileEditFormProps extends Record<string, unknown> {
     onSuccess?: () => void;
@@ -22,31 +23,17 @@ interface ProfileEditFormProps extends Record<string, unknown> {
  *
  * @class ProfileEditForm
  * @extends BaseComponent
- *
- * @example
- * const form = new ProfileEditForm({
- *   onSuccess: () => showToast("success"),
- *   onError: () => showToast("error"),
- * });
- * form.render(container);
  */
 export class ProfileEditForm extends BaseComponent {
     private _onSuccess?: () => void;
     private _onError?: () => void;
 
-    /**
-     * @param {ProfileEditFormProps} props - Колбэки успеха и ошибки.
-     */
     constructor(props: ProfileEditFormProps) {
         super(template, props);
         this._onSuccess = props.onSuccess;
         this._onError = props.onError;
     }
 
-    /**
-     * Навешивает обработчики после рендера.
-     * @protected
-     */
     protected _addEventListeners(): void {
         const form = this.getElement();
         if (!form) return;
@@ -56,18 +43,39 @@ export class ProfileEditForm extends BaseComponent {
             this._on(cancelBtn, "click", () => router.navigate("/profile"));
         }
 
+        this._bindEye(form, "#edit-password-current", "#eye-current");
+        this._bindEye(form, "#edit-password-new", "#eye-new");
+        this._bindEye(form, "#edit-password-confirm", "#eye-confirm");
+
         this._on(form, "submit", (e) => this.submit(e as SubmitEvent));
     }
 
     /**
-     * Валидирует поля формы.
-     * Логин и email — только если заполнены.
-     * Пароли — только если заполнено хотя бы одно поле пароля.
+     * Привязывает кнопку-глазок к полю пароля.
      *
      * @private
-     * @param fields - DOM-элементы полей.
-     * @param {HTMLElement} errorEl - Элемент для вывода ошибки.
-     * @returns {boolean} true если есть ошибки.
+     * @param {Element} form - Корневой элемент формы.
+     * @param {string} inputId - Селектор поля пароля.
+     * @param {string} eyeId - Селектор кнопки-глазка.
+     */
+    private _bindEye(form: Element, inputId: string, eyeId: string): void {
+        const input = form.querySelector<HTMLInputElement>(inputId);
+        const eye = form.querySelector<HTMLImageElement>(eyeId);
+        if (!input || !eye) return;
+        this._on(eye, "click", () => {
+            const isVisible = input.type === "text";
+            input.type = isVisible ? "password" : "text";
+            eye.src = isVisible ? "/icons/closed_eye.svg" : "/icons/opened_eye.svg";
+        });
+    }
+
+    /**
+     * Валидирует поля формы редактирования профиля.
+     *
+     * @private
+     * @param {{ username: HTMLInputElement; email: HTMLInputElement; currentPassword: HTMLInputElement; newPassword: HTMLInputElement; confirmPassword: HTMLInputElement }} fields
+     * @param {HTMLElement} errorEl
+     * @returns {boolean} true если есть ошибки
      */
     private _validate(
         fields: {
@@ -96,7 +104,6 @@ export class ProfileEditForm extends BaseComponent {
 
         [username, email, currentPassword, newPassword, confirmPassword].forEach(markValid);
 
-        // Хотя бы одно поле должно быть заполнено
         const anyFilled = [username, email, currentPassword, newPassword, confirmPassword]
             .some(f => f.value.trim());
 
@@ -105,21 +112,18 @@ export class ProfileEditForm extends BaseComponent {
             return true;
         }
 
-        // Валидация логина если заполнен
         if (username.value.trim()) {
             const [ok, err] = validate_username(username.value);
             if (!ok) markInvalid(username, err);
             else markValid(username);
         }
 
-        // Валидация email если заполнен
         if (email.value.trim()) {
             const [ok, err] = validate_email(email.value);
             if (!ok) markInvalid(email, err);
             else markValid(email);
         }
 
-        // Валидация паролей если заполнено хотя бы одно
         const anyPassword = currentPassword.value || newPassword.value || confirmPassword.value;
         if (anyPassword) {
             const [okCurrent] = is_empty(currentPassword.value, "Текущий пароль");
@@ -143,12 +147,10 @@ export class ProfileEditForm extends BaseComponent {
     }
 
     /**
-     * Обработчик отправки формы.
-     * Валидирует поля, отправляет запрос на сервер.
-     * Вызывает onSuccess или onError в зависимости от результата.
+     * Обработчик отправки формы редактирования профиля.
      *
      * @async
-     * @param {SubmitEvent} e - Событие submit.
+     * @param {SubmitEvent} e
      * @returns {Promise<void>}
      */
     async submit(e: SubmitEvent): Promise<void> {
@@ -181,8 +183,17 @@ export class ProfileEditForm extends BaseComponent {
         saveBtn.disabled = true;
 
         try {
-            // TODO: заменить на реальный API вызов когда появится эндпоинт
-            this._onSuccess?.();
+            const body: Record<string, string> = {};
+            if (usernameInput.value.trim()) body.username = usernameInput.value.trim();
+            if (emailInput.value.trim()) body.email = emailInput.value.trim();
+            if (newPasswordInput.value) body.password = newPasswordInput.value;
+
+            const result = await update_profile(body);
+            if (result.code === 200) {
+                this._onSuccess?.();
+            } else {
+                this._onError?.();
+            }
         } catch {
             this._onError?.();
         } finally {
