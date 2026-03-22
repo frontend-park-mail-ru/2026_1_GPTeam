@@ -1,6 +1,5 @@
-import { currencies } from "../store/store.js";
-
 type ValidationResult = [boolean, string];
+import {get_currencies} from "../store/store.js";
 
 /**
  * Проверка логина на использование только разрешённых символов.
@@ -107,6 +106,7 @@ export function validate_email(email: string): ValidationResult {
  */
 export function validate_currency(currency: string): ValidationResult {
     currency = currency.trim().toUpperCase();
+    let currencies = get_currencies();
     if (currencies.includes(currency))
         return [true, ""];
     return [false, "Валюта не поддерживается"];

@@ -14,6 +14,8 @@ import { ProfilePage } from "./pages/Profile/profile.js";
 import { BalancePage } from "./pages/Balance/balance.js";
 import { ProfileEditPage } from "./pages/ProfileEdit/profile_edit.js";
 import { AvatarEditPage } from "./pages/AvatarEdit/avatar_edit.js";
+import {load_currencies} from "./api/currency.js";
+import {set_currencies} from "./store/store.js";
 
 /**
  * Конфигурация маршрутизатора.
@@ -40,6 +42,8 @@ router
  */
 async function init() {
     router.start();
+    let currencies = await load_currencies();
+    set_currencies(currencies);
 }
 
 // Запуск приложения
