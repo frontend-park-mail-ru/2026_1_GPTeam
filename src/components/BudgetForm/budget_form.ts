@@ -2,7 +2,7 @@ import { BaseComponent } from "../base_component.js";
 import template from "./budget_form.hbs?raw";
 import "./budget_form.css";
 import { client } from "../../api/client.js";
-import { currencies } from "../../store/store.js";
+import { get_currencies } from "../../store/store.js";
 import { router } from "../../router/router_instance.js";
 import { CustomCalendar } from "../CustomCalendar/custom_calendar.js";
 import { CustomSelect } from "../CustomSelect/custom_select.js";
@@ -33,7 +33,7 @@ export class BudgetForm extends BaseComponent {
     private _currencySelect: CustomSelect | null = null;
 
     constructor(props: Record<string, unknown>) {
-        props.currency_list = currencies;
+        props.currency_list = get_currencies();
         super(template, props);
     }
 
