@@ -14,7 +14,6 @@ import { ProfilePage } from "./pages/Profile/profile.js";
 import { BalancePage } from "./pages/Balance/balance.js";
 import {load_currencies} from "./api/currency.js";
 import {set_currencies} from "./store/store.js";
-import sw from './service_worker.js?url';
 
 /**
  * Конфигурация маршрутизатора.
@@ -38,17 +37,14 @@ router
  * @returns {Promise<void>}
  */
 async function init() {
+    if ("serviceWorker" in navigator) {
+        navigator.serviceWorker.register("/service_worker.js")
+            .catch(error => console.error(error));
+    }
+
     router.start();
     let currencies = await load_currencies();
     set_currencies(currencies);
-
-    if ("serviceWorker" in navigator) {
-        navigator.serviceWorker.register(sw)
-            .then(() => navigator.serviceWorker.ready.then((worker) => {
-                worker.sync.register("syncdata");
-            }))
-            .catch(error => console.error(error));
-    }
 }
 
 init();
