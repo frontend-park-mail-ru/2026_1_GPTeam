@@ -55,19 +55,17 @@ async function validateAndLoadData() {
  * Регистрация Service Worker с учетом окружения Vite
  */
 async function registerServiceWorker() {
-    if (import.meta.env.VITE_ENABLE_SW !== 'true' || !('serviceWorker' in navigator)) {
+    if (!('serviceWorker' in navigator) || 
+        import.meta.env.VITE_ENABLE_SW !== 'true' || 
+        import.meta.env.DEV) {
         return;
     }
 
     try {
-        // Vite PWA Plugin в режиме dev использует другой путь
-        const swUrl = import.meta.env.DEV ? '/dev-sw.js?dev-sw' : '/service_worker.js';
-        
-        const registration = await navigator.serviceWorker.register(swUrl, {
+        const registration = await navigator.serviceWorker.register('/service_worker.js', {
             type: 'module'
         });
-        
-        console.log('SW registered:', registration.scope);
+        console.log('SW registered in production:', registration.scope);
     } catch (error) {
         console.error('SW registration failed:', error);
     }
