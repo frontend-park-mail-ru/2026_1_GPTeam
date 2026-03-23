@@ -1,24 +1,29 @@
 /**
  * @fileoverview Главная точка входа приложения Finance Manager.
- * Отвечает за импорт глобальных стилей, регистрацию маршрутов в роутере
- * и запуск жизненного цикла одностраничного приложения (SPA).
+ * Данный модуль инициализирует маршрутизацию, загружает справочники (валюты, категории)
+ * в глобальное состояние (store) и регистрирует Service Worker для PWA.
  */
 
-import { router } from "./router/router_instance.js";
-import { LoginPage } from "./pages/Login/login.js";
-import { SignupPage } from "./pages/Signup/signup.js";
-import { BudgetPage } from "./pages/Budget/budget.js";
+import { router } from "./router/router_instance.ts";
+import { LoginPage } from "./pages/Login/login.ts";
+import { SignupPage } from "./pages/Signup/signup.ts";
+import { BudgetPage } from "./pages/Budget/budget.ts";
 import "./styles/global.css";
-import { LandingPage } from "./pages/Landing/landing.js";
-import { ProfilePage } from "./pages/Profile/profile.js";
-import { BalancePage } from "./pages/Balance/balance.js";
-import { ProfileEditPage } from "./pages/ProfileEdit/profile_edit.js";
-import { OperationsPage } from "./pages/Operations/operations.js";
+import { LandingPage } from "./pages/Landing/landing.ts";
+import { ProfilePage } from "./pages/Profile/profile.ts";
+import { BalancePage } from "./pages/Balance/balance.ts";
+import { ProfileEditPage } from "./pages/ProfileEdit/profile_edit.ts";
+import { OperationsPage } from "./pages/Operations/operations.ts";
+import { AvatarEditPage } from "./pages/AvatarEdit/avatar_edit.ts";
+import { TransactionCreatePage } from "./pages/TransactionsCreate/transactions_create.ts";
+import { TransactionDetailPage } from "./pages/TransactionsDetail/transactions_detail.ts";
+
+import { load_categories, load_currencies, load_transaction_types } from "./api/currency.ts";
+import { set_currencies, set_categories, set_transaction_types } from "./store/store.ts";
 
 /**
  * Конфигурация маршрутизатора.
- * Связывает URL-пути с фабриками компонентов страниц.
- * Использует Chaining (цепочку вызовов) для регистрации всех доступных разделов приложения.
+ * Связывает URL-пути с фабриками компонентов соответствующих страниц.
  */
 router
     .addRoute("/", () => new LandingPage())
@@ -28,19 +33,72 @@ router
     .addRoute("/balance", () => new BalancePage())
     .addRoute("/budget", () => new BudgetPage())
     .addRoute("/profile/edit", () => new ProfileEditPage())
-    .addRoute("/operations", () => new OperationsPage());
+    .addRoute("/operations", () => new OperationsPage())
+    .addRoute("/profile/avatar", () => new AvatarEditPage())
+    .addRoute("/operations/create", () => new TransactionCreatePage())
+    .addRoute("/operations/:id", (p) => new TransactionDetailPage(Number(p.id)));
 
 /**
- * Инициализирует приложение и запускает обработку текущего URL.
+ * Загружает необходимые справочные данные с бэкенда и сохраняет их в стор.
  * * @async
- * @function init
- * @description Вызывает метод start у роутера, который определяет, 
- * какую страницу отрисовать при первой загрузке или обновлении окна браузера.
- * @returns {Promise<void>}
+ * @function validateAndLoadData
+ * @description Выполняет параллельные запросы к API для получения списка валют,
+ * категорий и типов транзакций. В случае успеха обновляет глобальное состояние.
+ * @returns {Promise<boolean>} Возвращает true, если данные были успешно загружены и синхронизированы.
  */
-async function init() {
-    router.start();
+async function validateAndLoadData(): Promise<boolean> {
+    try {
+        const [currencies, categories, types] = await Promise.all([
+            load_currencies(),
+            load_categories(),
+            load_transaction_types(),
+        ]);
+
+        if (currencies) set_currencies(currencies);
+        if (categories) set_categories(categories);
+        if (types) set_transaction_types(types);
+
+        return true;
+    } catch (error) {
+        console.error("Failed to sync with backend:", error);
+        return false;
+    }
 }
 
-// Запуск приложения
+/**
+ * Инициализирует жизненный цикл приложения.
+ * * @async
+ * @function init
+ * @description Порядок инициализации:
+ * 1. Загрузка справочников (валюты, категории) с сервера.
+ * 2. Запуск роутера и отрисовка страницы на основе текущего URL.
+ * 3. Регистрация Service Worker (только в production режиме при наличии флага в .env).
+ * @returns {Promise<void>}
+ */
+async function init(): Promise<void> {
+    // Ждем загрузки данных перед запуском интерфейса
+    await validateAndLoadData();
+    
+    // Активация роутера и отрисовка текущего маршрута
+    router.start();
+
+    /**
+     * Регистрация Service Worker для офлайн-режима.
+     * Проверяет: окружение (не DEV), поддержку в браузере и флаг в .env.
+     */
+    if (
+        !import.meta.env.DEV && 
+        'serviceWorker' in navigator && 
+        import.meta.env.VITE_ENABLE_SW === 'true'
+    ) {
+        try {
+            await navigator.serviceWorker.register('/service_worker.js', { type: 'module' });
+            console.log('Service Worker registered');
+        } catch (e) {
+            console.error('Service Worker registration failed:', e);
+        }
+    }
+}
+
+// Точка входа: запуск приложения
 init();

@@ -1,34 +1,36 @@
-import { BaseComponent } from "../base_component.js";
+import { BaseComponent } from "../base_component.ts";
 import template from "./header.hbs?raw";
 import "./header.css";
+import { get_profile } from "../../api/profile.ts";
+import type { SimpleResponse } from "../../types/interfaces.ts";
 
 interface HeaderProps extends Record<string, unknown> {
     cur_page: string;
+}
+
+interface ProfileApiResponse extends SimpleResponse {
+    user: {
+        username: string;
+        email: string;
+        created_at: string;
+        avatar_url: string;
+    };
 }
 
 /**
  * Компонент шапки сайта (навигации).
  * Отвечает за отображение верхнего меню и автоматическую подсветку
  * текущей активной ссылки на основе переданного пути.
+ * Если у пользователя есть аватар — показывает его в хедере вместо иконки.
  *
  * @class Header
  * @extends BaseComponent
  */
 export class Header extends BaseComponent {
-    /**
-     * Создает экземпляр шапки.
-     * @param {HeaderProps} props - Свойства компонента.
-     */
     constructor(props: HeaderProps) {
         super(template, props);
     }
 
-    /**
-     * Жизненный цикл компонента: вызывается после рендеринга.
-     * Находит все ссылки `<a>` и добавляет класс `active_header_link` той,
-     * чей `href` совпадает с текущей страницей.
-     * @protected
-     */
     protected _afterRender(): void {
         const nav = document.getElementsByTagName("a");
         for (const elem of nav) {
@@ -41,6 +43,32 @@ export class Header extends BaseComponent {
                     elem.classList.add("profile_icon_active");
                 }
             }
+        }
+
+        this._loadAvatar();
+    }
+
+    private async _loadAvatar(): Promise<void> {
+        try {
+            const data = await get_profile() as ProfileApiResponse;
+            if (data.code !== 200 || !data.user?.avatar_url) return;
+
+            const profileLink = document.querySelector<HTMLAnchorElement>("a[href='/profile']");
+            if (!profileLink) return;
+
+            const icon = profileLink.querySelector<HTMLImageElement>("img");
+            if (!icon) return;
+
+            const img = new Image();
+            img.onload = () => {
+                icon.src = data.user.avatar_url;
+                icon.style.width = "32px";
+                icon.style.height = "32px";
+                icon.style.borderRadius = "50%";
+                icon.style.objectFit = "cover";
+            };
+            img.src = data.user.avatar_url;
+        } catch {
         }
     }
 }

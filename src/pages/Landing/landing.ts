@@ -1,8 +1,8 @@
-import { BasePage } from "../base_page.js";
+import { BasePage } from "../base_page.ts";
 import template from "./landing.hbs?raw";
 import "./landing.css";
-import { is_login } from "../../api/auth.js";
-import { router } from "../../router/router_instance.js";
+import { is_login } from "../../api/auth.ts";
+import { router } from "../../router/router_instance.ts";
 
 /**
  * Страница лендинга (приветственная страница).

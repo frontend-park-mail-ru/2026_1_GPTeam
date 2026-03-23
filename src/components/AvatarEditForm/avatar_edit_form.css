@@ -1,0 +1,136 @@
+.avatar-edit-form {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 16px;
+    width: 100%;
+}
+
+.avatar-edit__preview {
+    position: relative;
+    width: 108px;
+    height: 108px;
+    margin-bottom: 4px;
+}
+
+.avatar-edit__circle {
+    width: 108px;
+    height: 108px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #484fff, #7b7fff);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 34px;
+    font-weight: 800;
+    color: white;
+    font-family: Manrope, sans-serif;
+    overflow: hidden;
+}
+
+.avatar-edit__img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 50%;
+}
+
+.avatar-edit__ring {
+    position: absolute;
+    inset: -3px;
+    border-radius: 50%;
+    border: 2px solid rgb(72 79 255 / 50%);
+    pointer-events: none;
+}
+
+.avatar-edit__initials {
+    font-size: 34px;
+    font-weight: 800;
+    color: white;
+    font-family: Manrope, sans-serif;
+}
+
+.avatar-edit__upload-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 10px 28px;
+    border-radius: 50px;
+    background: rgb(72 79 255 / 15%);
+    border: 1px solid rgb(72 79 255 / 40%);
+    color: #7b7fff;
+    font-size: 14px;
+    font-weight: 600;
+    font-family: Manrope, sans-serif;
+    cursor: pointer;
+    transition: background 0.2s, border-color 0.2s;
+}
+
+.avatar-edit__upload-btn:hover {
+    background: rgb(72 79 255 / 25%);
+    border-color: rgb(72 79 255 / 70%);
+}
+
+.avatar-edit__hint {
+    font-size: 12px;
+    color: rgb(255 255 255 / 30%);
+    font-family: Manrope, sans-serif;
+    margin: 0;
+}
+
+.avatar-edit__error {
+    font-size: 13px;
+    color: #f87171;
+    font-family: Manrope, sans-serif;
+    min-height: 18px;
+    margin: 0;
+    text-align: center;
+}
+
+.avatar-edit__actions {
+    display: flex;
+    gap: 12px;
+    width: 100%;
+    margin-top: 8px;
+}
+
+.avatar-edit__btn-save {
+    flex: 1;
+    padding: 12px;
+    border-radius: 50px;
+    background: linear-gradient(135deg, #484fff, #7b7fff);
+    border: none;
+    color: white;
+    font-size: 15px;
+    font-weight: 700;
+    font-family: Manrope, sans-serif;
+    cursor: pointer;
+    transition: opacity 0.2s;
+}
+
+.avatar-edit__btn-save:hover {
+    opacity: 0.85;
+}
+
+.avatar-edit__btn-save:disabled {
+    opacity: 0.4;
+    cursor: not-allowed;
+}
+
+.avatar-edit__btn-cancel {
+    flex: 1;
+    padding: 12px;
+    border-radius: 50px;
+    background: rgb(255 255 255 / 5%);
+    border: 1px solid rgb(255 255 255 / 10%);
+    color: rgb(255 255 255 / 60%);
+    font-size: 15px;
+    font-weight: 700;
+    font-family: Manrope, sans-serif;
+    cursor: pointer;
+    transition: background 0.2s;
+}
+
+.avatar-edit__btn-cancel:hover {
+    background: rgb(255 255 255 / 10%);
+}

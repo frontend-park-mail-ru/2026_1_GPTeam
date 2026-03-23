@@ -1,4 +1,4 @@
-import { Router } from "./router.js";
+import { Router } from "./router.ts";
 
 /**
  * Контейнер для отрисовки приложения.
@@ -10,7 +10,7 @@ const root = document.getElementById("app") as HTMLElement;
  * Экспортируемый экземпляр маршрутизатора (Singleton).
  *
  * @example
- * import { router } from "../../router/router_instance.js";
+ * import { router } from "../../router/router_instance.ts";
  * router.navigate('/profile');
  *
  * @type {Router}

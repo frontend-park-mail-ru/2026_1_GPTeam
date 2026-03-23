@@ -1,0 +1,45 @@
+<div class="transaction-detail">
+    <div class="transaction-detail__back">
+        <button type="button" class="transaction-detail__back-btn" id="back_btn">
+            ← Назад к операциям
+        </button>
+    </div>
+
+    <div class="transaction-detail__card transaction-detail__card--{{type}}" id="detail_card">
+        <div class="transaction-detail__icon">{{category_icon}}</div>
+
+        <h2 class="transaction-detail__title">{{title}}</h2>
+        <div class="transaction-detail__amount transaction-detail__amount--{{type}}">
+            {{amount_sign}}{{currency}} {{amount}}
+        </div>
+
+        <div class="transaction-detail__meta">
+            <div class="transaction-detail__row">
+                <span class="transaction-detail__key">Тип</span>
+                <span class="transaction-detail__val">{{type_label}}</span>
+            </div>
+            <div class="transaction-detail__row">
+                <span class="transaction-detail__key">Категория</span>
+                <span class="transaction-detail__val">{{category}}</span>
+            </div>
+            <div class="transaction-detail__row">
+                <span class="transaction-detail__key">Дата операции</span>
+                <span class="transaction-detail__val">{{date}}</span>
+            </div>
+            <div class="transaction-detail__row">
+                <span class="transaction-detail__key">Создана</span>
+                <span class="transaction-detail__val">{{created_at}}</span>
+            </div>
+            {{#if description}}
+            <div class="transaction-detail__row transaction-detail__row--desc">
+                <span class="transaction-detail__key">Описание</span>
+                <span class="transaction-detail__val">{{description}}</span>
+            </div>
+            {{/if}}
+        </div>
+
+        <div class="transaction-detail__actions">
+            <button type="button" class="btn-danger" id="delete_btn">Удалить операцию</button>
+        </div>
+    </div>
+</div>

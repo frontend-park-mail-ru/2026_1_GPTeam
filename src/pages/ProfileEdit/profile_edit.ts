@@ -1,18 +1,21 @@
-import { BasePage } from "../base_page.js";
+import { BasePage } from "../base_page.ts";
 import template from "./profile_edit.hbs?raw";
-import { Header } from "../../components/Header/header.js";
-import { ProfileAvatar } from "../../components/ProfileAvatar/profile_avatar.js";
-import { ProfileEditForm } from "../../components/ProfileEditForm/profile_edit_form.js";
-import { router } from "../../router/router_instance.js";
+import { Header } from "../../components/Header/header.ts";
+import { ProfileAvatar } from "../../components/ProfileAvatar/profile_avatar.ts";
+import { ProfileEditForm } from "../../components/ProfileEditForm/profile_edit_form.ts";
+import { router } from "../../router/router_instance.ts";
 import "./profile_edit.css";
 import Handlebars from "handlebars";
-import type { User, SimpleResponse } from "../../types/interfaces.js";
+import type { SimpleResponse } from "../../types/interfaces.ts";
+import { get_profile } from "../../api/profile.ts";
 
-/** Ответ API на запрос профиля. */
-interface ProfileResponse extends SimpleResponse {
-    username: User["username"];
-    email: User["email"];
-    created_at: User["created_at"];
+interface ProfileApiResponse extends SimpleResponse {
+    user: {
+        username: string;
+        email: string;
+        created_at: string;
+        avatar_url: string;
+    };
 }
 
 /**
@@ -24,14 +27,6 @@ interface ProfileResponse extends SimpleResponse {
  * @extends BasePage
  */
 export class ProfileEditPage extends BasePage {
-    /**
-     * Показывает toast и скрывает через delay мс.
-     *
-     * @private
-     * @param {HTMLElement} root - Корневой элемент.
-     * @param {"success" | "error"} type - Тип уведомления.
-     * @param {number} [delay=3000] - Время показа в мс.
-     */
     private _showToast(root: HTMLElement, type: "success" | "error", delay = 3000): void {
         const toast = root.querySelector<HTMLElement>(
             type === "success" ? "#toast-success" : "#toast-error"
@@ -41,26 +36,15 @@ export class ProfileEditPage extends BasePage {
         setTimeout(() => { toast.style.display = "none"; }, delay);
     }
 
-    /**
-     * Асинхронно рендерит страницу редактирования профиля.
-     *
-     * @async
-     * @param {HTMLElement} root - Корневой DOM-элемент.
-     * @returns {Promise<void>}
-     */
     async render(root: HTMLElement): Promise<void> {
-        // TODO: заменить на get_profile() когда появится эндпоинт
-        const profile: ProfileResponse = {
-            code: 200,
-            username: "username",
-            email: "user@email.com",
-            created_at: "1 января 2026",
-        };
+        const data = await get_profile() as ProfileApiResponse;
 
-        if (profile.code === 401) {
+        if (data.code === 401) {
             router.navigate("/login");
             return;
         }
+
+        const profile = data.user;
 
         const compiledTemplate = Handlebars.compile(template);
         root.innerHTML = `
@@ -81,7 +65,13 @@ export class ProfileEditPage extends BasePage {
         avatar.render(root.querySelector<HTMLElement>(".profile-edit__avatar")!);
         this._components.push(avatar);
 
-        // Скрываем имя и email — на странице редактирования не нужны
+        const changeBtn = root.querySelector<HTMLElement>("#avatar-change-btn");
+        if (changeBtn) {
+            changeBtn.addEventListener("click", () => {
+                router.navigate("/profile/avatar");
+            });
+        }
+
         const avatarName = root.querySelector<HTMLElement>(".profile-avatar__name");
         const avatarEmail = root.querySelector<HTMLElement>(".profile-avatar__email");
         if (avatarName) avatarName.style.display = "none";

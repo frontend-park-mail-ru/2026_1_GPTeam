@@ -1,4 +1,4 @@
-import { BaseComponent } from "../base_component.js";
+import { BaseComponent } from "../base_component.ts";
 import template from "./expenses_balance.hbs?raw";
 import "./expenses_balance.css";
 

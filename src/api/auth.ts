@@ -1,5 +1,5 @@
-import { client } from "./client.js";
-import type { SimpleResponse } from "../types/interfaces.js";
+import { client } from "./client.ts";
+import type { SimpleResponse } from "../types/interfaces.ts";
 
 /**
  * Проверяет, авторизован ли пользователь, путём обновления токена.

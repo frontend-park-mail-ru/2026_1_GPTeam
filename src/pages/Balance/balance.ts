@@ -1,14 +1,14 @@
-import { BasePage } from "../base_page.js";
+import { BasePage } from "../base_page.ts";
 import template from "./balance.hbs?raw";
-import { Header } from "../../components/Header/header.js";
-import { get_balance } from "../../api/balance.js";
-import { TotalBalance } from "../../components/TotalBalance/total_balance.js";
+import { Header } from "../../components/Header/header.ts";
+import { get_balance } from "../../api/balance.ts";
+import { TotalBalance } from "../../components/TotalBalance/total_balance.ts";
 import "./balance.css";
 import Handlebars from "handlebars";
-import { IncomeBalance } from "../../components/IncomeBalance/income_balance.js";
-import { ExpensesBalance } from "../../components/ExpensesBalance/expenses_balance.js";
-import { router } from "../../router/router_instance.js";
-import type { BalanceResponse as BalanceResponseType } from "../../types/interfaces.js";
+import { IncomeBalance } from "../../components/IncomeBalance/income_balance.ts";
+import { ExpensesBalance } from "../../components/ExpensesBalance/expenses_balance.ts";
+import { router } from "../../router/router_instance.ts";
+import type { BalanceResponse as BalanceResponseType } from "../../types/interfaces.ts";
 
 /**
  * Страница баланса пользователя.

@@ -1,4 +1,4 @@
-import { BaseComponent } from "../components/base_component.js";
+import { BaseComponent } from "../components/base_component.ts";
 
 /**
  * Абстрактный базовый класс для всех страниц приложения.

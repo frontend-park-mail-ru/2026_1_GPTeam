@@ -1,0 +1,171 @@
+.transaction-detail-page {
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    min-height: calc(100vh - 100px);
+    padding: 40px 20px;
+    width: 100%;
+    box-sizing: border-box;
+}
+
+.transaction-detail {
+    width: 100%;
+    max-width: 520px;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    animation: fadeIn 0.3s ease-out;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(10px); }
+    to   { opacity: 1; transform: translateY(0); }
+}
+
+.transaction-detail__back-btn {
+    background: transparent;
+    border: none;
+    color: rgb(255 255 255 / 45%);
+    font-size: 14px;
+    font-weight: 600;
+    cursor: pointer;
+    padding: 0;
+    transition: color 0.2s;
+    font-family: inherit;
+}
+
+.transaction-detail__back-btn:hover {
+    color: #d7d9ff;
+}
+
+.transaction-detail__card {
+    background: linear-gradient(135deg, rgb(255 255 255 / 3%), rgb(72 79 255 / 6%));
+    border: 1px solid rgb(255 255 255 / 8%);
+    border-radius: 24px;
+    padding: 32px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 16px;
+    box-shadow: 0 20px 40px rgb(0 0 0 / 20%);
+}
+
+.transaction-detail__card--income {
+    border-color: rgb(92 214 159 / 20%);
+}
+
+.transaction-detail__card--expense {
+    border-color: rgb(255 107 129 / 20%);
+}
+
+.transaction-detail__icon {
+    width: 64px;
+    height: 64px;
+    border-radius: 18px;
+    background: linear-gradient(135deg, rgb(72 79 255 / 28%), rgb(72 79 255 / 8%));
+    border: 1px solid rgb(72 79 255 / 25%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 30px;
+}
+
+.transaction-detail__title {
+    margin: 0;
+    color: #fff;
+    font-size: 22px;
+    font-weight: 700;
+    text-align: center;
+}
+
+.transaction-detail__amount {
+    font-size: 32px;
+    font-weight: 800;
+    letter-spacing: -0.02em;
+}
+
+.transaction-detail__amount--income { color: #7ff1b2; }
+.transaction-detail__amount--expense { color: #ff9dad; }
+
+.transaction-detail__meta {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    gap: 0;
+    border: 1px solid rgb(255 255 255 / 7%);
+    border-radius: 14px;
+    overflow: hidden;
+    margin-top: 8px;
+}
+
+.transaction-detail__row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 14px 18px;
+    gap: 16px;
+    border-bottom: 1px solid rgb(255 255 255 / 5%);
+}
+
+.transaction-detail__row:last-child {
+    border-bottom: none;
+}
+
+.transaction-detail__row--desc {
+    align-items: flex-start;
+}
+
+.transaction-detail__key {
+    color: rgb(255 255 255 / 40%);
+    font-size: 13px;
+    font-weight: 600;
+    flex-shrink: 0;
+}
+
+.transaction-detail__val {
+    color: #fff;
+    font-size: 14px;
+    font-weight: 600;
+    text-align: right;
+    word-break: break-all;
+}
+
+.transaction-detail__actions {
+    width: 100%;
+    margin-top: 8px;
+}
+
+.btn-danger {
+    width: 100%;
+    background: rgb(255 107 129 / 10%);
+    color: #ff9dad;
+    border: 1px solid rgb(255 107 129 / 25%);
+    border-radius: 12px;
+    padding: 14px;
+    font-size: 15px;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    font-family: inherit;
+}
+
+.btn-danger:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
+.btn-danger:hover:not(:disabled) {
+    background: rgb(255 107 129 / 20%);
+    border-color: rgb(255 107 129 / 45%);
+    color: #fff;
+}
+
+.detail-loading,
+.detail-error {
+    color: rgb(255 255 255 / 45%);
+    font-size: 15px;
+    text-align: center;
+    padding: 60px 0;
+}
+
+.detail-error { color: #ff9dad; }
