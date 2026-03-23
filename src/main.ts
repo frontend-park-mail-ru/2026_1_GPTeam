@@ -1,30 +1,25 @@
 /**
- * @fileoverview Главная точка входа приложения Finance Manager.
+ * @fileoverview Главная точка входа приложения MoneyFirst.
  * Отвечает за импорт глобальных стилей, регистрацию маршрутов в роутере
  * и запуск жизненного цикла одностраничного приложения (SPA).
  */
 
-import { router } from "./router/router_instance.js";
-import { LoginPage } from "./pages/Login/login.js";
-import { SignupPage } from "./pages/Signup/signup.js";
-import { BudgetPage } from "./pages/Budget/budget.js";
+
+import { router } from "./router/router_instance.ts";
+import { LoginPage } from "./pages/Login/login.ts";
+import { SignupPage } from "./pages/Signup/signup.ts";
+import { BudgetPage } from "./pages/Budget/budget.ts";
 import "./styles/global.css";
-import { LandingPage } from "./pages/Landing/landing.js";
-import { ProfilePage } from "./pages/Profile/profile.js";
-import { BalancePage } from "./pages/Balance/balance.js";
-import { ProfileEditPage } from "./pages/ProfileEdit/profile_edit.js"
-import { OperationsPage } from "./pages/Operations/operations.js";
+import { LandingPage } from "./pages/Landing/landing.ts";
+import { ProfilePage } from "./pages/Profile/profile.ts";
+import { BalancePage } from "./pages/Balance/balance.ts";
+import { ProfileEditPage } from "./pages/ProfileEdit/profile_edit.ts";
+import { OperationsPage } from "./pages/Operations/operations.ts";
+import { TransactionDetailPage } from "./pages/TransactionsDetail/transactions_detail.ts";
+import { AvatarEditPage } from "./pages/AvatarEdit/avatar_edit.ts";
+import { TransactionCreatePage } from "./pages/TransactionsCreate/transactions_create.ts";
+import { load_currencies, load_categories, load_transaction_types } from "./api/currency.ts";
 
-import { ProfileEditPage } from "./pages/ProfileEdit/profile_edit.js";
-import { AvatarEditPage } from "./pages/AvatarEdit/avatar_edit.js";
-import {load_currencies} from "./api/currency.js";
-import {set_currencies} from "./store/store.js";
-
-/**
- * Конфигурация маршрутизатора.
- * Связывает URL-пути с фабриками компонентов страниц.
- * Использует Chaining (цепочку вызовов) для регистрации всех доступных разделов приложения.
- */
 router
     .addRoute("/", () => new LandingPage())
     .addRoute("/login", () => new LoginPage())
@@ -34,26 +29,23 @@ router
     .addRoute("/budget", () => new BudgetPage())
     .addRoute("/profile/edit", () => new ProfileEditPage())
     .addRoute("/operations", () => new OperationsPage())
-    .addRoute("/profile/avatar", () => new AvatarEditPage());
+    .addRoute("/profile/avatar", () => new AvatarEditPage())
+    .addRoute("/operations/create", () => new TransactionCreatePage())
+    .addRoute("/operations/:id", (p) => new TransactionDetailPage(Number(p.id)));
 
 /**
- * Инициализирует приложение и запускает обработку текущего URL.
+ * Инициализирует приложение: загружает справочники и запускает роутер.
  * @async
  * @function init
- * @description Вызывает метод start у роутера, который определяет,
- * какую страницу отрисовать при первой загрузке или обновлении окна браузера.
  * @returns {Promise<void>}
  */
-async function init() {
-    if ("serviceWorker" in navigator) {
-        navigator.serviceWorker.register("/service_worker.js")
-            .catch(error => console.error(error));
-    }
-
+async function init(): Promise<void> {
+    await Promise.all([
+        load_currencies(),
+        load_categories(),
+        load_transaction_types(),
+    ]);
     router.start();
-    let currencies = await load_currencies();
-    set_currencies(currencies);
 }
 
-// Запуск приложения
 init();

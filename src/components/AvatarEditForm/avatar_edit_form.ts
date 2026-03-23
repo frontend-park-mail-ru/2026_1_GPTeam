@@ -1,7 +1,7 @@
-import { BaseComponent } from "../base_component.js";
+import { BaseComponent } from "../base_component.ts";
 import template from "./avatar_edit_form.hbs?raw";
 import "./avatar_edit_form.css";
-import { router } from "../../router/router_instance.js";
+import { router } from "../../router/router_instance.ts";
 
 interface AvatarEditFormProps extends Record<string, unknown> {
     initials: string;

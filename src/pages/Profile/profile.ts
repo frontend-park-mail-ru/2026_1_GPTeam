@@ -1,15 +1,15 @@
-import { BasePage } from "../base_page.js";
+import { BasePage } from "../base_page.ts";
 import template from "./profile.hbs?raw";
-import { Header } from "../../components/Header/header.js";
-import { ProfileAvatar } from "../../components/ProfileAvatar/profile_avatar.js";
-import { ProfileInfo } from "../../components/ProfileInfo/profile_info.js";
-import { router } from "../../router/router_instance.js";
+import { Header } from "../../components/Header/header.ts";
+import { ProfileAvatar } from "../../components/ProfileAvatar/profile_avatar.ts";
+import { ProfileInfo } from "../../components/ProfileInfo/profile_info.ts";
+import { router } from "../../router/router_instance.ts";
 import "./profile.css";
 import Handlebars from "handlebars";
-import type { SimpleResponse } from "../../types/interfaces.js";
-import { Modal } from "../../components/Modal/modal.js";
-import { get_profile } from "../../api/profile.js";
-import { logout } from "../../api/auth.js";
+import type { SimpleResponse } from "../../types/interfaces.ts";
+import { Modal } from "../../components/Modal/modal.ts";
+import { get_profile } from "../../api/profile.ts";
+import { logout } from "../../api/auth.ts";
 
 interface ProfileApiResponse extends SimpleResponse {
     user: {

@@ -9,10 +9,10 @@ export class CustomSelect {
     private _onChange?: (value: string) => void;
 
     /**
-     * @param {HTMLElement} display - Элемент отображения текущего значения.
-     * @param {HTMLInputElement} input - Скрытый input.
-     * @param {HTMLElement} dropdown - Контейнер выпадающего списка.
-     * @param {(value: string) => void} [onChange] - Колбэк при выборе.
+     * @param {HTMLElement} display
+     * @param {HTMLInputElement} input
+     * @param {HTMLElement} dropdown
+     * @param {(value: string) => void} [onChange]
      */
     constructor(
         display: HTMLElement,
@@ -37,8 +37,9 @@ export class CustomSelect {
             option.addEventListener("click", (e) => {
                 e.stopPropagation();
                 const value = option.dataset.value ?? "";
+                const label = option.textContent?.trim() ?? value;
                 this._input.value = value;
-                this._display.textContent = value;
+                this._display.textContent = label;
                 this._dropdown.querySelectorAll(".custom-select__option").forEach(o => o.classList.remove("selected"));
                 option.classList.add("selected");
                 this._dropdown.classList.remove("open");
@@ -50,21 +51,16 @@ export class CustomSelect {
         if (first) {
             first.classList.add("selected");
             this._input.value = first.dataset.value ?? "";
-            this._display.textContent = first.dataset.value ?? "";
+            this._display.textContent = first.textContent?.trim() ?? (first.dataset.value ?? "");
         }
     }
 
-    /**
-     * Закрывает дропдаун.
-     */
+    /** Закрывает дропдаун. */
     close(): void {
         this._dropdown.classList.remove("open");
     }
 
-    /**
-     * Возвращает текущее значение.
-     * @returns {string}
-     */
+    /** @returns {string} */
     getValue(): string {
         return this._input.value;
     }

@@ -1,6 +1,6 @@
-import { client } from "./client.js";
-import { is_login } from "./auth.js";
-import type { SimpleResponse } from "../types/interfaces.js";
+import { client } from "./client.ts";
+import { is_login } from "./auth.ts";
+import type { SimpleResponse } from "../types/interfaces.ts";
 
 /**
  * Ответ сервера с данными профиля.

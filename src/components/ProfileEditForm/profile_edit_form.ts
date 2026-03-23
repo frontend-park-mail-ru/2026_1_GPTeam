@@ -1,4 +1,4 @@
-import { BaseComponent } from "../base_component.js";
+import { BaseComponent } from "../base_component.ts";
 import template from "./profile_edit_form.hbs?raw";
 import "./profile_edit_form.css";
 import {
@@ -7,9 +7,9 @@ import {
     validate_email,
     validate_password,
     are_password_equal,
-} from "../../utils/validation.js";
-import { router } from "../../router/router_instance.js";
-import { update_profile } from "../../api/profile.js";
+} from "../../utils/validation.ts";
+import { router } from "../../router/router_instance.ts";
+import { update_profile } from "../../api/profile.ts";
 
 interface ProfileEditFormProps extends Record<string, unknown> {
     onSuccess?: () => void;

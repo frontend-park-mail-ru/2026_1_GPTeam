@@ -1,8 +1,8 @@
-import { BaseComponent } from "../base_component.js";
+import { BaseComponent } from "../base_component.ts";
 import template from "./header.hbs?raw";
 import "./header.css";
-import { get_profile } from "../../api/profile.js";
-import type { SimpleResponse } from "../../types/interfaces.js";
+import { get_profile } from "../../api/profile.ts";
+import type { SimpleResponse } from "../../types/interfaces.ts";
 
 interface HeaderProps extends Record<string, unknown> {
     cur_page: string;

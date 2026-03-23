@@ -1,12 +1,12 @@
-import { BasePage } from "../base_page.js";
+import { BasePage } from "../base_page.ts";
 import template from "./avatar_edit.hbs?raw";
-import { Header } from "../../components/Header/header.js";
-import { AvatarEditForm } from "../../components/AvatarEditForm/avatar_edit_form.js";
-import { router } from "../../router/router_instance.js";
+import { Header } from "../../components/Header/header.ts";
+import { AvatarEditForm } from "../../components/AvatarEditForm/avatar_edit_form.ts";
+import { router } from "../../router/router_instance.ts";
 import "./avatar_edit.css";
 import Handlebars from "handlebars";
-import type { SimpleResponse } from "../../types/interfaces.js";
-import { get_profile } from "../../api/profile.js";
+import type { SimpleResponse } from "../../types/interfaces.ts";
+import { get_profile } from "../../api/profile.ts";
 
 interface ProfileApiResponse extends SimpleResponse {
     user: {
