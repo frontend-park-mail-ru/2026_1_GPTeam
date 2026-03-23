@@ -1,4 +1,4 @@
-import { BaseComponent } from "../base_component.js";
+import { BaseComponent } from "../base_component.ts";
 import template from "./modal_form.hbs?raw";
 import "./modal_form.css";
 

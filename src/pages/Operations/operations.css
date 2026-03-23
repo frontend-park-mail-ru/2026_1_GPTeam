@@ -145,14 +145,14 @@
     gap: 14px;
 }
 
-@media (max-width: 900px) {
+@media (width <= 900px) {
     .operations-page {
         padding-left: 24px;
         padding-right: 24px;
     }
 }
 
-@media (max-width: 780px) {
+@media (width <= 780px) {
     .operations-page__head {
         flex-direction: column;
         align-items: flex-start;

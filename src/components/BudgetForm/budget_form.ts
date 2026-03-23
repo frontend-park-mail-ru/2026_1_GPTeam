@@ -1,16 +1,16 @@
-import { BaseComponent } from "../base_component.js";
+import { BaseComponent } from "../base_component.ts";
 import template from "./budget_form.hbs?raw";
 import "./budget_form.css";
-import { client } from "../../api/client.js";
-import { get_currencies } from "../../store/store.js";
-import { router } from "../../router/router_instance.js";
-import { CustomCalendar } from "../CustomCalendar/custom_calendar.js";
-import { CustomSelect } from "../CustomSelect/custom_select.js";
+import { client } from "../../api/client.ts";
+import { get_currencies } from "../../store/store.ts";
+import { router } from "../../router/router_instance.ts";
+import { CustomCalendar } from "../CustomCalendar/custom_calendar.ts";
+import { CustomSelect } from "../CustomSelect/custom_select.ts";
 import {
     is_empty,
     validate_end_date,
     validate_start_date,
-} from "../../utils/validation.js";
+} from "../../utils/validation.ts";
 
 interface BudgetFormFields {
     title: HTMLInputElement | null;
@@ -33,7 +33,6 @@ export class BudgetForm extends BaseComponent {
     private _currencySelect: CustomSelect | null = null;
 
     constructor(props: Record<string, unknown>) {
-        props.currency_list = get_currencies();
         super(template, props);
     }
 
@@ -59,17 +58,34 @@ export class BudgetForm extends BaseComponent {
         const form = this.getElement();
         if (!form) return;
 
+        this._populateCurrencies(form);
         this._initSelect(form);
         this._initCalendars(form);
 
         this._on(form, "submit", (e) => this.submit(e));
 
-        // Закрытие всех попапов при клике вне
         document.addEventListener("click", () => {
             this._startCal?.close();
             this._endCal?.close();
             this._currencySelect?.close();
         });
+    }
+
+    /**
+     * Заполняет дропдаун валют из store программно.
+     * @private
+     * @param {Element} form
+     */
+    private _populateCurrencies(form: Element): void {
+        const dropdown = form.querySelector<HTMLElement>("#currency_dropdown")!;
+        const currencies = get_currencies();
+        if (currencies.length === 0) {
+            dropdown.innerHTML = `<div class="custom-select__option" style="opacity:0.4;cursor:default">Валюты не загружены</div>`;
+            return;
+        }
+        dropdown.innerHTML = currencies
+            .map(c => `<div class="custom-select__option" data-value="${c}">${c}</div>`)
+            .join("");
     }
 
     /**
@@ -80,7 +96,7 @@ export class BudgetForm extends BaseComponent {
         const display = form.querySelector<HTMLElement>("#currency_display");
         const input = form.querySelector<HTMLInputElement>("#currency_input");
         const dropdown = form.querySelector<HTMLElement>("#currency_dropdown");
-        if (display && input && dropdown) {
+        if (display && input && dropdown && get_currencies().length > 0) {
             this._currencySelect = new CustomSelect(display, input, dropdown);
         }
     }
@@ -93,39 +109,35 @@ export class BudgetForm extends BaseComponent {
         const today = this.serverTime ? new Date(this.serverTime) : new Date();
         today.setHours(0, 0, 0, 0);
 
-        // Элементы начала
+        const maxDate = new Date(today);
+        maxDate.setFullYear(maxDate.getFullYear() + 5);
+
         const startPopup = form.querySelector<HTMLElement>("#start_at_calendar")!;
         const startDisplay = form.querySelector<HTMLInputElement>("#start_at_display")!;
         const startInput = form.querySelector<HTMLInputElement>("#start_at_input")!;
         const startBtn = form.querySelector<HTMLElement>("#start_at_calendar_btn")!;
 
-        // Элементы конца
         const endPopup = form.querySelector<HTMLElement>("#end_at_calendar")!;
         const endDisplay = form.querySelector<HTMLInputElement>("#end_at_display")!;
         const endInput = form.querySelector<HTMLInputElement>("#end_at_input")!;
         const endBtn = form.querySelector<HTMLElement>("#end_at_calendar_btn")!;
 
-        // Инициализация календаря начала
-        this._startCal = new CustomCalendar(startPopup, startDisplay, startInput, today, (date) => {
-            const minForEnd = date || today;
-            this._endCal?.setMinDate(minForEnd);
-            
-            // Если дата начала выбрана — перекидываем календарь конца на тот же месяц
-            if (date) {
-                this._endCal?.setView(date);
-            }
+    this._startCal = new CustomCalendar(startPopup, startDisplay, startInput, today, (date) => {
+        const minForEnd = date || today;
+        this._endCal?.setMinDate(minForEnd);
+        if (date) this._endCal?.setView(date);
+        const endVal = this._endCal?.getValue();
+        if (endVal && date && endVal < date) this._endCal?.clearSelection();
 
-            // Если дата конца теперь меньше новой даты начала — сбрасываем конец
-            const endVal = this._endCal?.getValue();
-            if (endVal && date && endVal < date) {
-                this._endCal?.clearSelection();
-            }
-        });
+        const endMax = new Date(date || today);
+        endMax.setFullYear(endMax.getFullYear() + 5);
+        this._endCal?.setMaxDate(endMax);
+    });
+    this._startCal.setMaxDate(maxDate);
 
-        // Инициализация календаря конца
-        this._endCal = new CustomCalendar(endPopup, endDisplay, endInput, today);
+    this._endCal = new CustomCalendar(endPopup, endDisplay, endInput, today);
+    this._endCal.setMaxDate(maxDate);
 
-        // Обработчики открытия начала
         const toggleStart = (e: Event) => {
             e.stopPropagation();
             this._endCal?.close();
@@ -135,19 +147,12 @@ export class BudgetForm extends BaseComponent {
         this._on(startBtn, "click", toggleStart);
         this._on(startDisplay, "click", toggleStart);
 
-        // Обработчик открытия конца (с синхронизацией вью)
         const toggleEnd = (e: Event) => {
             e.stopPropagation();
             const startVal = this._startCal?.getValue();
             const minForEnd = startVal || today;
-
             this._endCal?.setMinDate(minForEnd);
-            
-            // Перед открытием проверяем, нужно ли перекинуть месяц
-            if (startVal) {
-                this._endCal?.setView(startVal);
-            }
-
+            if (startVal) this._endCal?.setView(startVal);
             this._startCal?.close();
             this._currencySelect?.close();
             this._endCal?.toggle();
@@ -158,6 +163,9 @@ export class BudgetForm extends BaseComponent {
 
     /**
      * Выполняет валидацию полей формы.
+     * @param {BudgetFormFields} fields
+     * @param {HTMLElement} error_message
+     * @returns {boolean} true если есть ошибки
      */
     validate(fields: BudgetFormFields, error_message: HTMLElement): boolean {
         const { title, description, target, currency, start_at, end_at } = fields;
@@ -169,11 +177,11 @@ export class BudgetForm extends BaseComponent {
             .forEach(f => f.style.borderColor = "rgba(72, 79, 255, 0.5)");
 
         const required: [HTMLInputElement, string][] = [
-            [title!, "Название"], 
-            [description!, "Описание"], 
-            [target!, "Планируемый бюджет"], 
-            [currency!, "Валюта"], 
-            [start_at!, "Дата начала"]
+            [title!, "Название"],
+            [description!, "Описание"],
+            [target!, "Планируемый бюджет"],
+            [currency!, "Валюта"],
+            [start_at!, "Дата начала"],
         ];
 
         for (const [field, name] of required) {
@@ -199,12 +207,10 @@ export class BudgetForm extends BaseComponent {
         return errors;
     }
 
-/**
+    /**
      * Обработчик события submit формы.
-     * Проводит валидацию, формирует JSON-полезную нагрузку (преобразуя даты в ISO формат)
-     * и отправляет POST запрос на /budget.
-     * * @async
-     * @param {Event} e - Объект события.
+     * @async
+     * @param {Event} e
      * @returns {Promise<void>}
      */
     async submit(e: Event): Promise<void> {

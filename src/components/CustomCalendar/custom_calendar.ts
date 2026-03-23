@@ -1,4 +1,4 @@
-import { MONTHS, WEEKDAYS } from "../../store/store.js";
+import { MONTHS, WEEKDAYS } from "../../store/store.ts";
 
 /**
  * Кастомный календарь с поддержкой ручного ввода, маски даты и синхронизации.
@@ -141,6 +141,15 @@ export class CustomCalendar {
     }
 
     /**
+     * Устанавливает максимальную дату для выбора.
+     * @param {Date | null} date
+     */
+    setMaxDate(date: Date | null): void {
+        this._maxDate = date;
+        if (this.isOpen()) this.render();
+    }
+
+    /**
      * @returns {Date | null} Текущая выбранная дата.
      */
     getValue(): Date | null {
@@ -191,7 +200,8 @@ export class CustomCalendar {
             
             const isToday = date.getTime() === today.getTime();
             const isSelected = this._selected && date.getTime() === this._selected.getTime();
-            const isDisabled = this._minDate ? date < this._minDate : false;
+            const isDisabled = (this._minDate ? date < this._minDate : false) ||
+                   (this._maxDate ? date > this._maxDate : false);
 
             const dateStr = `${this._viewYear}-${String(this._viewMonth + 1).padStart(2, "0")}-${String(d).padStart(2, "0")}`;
             let cls = "custom-calendar__day";

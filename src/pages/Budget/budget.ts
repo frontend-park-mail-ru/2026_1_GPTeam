@@ -1,19 +1,19 @@
-import { BasePage } from "../base_page.js";
-import { BudgetForm } from "../../components/BudgetForm/budget_form.js";
-import { BudgetCard } from "../../components/BudgetCard/budget_card.js";
-import { Modal } from "../../components/Modal/modal.js";
-import { ModalForm } from "../../components/ModalForm/modal_form.js";
+import { BasePage } from "../base_page.ts";
+import { BudgetForm } from "../../components/BudgetForm/budget_form.ts";
+import { BudgetCard } from "../../components/BudgetCard/budget_card.ts";
+import { Modal } from "../../components/Modal/modal.ts";
+import { ModalForm } from "../../components/ModalForm/modal_form.ts";
 import "./budget.css";
-import { router } from "../../router/router_instance.js";
-import { Header } from "../../components/Header/header.js";
-import { client } from "../../api/client.js";
-import { is_login } from "../../api/auth.js";
+import { router } from "../../router/router_instance.ts";
+import { Header } from "../../components/Header/header.ts";
+import { client } from "../../api/client.ts";
+import { is_login } from "../../api/auth.ts";
 import type {
     BudgetListResponse as BudgetListResponseType,
     BudgetGetResponse,
     DeleteResponse as DeleteResponseType,
     Budget,
-} from "../../types/interfaces.js";
+} from "../../types/interfaces.ts";
 
 /**
  * Страница управления бюджетами.

@@ -1,12 +1,12 @@
-import { BaseComponent } from "../base_component.js";
+import { BaseComponent } from "../base_component.ts";
 import template from "./auth_form.hbs?raw";
 import "./auth_form.css";
-import "../../utils/helpers.js";
-import { is_empty, validate_username, validate_password, are_password_equal, validate_email } from "../../utils/validation.js";
-import { client } from "../../api/client.js";
-import { router } from "../../router/router_instance.js";
-import { is_login } from "../../api/auth.js";
-import type { AuthResponse as AuthResponseType } from "../../types/interfaces.js";
+import "../../utils/helpers.ts";
+import { is_empty, validate_username, validate_password, are_password_equal, validate_email } from "../../utils/validation.ts";
+import { client } from "../../api/client.ts";
+import { router } from "../../router/router_instance.ts";
+import { is_login } from "../../api/auth.ts";
+import type { AuthResponse as AuthResponseType } from "../../types/interfaces.ts";
 
 interface AuthFormProps {
     mode: "login" | "signup";

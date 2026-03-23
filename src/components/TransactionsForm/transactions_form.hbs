@@ -1,0 +1,94 @@
+<form class="transaction-form" id="transaction_form">
+    <h2 class="transaction-form__title">Новая операция</h2>
+
+    <div class="form-group">
+        <label class="form-label">
+            Название
+            <span class="form-hint" aria-label="От 1 до 255 символов">?</span>
+        </label>
+        <input class="form-input" type="text" id="title_input" placeholder="Например, Обед в кафе" maxlength="255">
+    </div>
+
+    <div class="form-row">
+        <div class="form-group">
+            <label class="form-label">
+                Сумма
+                <span class="form-hint" aria-label="Положительное число, не более 1 000 000 000">?</span>
+            </label>
+            <input class="form-input" type="number" id="value_input" step="0.01" min="0.01" placeholder="0.00">
+        </div>
+        <div class="form-group">
+            <label class="form-label">
+                Валюта
+                <span class="form-hint" aria-label="Доступные валюты: RUB, USD, EUR">?</span>
+            </label>
+            <div class="custom-select-wrap">
+                <div class="form-input custom-select__display" id="currency_display"></div>
+                <input type="hidden" id="currency_input">
+                <div class="custom-select__dropdown" id="currency_dropdown"></div>
+            </div>
+        </div>
+    </div>
+
+    <div class="form-row">
+        <div class="form-group">
+            <label class="form-label">
+                Тип операции
+                <span class="form-hint" aria-label="Доход — поступление средств, Расход — списание">?</span>
+            </label>
+            <div class="custom-select-wrap">
+                <div class="form-input custom-select__display" id="type_display"></div>
+                <input type="hidden" id="type_input">
+                <div class="custom-select__dropdown" id="type_dropdown">
+                    <div class="custom-select__option" data-value="EXPENSE">Расход</div>
+                    <div class="custom-select__option" data-value="INCOME">Доход</div>
+                </div>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="form-label">
+                Категория
+                <span class="form-hint" aria-label="Зарплата, Продукты, Транспорт, Кафе, Коммунальные платежи, Одежда, Здоровье, Спорт, Развлечения, Путешествия, Образование, Подарки, Животные, Техника, Кредиты и долги, Другое">?</span>
+            </label>
+            <div class="custom-select-wrap">
+                <div class="form-input custom-select__display" id="category_display">Выберите категорию</div>
+                <input type="hidden" id="category_input">
+                <div class="custom-select__dropdown" id="category_dropdown"></div>
+            </div>
+        </div>
+    </div>
+
+    <div class="form-group">
+        <label class="form-label">
+            Дата операции
+            <span class="form-hint" aria-label="Дата в формате ДД.ММ.ГГГГ — можно ввести вручную или выбрать в календаре">?</span>
+        </label>
+        <div class="calendar-wrap">
+            <div class="calendar-field">
+                <input class="form-input calendar-field__display" type="text" id="transaction_date_display" placeholder="ДД.ММ.ГГГГ" autocomplete="off">
+                <button type="button" class="calendar-field__btn" id="transaction_date_btn">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/>
+                    </svg>
+                </button>
+                <input type="hidden" id="transaction_date_input">
+            </div>
+            <div class="custom-calendar" id="transaction_date_calendar"></div>
+        </div>
+    </div>
+
+    <div class="form-group">
+        <label class="form-label">
+            Описание
+            <span class="form-hint" aria-label="Минимум 1 символ — краткий комментарий к операции">?</span>
+        </label>
+        <textarea class="form-input" id="description_input" rows="3" placeholder="Краткое описание операции"></textarea>
+    </div>
+
+    <p class="transaction-form__error" id="error_message"></p>
+
+    <div class="transaction-form__actions">
+        <button type="button" class="btn-secondary" id="cancel_btn">Отмена</button>
+        <button type="submit" class="btn-primary">Создать</button>
+    </div>
+</form>

@@ -95,3 +95,45 @@ export interface BudgetResponse extends RequestWithErrors {}
 
 /** Generic delete response. */
 export interface DeleteResponse extends SimpleResponse {}
+
+/** --- TRANSACTION TYPES --- */
+
+/** Transaction entity. */
+export interface Transaction {
+  id: number;
+  user_id: number;
+  account_id: number;
+  value: number;
+  type: string;
+  category: string;
+  title: string;
+  description: string;
+  created_at: string;
+  transaction_date: string;
+}
+
+/** Список ID транзакций. */
+export interface TransactionListResponse extends SimpleResponse {
+  len: number;
+  ids: number[];
+}
+
+/** Детальная информация об одной транзакции. */
+export interface TransactionGetResponse extends SimpleResponse {
+  transaction: Transaction;
+}
+
+/** Ответ после создания или удаления транзакции. */
+export interface TransactionActionResponse extends SimpleResponse {
+  transaction_id: number;
+}
+
+export interface TransactionCreateRequest {
+    account_id: number;
+    value: number;
+    type: string;
+    category: string;
+    title: string;
+    description: string;
+    transaction_date: string;
+}

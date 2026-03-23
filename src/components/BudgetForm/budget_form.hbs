@@ -16,7 +16,7 @@
             <input class="budget-form-input" id="target_input" type="number" step="any" name="target" placeholder="100" autocomplete="off">
             <div class="budget-help-wrap">
                 <img class="budget-help" src="/icons/question.svg" alt="Справка">
-                <div class="budget-tooltip">Число больше 0, не превышающее 10¹⁸</div>
+                <div class="budget-tooltip">Число больше 0, не больше триллиона</div>
             </div>
         </div>
 
@@ -25,25 +25,20 @@
             <div class="budget-form-input custom-select__display" id="currency_display"></div>
             <input type="hidden" id="currency_input" name="currency">
             <span class="custom-select__arrow">▾</span>
-            <div class="custom-select__dropdown" id="currency_dropdown">
-                {{#each currency_list}}
-                    <div class="custom-select__option" data-value="{{this}}">{{this}}</div>
-                {{/each}}
-            </div>
+            <div class="custom-select__dropdown" id="currency_dropdown"></div>
         </div>
 
         <label>Начало</label>
         <div class="budget-date-wrapper">
             <div class="input-wrapper">
-                <input type="text" 
-                    class="budget-form-input budget-date-display" 
-                    id="start_at_display" 
-                    placeholder="ДД.ММ.ГГГГ" 
-                    maxlength="10" 
+                <input type="text"
+                    class="budget-form-input budget-date-display"
+                    id="start_at_display"
+                    placeholder="ДД.ММ.ГГГГ"
+                    maxlength="10"
                     autocomplete="off">
                 <input type="hidden" id="start_at_input" name="start_at">
                 <img class="budget-calendar-icon" id="start_at_calendar_btn" src="/icons/calendar.png" alt="Календарь">
-                
                 <div class="budget-help-wrap">
                     <img class="budget-help" src="/icons/question.svg" alt="Справка">
                     <div class="budget-tooltip">Не раньше сегодня и не позже чем через 5 лет</div>
@@ -55,15 +50,14 @@
         <label>Конец (необязательно)</label>
         <div class="budget-date-wrapper">
             <div class="input-wrapper">
-                <input type="text" 
-                    class="budget-form-input budget-date-display" 
-                    id="end_at_display" 
-                    placeholder="ДД.ММ.ГГГГ" 
-                    maxlength="10" 
+                <input type="text"
+                    class="budget-form-input budget-date-display"
+                    id="end_at_display"
+                    placeholder="ДД.ММ.ГГГГ"
+                    maxlength="10"
                     autocomplete="off">
                 <input type="hidden" id="end_at_input" name="end_at">
                 <img class="budget-calendar-icon" id="end_at_calendar_btn" src="/icons/calendar.png" alt="Календарь">
-                
                 <div class="budget-help-wrap">
                     <img class="budget-help" src="/icons/question.svg" alt="Справка">
                     <div class="budget-tooltip">Позже даты начала, разрыв не более 5 лет</div>

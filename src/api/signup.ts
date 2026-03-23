@@ -1,5 +1,5 @@
-import { client } from "./client.js";
-import type { AuthResponse } from "../types/interfaces.js";
+import { client } from "./client.ts";
+import type { AuthResponse } from "../types/interfaces.ts";
 
 /**
  * Регистрирует нового пользователя на сервере.

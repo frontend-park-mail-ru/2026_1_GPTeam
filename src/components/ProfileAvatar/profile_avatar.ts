@@ -1,7 +1,7 @@
-import { BaseComponent } from "../base_component.js";
+import { BaseComponent } from "../base_component.ts";
 import template from "./profile_avatar.hbs?raw";
 import "./profile_avatar.css";
-import type { User } from "../../types/interfaces.js";
+import type { User } from "../../types/interfaces.ts";
 
 /** Props для компонента ProfileAvatar. */
 interface ProfileAvatarProps {
