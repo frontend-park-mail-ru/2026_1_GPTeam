@@ -45,6 +45,11 @@ router
  * @returns {Promise<void>}
  */
 async function init() {
+    if ("serviceWorker" in navigator) {
+        navigator.serviceWorker.register("/service_worker.js")
+            .catch(error => console.error(error));
+    }
+
     router.start();
     let currencies = await load_currencies();
     set_currencies(currencies);
