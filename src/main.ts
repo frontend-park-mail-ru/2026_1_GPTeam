@@ -1,9 +1,3 @@
-/**
- * @fileoverview Главная точка входа приложения Finance Manager.
- * Отвечает за импорт глобальных стилей, регистрацию маршрутов в роутере
- * и запуск жизненного цикла одностраничного приложения (SPA).
- */
-
 import { router } from "./router/router_instance.ts";
 import { LoginPage } from "./pages/Login/login.ts";
 import { SignupPage } from "./pages/Signup/signup.ts";
@@ -14,17 +8,12 @@ import { ProfilePage } from "./pages/Profile/profile.ts";
 import { BalancePage } from "./pages/Balance/balance.ts";
 import { ProfileEditPage } from "./pages/ProfileEdit/profile_edit.ts"
 import { OperationsPage } from "./pages/Operations/operations.ts";
-
 import { AvatarEditPage } from "./pages/AvatarEdit/avatar_edit.ts";
 import { TransactionCreatePage } from "./pages/TransactionsCreate/transactions_create.ts";
-import {load_currencies} from "./api/currency.ts";
-import {set_currencies} from "./store/store.ts";
+import { load_categories, load_currencies, load_transaction_types } from "./api/currency.ts";
+import { set_currencies } from "./store/store.ts";
+import { TransactionDetailPage } from "./pages/TransactionsDetail/transactions_detail.ts";
 
-/**
- * Конфигурация маршрутизатора.
- * Связывает URL-пути с фабриками компонентов страниц.
- * Использует Chaining (цепочку вызовов) для регистрации всех доступных разделов приложения.
- */
 router
     .addRoute("/", () => new LandingPage())
     .addRoute("/login", () => new LoginPage())
@@ -35,32 +24,69 @@ router
     .addRoute("/profile/edit", () => new ProfileEditPage())
     .addRoute("/operations", () => new OperationsPage())
     .addRoute("/profile/avatar", () => new AvatarEditPage())
-    .addRoute("/operations/create", () => new TransactionCreatePage());
+    .addRoute("/operations/create", () => new TransactionCreatePage())
+    .addRoute("/operations/:id", (p) => new TransactionDetailPage(Number(p.id)));
 
 /**
- * Инициализирует приложение и запускает обработку текущего URL.
- * @async
- * @function init
- * @description Выполняет начальную настройку приложения:
- * - Запускает роутер для отрисовки страницы по текущему маршруту.
- * - Регистрирует Service Worker для поддержки офлайн-режима и кэширования.
- * - Загружает список валют и сохраняет их в глобальном хранилище.
- * @returns {Promise<void>}
+ * Валидация критических данных перед стартом
  */
-async function init() {
-    // Запуск роутера и отрисовка начального представления
-    router.start();
+async function validateAndLoadData() {
+    try {
+        const [currencies, categories, types] = await Promise.all([
+            load_currencies(),
+            load_categories(),
+            load_transaction_types(),
+        ]);
 
-    // Регистрация Service Worker для офлайн-поддержки
-    if ("serviceWorker" in navigator) {
-        navigator.serviceWorker.register("/service_worker.js")
-            .catch((error: Error) => console.error("Service Worker registration failed:", error));
+        if (!currencies || currencies.length === 0) {
+            console.warn("Критическая ошибка: валюты не загружены");
+        } else {
+            set_currencies(currencies);
+        }
+        
+        return true;
+    } catch (error) {
+        console.error("Ошибка при инициализации данных:", error);
+        return false;
     }
-
-    // Загрузка и сохранение списка валют
-    const currencies = await load_currencies();
-    set_currencies(currencies);
 }
 
-// Запуск приложения
+/**
+ * Регистрация Service Worker с учетом окружения Vite
+ */
+async function registerServiceWorker() {
+    if (import.meta.env.VITE_ENABLE_SW !== 'true' || !('serviceWorker' in navigator)) {
+        return;
+    }
+
+    try {
+        // Vite PWA Plugin в режиме dev использует другой путь
+        const swUrl = import.meta.env.DEV ? '/dev-sw.js?dev-sw' : '/service_worker.js';
+        
+        const registration = await navigator.serviceWorker.register(swUrl, {
+            type: 'module'
+        });
+        
+        console.log('SW registered:', registration.scope);
+    } catch (error) {
+        console.error('SW registration failed:', error);
+    }
+}
+
+async function init() {
+    // 1. Сначала пытаемся загрузить данные
+    const isDataLoaded = await validateAndLoadData();
+    
+    // 2. Запускаем роутер в любом случае (чтобы показать хотя бы 404 или ошибку)
+    router.start();
+
+    // 3. Регистрируем SW в фоновом режиме
+    registerServiceWorker();
+    
+    if (!isDataLoaded) {
+        // Можно выкинуть уведомление пользователю, что сервер недоступен
+        console.error("Приложение запущено с ограниченным функционалом (офлайн-режим или ошибка сервера)");
+    }
+}
+
 init();

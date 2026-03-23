@@ -4,7 +4,9 @@
     <div class="form-group">
         <label class="form-label">
             Название
-            <span class="form-hint" aria-label="От 1 до 255 символов">?</span>
+            <span class="form-hint" aria-label="От 1 до 255 символов">
+                <img class="form-hint__icon" src="/icons/question.svg" alt="Справка">
+            </span>
         </label>
         <input class="form-input" type="text" id="title_input" placeholder="Например, Обед в кафе" maxlength="255">
     </div>
@@ -13,14 +15,18 @@
         <div class="form-group">
             <label class="form-label">
                 Сумма
-                <span class="form-hint" aria-label="Положительное число, не более 1 000 000 000">?</span>
+                <span class="form-hint" aria-label="Положительное число, не более 1 000 000 000">
+                    <img class="form-hint__icon" src="/icons/question.svg" alt="Справка">
+                </span>
             </label>
             <input class="form-input" type="number" id="value_input" step="0.01" min="0.01" placeholder="0.00">
         </div>
         <div class="form-group">
             <label class="form-label">
                 Валюта
-                <span class="form-hint" aria-label="Доступные валюты: RUB, USD, EUR">?</span>
+                <span class="form-hint" aria-label="Доступные валюты: RUB, USD, EUR">
+                    <img class="form-hint__icon" src="/icons/question.svg" alt="Справка">
+                </span>
             </label>
             <div class="custom-select-wrap">
                 <div class="form-input custom-select__display" id="currency_display"></div>
@@ -34,7 +40,9 @@
         <div class="form-group">
             <label class="form-label">
                 Тип операции
-                <span class="form-hint" aria-label="Доход — поступление средств, Расход — списание">?</span>
+                <span class="form-hint" aria-label="Доход — поступление средств, Расход — списание">
+                    <img class="form-hint__icon" src="/icons/question.svg" alt="Справка">
+                </span>
             </label>
             <div class="custom-select-wrap">
                 <div class="form-input custom-select__display" id="type_display"></div>
@@ -48,7 +56,9 @@
         <div class="form-group">
             <label class="form-label">
                 Категория
-                <span class="form-hint" aria-label="Зарплата, Продукты, Транспорт, Кафе, Коммунальные платежи, Одежда, Здоровье, Спорт, Развлечения, Путешествия, Образование, Подарки, Животные, Техника, Кредиты и долги, Другое">?</span>
+                <span class="form-hint" aria-label="Зарплата, Продукты, Транспорт, Кафе, Коммунальные платежи, Одежда, Здоровье, Спорт, Развлечения, Путешествия, Образование, Подарки, Животные, Техника, Кредиты и долги, Другое">
+                    <img class="form-hint__icon" src="/icons/question.svg" alt="Справка">
+                </span>
             </label>
             <div class="custom-select-wrap">
                 <div class="form-input custom-select__display" id="category_display">Выберите категорию</div>
@@ -61,15 +71,15 @@
     <div class="form-group">
         <label class="form-label">
             Дата операции
-            <span class="form-hint" aria-label="Дата в формате ДД.ММ.ГГГГ — можно ввести вручную или выбрать в календаре">?</span>
+            <span class="form-hint" aria-label="Дата в формате ДД.ММ.ГГГГ — можно ввести вручную или выбрать в календаре">
+                <img class="form-hint__icon" src="/icons/question.svg" alt="Справка">
+            </span>
         </label>
         <div class="calendar-wrap">
             <div class="calendar-field">
                 <input class="form-input calendar-field__display" type="text" id="transaction_date_display" placeholder="ДД.ММ.ГГГГ" autocomplete="off">
                 <button type="button" class="calendar-field__btn" id="transaction_date_btn">
-                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                        <rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/>
-                    </svg>
+                    <img class="calendar-field__icon" src="/icons/calendar.png" alt="Календарь">
                 </button>
                 <input type="hidden" id="transaction_date_input">
             </div>
@@ -80,7 +90,9 @@
     <div class="form-group">
         <label class="form-label">
             Описание
-            <span class="form-hint" aria-label="Минимум 1 символ — краткий комментарий к операции">?</span>
+            <span class="form-hint" aria-label="Минимум 1 символ — краткий комментарий к операции">
+                <img class="form-hint__icon" src="/icons/question.svg" alt="Справка">
+            </span>
         </label>
         <textarea class="form-input" id="description_input" rows="3" placeholder="Краткое описание операции"></textarea>
     </div>
