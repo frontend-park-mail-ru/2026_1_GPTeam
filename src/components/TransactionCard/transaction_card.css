@@ -1,165 +1,140 @@
 .transaction-card {
     width: 100%;
-    padding: 18px 20px;
-    border-radius: 18px;
-    border: 1px solid rgb(255 255 255 / 8%);
-    background: linear-gradient(135deg, rgb(255 255 255 / 3%), rgb(72 79 255 / 4%));
-    transition: border-color 0.2s ease, transform 0.2s ease, box-shadow 0.2s ease;
-    box-sizing: border-box;
-}
-
-.transaction-card:hover {
-    border-color: rgb(72 79 255 / 28%);
-    box-shadow: 0 0 24px rgb(72 79 255 / 10%);
-    transform: translateY(-1px);
-}
-
-.transaction-card--income {
-    border-color: rgb(92 214 159 / 16%);
-}
-
-.transaction-card--expense {
-    border-color: rgb(255 107 129 / 16%);
-}
-
-.transaction-card__main {
-    display: flex;
-    align-items: flex-start;
-    gap: 16px;
-}
-
-.transaction-card__icon-wrap {
-    flex-shrink: 0;
-}
-
-.transaction-card__icon {
-    width: 48px;
-    height: 48px;
-    border-radius: 14px;
-    background: linear-gradient(135deg, rgb(72 79 255 / 28%), rgb(72 79 255 / 8%));
-    border: 1px solid rgb(72 79 255 / 25%);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-size: 22px;
-    box-shadow: inset 0 1px 0 rgb(255 255 255 / 6%);
-}
-
-.transaction-card__content {
-    display: flex;
-    flex-direction: column;
-    gap: 12px;
-    width: 100%;
-    min-width: 0;
-}
-
-.transaction-card__top-row,
-.transaction-card__bottom-row {
     display: flex;
     align-items: center;
     justify-content: space-between;
     gap: 16px;
+    padding: 14px 16px;
+    border-radius: 18px;
+    border: 1px solid rgb(89 95 255 / 22%);
+    background: linear-gradient(135deg, rgb(28 31 52 / 94%), rgb(23 25 40 / 94%));
+    box-sizing: border-box;
 }
 
-.transaction-card__title {
-    margin: 0;
-    color: #fff;
-    font-size: 17px;
-    font-weight: 700;
-    line-height: 1.2;
+.transaction-card--income {
+    border-color: rgb(121 239 176 / 22%);
 }
 
-.transaction-card__amount-wrap {
+.transaction-card__left {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    min-width: 0;
+    flex: 1;
+}
+
+.transaction-card__icon-shell {
+    width: 42px;
+    height: 42px;
+    border-radius: 14px;
+    border: 1px solid rgb(89 95 255 / 22%);
+    background: rgb(255 255 255 / 1%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
     flex-shrink: 0;
 }
 
-.transaction-card__amount {
+.transaction-card--income .transaction-card__icon-shell {
+    background: rgb(89 95 255 / 45%);
+    border-color: rgb(89 95 255 / 45%);
+}
+
+.transaction-card__icon {
     font-size: 20px;
-    font-weight: 800;
-    letter-spacing: -0.02em;
+    line-height: 1;
 }
 
-.transaction-card__amount--income {
-    color: #7ff1b2;
+.transaction-card__content {
+    min-width: 0;
 }
 
-.transaction-card__amount--expense {
-    color: #ff9dad;
+.transaction-card__title,
+.transaction-card__amount {
+    margin: 0;
+    font-family: Manrope, sans-serif;
+}
+
+.transaction-card__title {
+    color: #fff;
+    font-size: 15px;
+    font-weight: 700;
+    line-height: 1.35;
+    margin-bottom: 6px;
 }
 
 .transaction-card__meta {
     display: flex;
     align-items: center;
-    gap: 10px;
-    min-width: 0;
     flex-wrap: wrap;
+    gap: 6px 18px;
 }
 
-.transaction-card__category {
-    display: inline-flex;
-    align-items: center;
-    gap: 8px;
-    padding: 7px 12px;
-    border-radius: 999px;
-    border: 1px solid rgb(72 79 255 / 24%);
-    background: rgb(72 79 255 / 10%);
-    color: #d7d9ff;
+.transaction-card__meta-item {
+    position: relative;
+    color: rgb(255 255 255 / 34%);
+    font-family: Manrope, sans-serif;
     font-size: 12px;
-    font-weight: 700;
 }
 
-.transaction-card__category-icon {
-    font-size: 13px;
+.transaction-card__meta-item + .transaction-card__meta-item::before {
+    content: "•";
+    position: absolute;
+    left: -11px;
+    color: rgb(255 255 255 / 22%);
 }
 
-.transaction-card__dot {
-    width: 4px;
-    height: 4px;
-    border-radius: 50%;
-    background: rgb(255 255 255 / 18%);
+.transaction-card__right {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 8px;
     flex-shrink: 0;
 }
 
-.transaction-card__date,
-.transaction-card__note {
-    color: rgb(255 255 255 / 48%);
-    font-size: 13px;
-    white-space: nowrap;
+.transaction-card__amount {
+    font-size: 18px;
+    font-weight: 800;
+    letter-spacing: -0.03em;
 }
 
-.transaction-card__note {
-    overflow: hidden;
-    text-overflow: ellipsis;
-    max-width: 220px;
+.transaction-card__amount--income {
+    color: #79efb0;
+}
+
+.transaction-card__amount--expense {
+    color: #ff9dab;
 }
 
 .transaction-card__actions {
     display: flex;
     align-items: center;
-    gap: 10px;
-    flex-shrink: 0;
+    gap: 8px;
+    flex-wrap: wrap;
+    justify-content: flex-end;
 }
 
 .transaction-card__action-btn {
-    border: 1px solid rgb(255 255 255 / 10%);
+    border: 1px solid rgb(255 255 255 / 12%);
     background: transparent;
-    color: rgb(255 255 255 / 68%);
+    color: rgb(255 255 255 / 78%);
     border-radius: 999px;
-    padding: 8px 14px;
-    font-size: 13px;
-    font-weight: 600;
+    padding: 6px 12px;
+    font-family: Manrope, sans-serif;
+    font-size: 12px;
+    font-weight: 700;
     cursor: pointer;
     transition: all 0.2s ease;
 }
 
 .transaction-card__action-btn:hover {
-    border-color: rgb(72 79 255 / 35%);
+    border-color: rgb(89 95 255 / 40%);
     color: #fff;
-    background: rgb(72 79 255 / 10%);
+    background: rgb(89 95 255 / 10%);
 }
 
 .transaction-card__action-btn--danger {
-    border-color: rgb(255 107 129 / 20%);
+    border-color: rgb(255 107 129 / 24%);
     color: rgb(255 157 173 / 88%);
 }
 
@@ -168,19 +143,51 @@
     background: rgb(255 107 129 / 10%);
 }
 
-@media (max-width: 780px) {
-    .transaction-card__top-row,
-    .transaction-card__bottom-row {
+@media (width <= 980px) {
+    .transaction-card {
         flex-direction: column;
+        align-items: stretch;
+    }
+
+    .transaction-card__right {
         align-items: flex-start;
     }
 
     .transaction-card__actions {
-        width: 100%;
-        flex-wrap: wrap;
+        justify-content: flex-start;
+    }
+}
+
+@media (width <= 640px) {
+    .transaction-card {
+        padding: 12px;
+        border-radius: 16px;
     }
 
-    .transaction-card__note {
-        max-width: 100%;
+    .transaction-card__left {
+        align-items: flex-start;
+    }
+
+    .transaction-card__icon-shell {
+        width: 38px;
+        height: 38px;
+        border-radius: 12px;
+    }
+
+    .transaction-card__title {
+        font-size: 14px;
+    }
+
+    .transaction-card__amount {
+        font-size: 16px;
+    }
+
+    .transaction-card__actions {
+        width: 100%;
+    }
+
+    .transaction-card__action-btn {
+        flex: 1;
+        text-align: center;
     }
 }

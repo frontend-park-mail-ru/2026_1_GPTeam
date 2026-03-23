@@ -1,36 +1,33 @@
-<div class="transaction-card transaction-card--{{type}}">
-  <div class="transaction-card__main">
-    <div class="transaction-card__icon-wrap">
-      <div class="transaction-card__icon">{{category_icon}}</div>
+<article class="transaction-card transaction-card--{{type}}">
+    <div class="transaction-card__left">
+        <div class="transaction-card__icon-shell">
+            <div class="transaction-card__icon">{{category_icon}}</div>
+        </div>
+
+        <div class="transaction-card__content">
+            <h3 class="transaction-card__title">{{title}}</h3>
+
+            <div class="transaction-card__meta">
+                <span class="transaction-card__meta-item">{{date}}</span>
+                {{#if note}}
+                    <span class="transaction-card__meta-item">{{note}}</span>
+                {{/if}}
+            </div>
+        </div>
     </div>
 
-    <div class="transaction-card__content">
-      <div class="transaction-card__top-row">
-        <h3 class="transaction-card__title">{{title}}</h3>
-        <div class="transaction-card__amount-wrap">
-          <span class="transaction-card__amount transaction-card__amount--{{type}}">{{amount_sign}}{{currency}} {{amount}}</span>
-        </div>
-      </div>
-
-      <div class="transaction-card__bottom-row">
-        <div class="transaction-card__meta">
-          <span class="transaction-card__category">
-            <span class="transaction-card__category-icon">{{category_icon}}</span>
-            {{category_title}}
-          </span>
-          <span class="transaction-card__dot"></span>
-          <span class="transaction-card__date">{{date}}</span>
-          {{#if note}}
-            <span class="transaction-card__dot"></span>
-            <span class="transaction-card__note">{{note}}</span>
-          {{/if}}
-        </div>
+    <div class="transaction-card__right">
+        <p class="transaction-card__amount transaction-card__amount--{{type}}">
+            {{amount_sign}}{{currency}} {{amount}}
+        </p>
 
         <div class="transaction-card__actions">
-          <button class="transaction-card__action-btn" type="button" data-action="edit">Изменить</button>
-          <button class="transaction-card__action-btn transaction-card__action-btn--danger" type="button" data-action="delete">Удалить</button>
+            <button class="transaction-card__action-btn" type="button" data-action="edit">
+                Изменить
+            </button>
+            <button class="transaction-card__action-btn transaction-card__action-btn--danger" type="button" data-action="delete">
+                Удалить
+            </button>
         </div>
-      </div>
     </div>
-  </div>
-</div>
+</article>
