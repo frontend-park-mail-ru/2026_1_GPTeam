@@ -47,7 +47,7 @@
     flex-direction: column;
     align-items: center;
     gap: 16px;
-    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
+    box-shadow: 0 20px 40px rgb(0 0 0 / 20%);
 }
 
 .transaction-detail__card--income {
@@ -127,7 +127,7 @@
     font-size: 14px;
     font-weight: 600;
     text-align: right;
-    word-break: break-word;
+    word-break: break-all;
 }
 
 .transaction-detail__actions {
@@ -149,15 +149,15 @@
     font-family: inherit;
 }
 
+.btn-danger:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+}
+
 .btn-danger:hover:not(:disabled) {
     background: rgb(255 107 129 / 20%);
     border-color: rgb(255 107 129 / 45%);
     color: #fff;
-}
-
-.btn-danger:disabled {
-    opacity: 0.5;
-    cursor: not-allowed;
 }
 
 .detail-loading,
