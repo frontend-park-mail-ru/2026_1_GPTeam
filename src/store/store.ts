@@ -5,24 +5,25 @@ export const MONTHS: string[] = [
 
 export const WEEKDAYS: string[] = ["Пн", "Вт", "Ср", "Чт", "Пт", "Сб", "Вс"];
 
-let currencies: string[] = [];
-let categories: string[] = [];
-let transactionTypes: string[] = [];
+// Используем any[], так как с бэка прилетают объекты {id: 1, name: "USD"} и т.д.
+let currencies: any[] = [];
+let categories: any[] = [];
+let transactionTypes: any[] = [];
 
-/** @returns {string[]} */
-export function get_currencies(): string[] { return currencies; }
+/** @returns {any[]} */
+export function get_currencies(): any[] { return currencies; }
 
-/** @param {string[]} v */
-export function set_currencies(v: string[]): void { currencies = v; }
+/** @param {any[]} v */
+export function set_currencies(v: any[]): void { currencies = v; }
 
-/** @returns {string[]} */
-export function get_categories(): string[] { return categories; }
+/** @returns {any[]} */
+export function get_categories(): any[] { return categories; }
 
-/** @param {string[]} v */
-export function set_categories(v: string[]): void { categories = v; }
+/** @param {any[]} v */
+export function set_categories(v: any[]): void { categories = v; }
 
-/** @returns {string[]} */
-export function get_transaction_types(): string[] { return transactionTypes; }
+/** @returns {any[]} */
+export function get_transaction_types(): any[] { return transactionTypes; }
 
-/** @param {string[]} v */
-export function set_transaction_types(v: string[]): void { transactionTypes = v; }
+/** @param {any[]} v */
+export function set_transaction_types(v: any[]): void { transactionTypes = v; }

@@ -1,3 +1,9 @@
+/**
+ * @fileoverview Главная точка входа приложения Finance Manager.
+ * Данный модуль инициализирует маршрутизацию, загружает справочники (валюты, категории)
+ * в глобальное состояние (store) и регистрирует Service Worker для PWA.
+ */
+
 import { router } from "./router/router_instance.ts";
 import { LoginPage } from "./pages/Login/login.ts";
 import { SignupPage } from "./pages/Signup/signup.ts";
@@ -6,14 +12,19 @@ import "./styles/global.css";
 import { LandingPage } from "./pages/Landing/landing.ts";
 import { ProfilePage } from "./pages/Profile/profile.ts";
 import { BalancePage } from "./pages/Balance/balance.ts";
-import { ProfileEditPage } from "./pages/ProfileEdit/profile_edit.ts"
+import { ProfileEditPage } from "./pages/ProfileEdit/profile_edit.ts";
 import { OperationsPage } from "./pages/Operations/operations.ts";
 import { AvatarEditPage } from "./pages/AvatarEdit/avatar_edit.ts";
 import { TransactionCreatePage } from "./pages/TransactionsCreate/transactions_create.ts";
-import { load_categories, load_currencies, load_transaction_types } from "./api/currency.ts";
-import { set_currencies } from "./store/store.ts";
 import { TransactionDetailPage } from "./pages/TransactionsDetail/transactions_detail.ts";
 
+import { load_categories, load_currencies, load_transaction_types } from "./api/currency.ts";
+import { set_currencies, set_categories, set_transaction_types } from "./store/store.ts";
+
+/**
+ * Конфигурация маршрутизатора.
+ * Связывает URL-пути с фабриками компонентов соответствующих страниц.
+ */
 router
     .addRoute("/", () => new LandingPage())
     .addRoute("/login", () => new LoginPage())
@@ -28,9 +39,14 @@ router
     .addRoute("/operations/:id", (p) => new TransactionDetailPage(Number(p.id)));
 
 /**
- * Валидация критических данных перед стартом
+ * Загружает необходимые справочные данные с бэкенда и сохраняет их в стор.
+ * * @async
+ * @function validateAndLoadData
+ * @description Выполняет параллельные запросы к API для получения списка валют,
+ * категорий и типов транзакций. В случае успеха обновляет глобальное состояние.
+ * @returns {Promise<boolean>} Возвращает true, если данные были успешно загружены и синхронизированы.
  */
-async function validateAndLoadData() {
+async function validateAndLoadData(): Promise<boolean> {
     try {
         const [currencies, categories, types] = await Promise.all([
             load_currencies(),
@@ -38,53 +54,51 @@ async function validateAndLoadData() {
             load_transaction_types(),
         ]);
 
-        if (!currencies || currencies.length === 0) {
-            console.warn("Критическая ошибка: валюты не загружены");
-        } else {
-            set_currencies(currencies);
-        }
-        
+        if (currencies) set_currencies(currencies);
+        if (categories) set_categories(categories);
+        if (types) set_transaction_types(types);
+
         return true;
     } catch (error) {
-        console.error("Ошибка при инициализации данных:", error);
+        console.error("Failed to sync with backend:", error);
         return false;
     }
 }
 
 /**
- * Регистрация Service Worker с учетом окружения Vite
+ * Инициализирует жизненный цикл приложения.
+ * * @async
+ * @function init
+ * @description Порядок инициализации:
+ * 1. Загрузка справочников (валюты, категории) с сервера.
+ * 2. Запуск роутера и отрисовка страницы на основе текущего URL.
+ * 3. Регистрация Service Worker (только в production режиме при наличии флага в .env).
+ * @returns {Promise<void>}
  */
-async function registerServiceWorker() {
-    if (!('serviceWorker' in navigator) || 
-        import.meta.env.VITE_ENABLE_SW !== 'true' || 
-        import.meta.env.DEV) {
-        return;
-    }
-
-    try {
-        const registration = await navigator.serviceWorker.register('/service_worker.js', {
-            type: 'module'
-        });
-        console.log('SW registered in production:', registration.scope);
-    } catch (error) {
-        console.error('SW registration failed:', error);
-    }
-}
-
-async function init() {
-    // 1. Сначала пытаемся загрузить данные
-    const isDataLoaded = await validateAndLoadData();
+async function init(): Promise<void> {
+    // Ждем загрузки данных перед запуском интерфейса
+    await validateAndLoadData();
     
-    // 2. Запускаем роутер в любом случае (чтобы показать хотя бы 404 или ошибку)
+    // Активация роутера и отрисовка текущего маршрута
     router.start();
 
-    // 3. Регистрируем SW в фоновом режиме
-    registerServiceWorker();
-    
-    if (!isDataLoaded) {
-        // Можно выкинуть уведомление пользователю, что сервер недоступен
-        console.error("Приложение запущено с ограниченным функционалом (офлайн-режим или ошибка сервера)");
+    /**
+     * Регистрация Service Worker для офлайн-режима.
+     * Проверяет: окружение (не DEV), поддержку в браузере и флаг в .env.
+     */
+    if (
+        !import.meta.env.DEV && 
+        'serviceWorker' in navigator && 
+        import.meta.env.VITE_ENABLE_SW === 'true'
+    ) {
+        try {
+            await navigator.serviceWorker.register('/service_worker.js', { type: 'module' });
+            console.log('Service Worker registered');
+        } catch (e) {
+            console.error('Service Worker registration failed:', e);
+        }
     }
 }
 
+// Точка входа: запуск приложения
 init();
