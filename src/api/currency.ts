@@ -48,12 +48,3 @@ export const load_transaction_types = async (): Promise<string[]> => {
     } catch {}
     return [];
 };
-
-export const fetchTransactionIds = async (): Promise<number[]> => {
-    const response = await client("/transactions", { method: "GET" });
-    const data: TransactionListResponse = await response.json();
-    if (data.code === 200 && Array.isArray(data.ids)) {
-        return data.ids;
-    }
-    return [];
-};

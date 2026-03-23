@@ -242,34 +242,7 @@ nav {
 
 .btn-solid:hover {
     transform: translateY(-1px);
-    box-shadow: 0 0 32px rgba(72, 79, 255, 0.6);
-}
-
-.site-logo {
-    position: fixed;
-    z-index: 1000;
-    font-family: 'Manrope', sans-serif;
-    color: white;
-    font-size: 32px;
-    font-weight: 800;
-    letter-spacing: 1px;
-    line-height: 1;
-    display: flex;
-    justify-content: space-between;
-    width: 100%;
-    padding: 24px 32px;
-    background: linear-gradient(180deg, #000000, rgba(0, 0, 0, 0));
-}
-
-.site-logo a {
-    color: white;
-    text-decoration: none;
-    transition: color 0.2s;
-
-}
-
-.site-logo a:hover {
-    color: #535bf2;
+    box-shadow: 0 0 32px rgb(72 79 255 / 60%);
 }
 
 .profile_icon {

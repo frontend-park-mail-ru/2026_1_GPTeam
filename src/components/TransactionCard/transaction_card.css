@@ -168,7 +168,7 @@
     background: rgb(255 107 129 / 10%);
 }
 
-@media (max-width: 780px) {
+@media (width <= 780px) {
     .transaction-card__top-row,
     .transaction-card__bottom-row {
         flex-direction: column;
