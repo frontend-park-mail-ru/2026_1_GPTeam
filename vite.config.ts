@@ -6,5 +6,6 @@ export default defineConfig({
             'money-first.ru',
             'www.money-first.ru',
         ]
-    }
-});
+    },
+    publicDir: 'public',
+})
