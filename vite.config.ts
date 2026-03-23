@@ -7,9 +7,8 @@ export default defineConfig({
             strategies: 'injectManifest',
             srcDir: 'public',
             filename: 'service_worker.js',
-            registerType: 'autoUpdate',
             injectManifest: {
-                swDest: 'dist/service_worker.js' 
+                swDest: 'dist/service_worker.js'
             },
             devOptions: {
                 enabled: true,
@@ -18,9 +17,17 @@ export default defineConfig({
         })
     ],
     server: {
+        host: true,
+        port: 5173,
+        strictPort: true,
+        hmr: {
+            host: 'localhost',
+            protocol: 'ws'
+        },
         allowedHosts: [
             'money-first.ru',
             'www.money-first.ru',
+            'localhost'
         ]
     },
     publicDir: 'public',
