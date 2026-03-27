@@ -1,7 +1,9 @@
 import { BaseComponent } from "../base_component.ts";
 import template from "./avatar_edit_form.hbs?raw";
+import { uploadAvatar } from "../../api/avatar.ts";
 import "./avatar_edit_form.css";
 import { router } from "../../router/router_instance.ts";
+import { update_profile } from "../../api/profile.ts";
 
 interface AvatarEditFormProps extends Record<string, unknown> {
     initials: string;
@@ -79,9 +81,15 @@ export class AvatarEditForm extends BaseComponent {
             saveBtn.disabled = true;
 
             try {
-                // TODO: заменить на реальный API вызов когда появится эндпоинт загрузки аватара
+                const { url: avatarUrl } = await uploadAvatar(file);
+
+                await update_profile({ avatar_url: avatarUrl });
+
                 this._onSuccess?.();
-            } catch {
+            } catch (err) {
+                errorEl.innerText = err instanceof Error
+                    ? err.message
+                    : "Не удалось сохранить аватар";
                 this._onError?.();
             } finally {
                 saveBtn.disabled = false;
