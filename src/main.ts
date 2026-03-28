@@ -20,6 +20,7 @@ import { TransactionDetailPage } from "./pages/TransactionsDetail/transactions_d
 
 import { load_categories, load_currencies, load_transaction_types } from "./api/currency.ts";
 import { set_currencies, set_categories, set_transaction_types } from "./store/store.ts";
+import { TransactionEditPage } from "./pages/TransactionsEdit/transactions_edit.ts";
 
 /**
  * Конфигурация маршрутизатора.
@@ -36,7 +37,8 @@ router
     .addRoute("/operations", () => new OperationsPage())
     .addRoute("/profile/avatar", () => new AvatarEditPage())
     .addRoute("/operations/create", () => new TransactionCreatePage())
-    .addRoute("/operations/:id", (p) => new TransactionDetailPage(Number(p.id)));
+    .addRoute("/operations/:id", (p) => new TransactionDetailPage(Number(p.id)))
+    .addRoute("/transactions/edit/:id", (params) => new TransactionEditPage(params));
 
 /**
  * Загружает необходимые справочные данные с бэкенда и сохраняет их в стор.
