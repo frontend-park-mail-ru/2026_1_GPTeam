@@ -1,50 +1,95 @@
 import { BaseComponent } from "../base_component.ts";
 import template from "./avatar_edit_form.hbs?raw";
 import { uploadAvatar } from "../../api/avatar.ts";
-import "./avatar_edit_form.css";
-import { router } from "../../router/router_instance.ts";
 import { update_profile } from "../../api/profile.ts";
+import { router } from "../../router/router_instance.ts";
+import "./avatar_edit_form.css";
 
-interface AvatarEditFormProps extends Record<string, unknown> {
-    initials: string;
+/**
+ * Интерфейс свойств компонента формы редактирования аватара
+ */
+interface AvatarEditFormProps {
+    /** Callback вызывается при успешном сохранении аватара */
     onSuccess?: () => void;
+    /** Callback вызывается при ошибке сохранения аватара */
     onError?: () => void;
+    /** Индексная сигнатура для совместимости с BaseComponent */
+    [key: string]: unknown;
 }
 
 /**
  * Компонент формы редактирования аватара.
- * Позволяет выбрать файл, показывает превью.
- * Вызывает onSuccess/onError после сохранения.
- *
+ * 
+ * Позволяет пользователю выбрать файл изображения, валидирует его,
+ * показывает превью в существующем аватаре на странице и отправляет
+ * файл на сервер при сохранении.
+ * 
+ * @example
+ * ```typescript
+ * const form = new AvatarEditForm({
+ *     onSuccess: () => {
+ *         showToast("success");
+ *         router.navigate("/profile");
+ *     },
+ *     onError: () => showToast("error")
+ * });
+ * form.render(container);
+ * ```
+ * 
  * @class AvatarEditForm
  * @extends BaseComponent
  */
 export class AvatarEditForm extends BaseComponent {
+    /** Callback для успешного сохранения */
     private _onSuccess?: () => void;
+    /** Callback для обработки ошибки */
     private _onError?: () => void;
+    /** Выбранный пользователем файл для загрузки */
+    private _selectedFile: File | null = null;
 
+    /**
+     * Создает экземпляр формы редактирования аватара
+     * 
+     * @param props - Свойства компонента
+     * @param props.onSuccess - Callback, вызываемый после успешного обновления аватара
+     * @param props.onError - Callback, вызываемый при ошибке обновления
+     */
     constructor(props: AvatarEditFormProps) {
         super(template, props);
         this._onSuccess = props.onSuccess;
         this._onError = props.onError;
     }
 
+    /**
+     * Инициализирует обработчики событий для элементов формы
+     * 
+     * Обрабатывает:
+     * - Выбор файла: валидация размера (до 5 МБ) и типа (только изображения)
+     * - Превью: обновление существующего аватара на странице через FileReader
+     * - Сохранение: загрузка файла на сервер и обновление профиля
+     * - Отмена: навигация назад на страницу профиля
+     * 
+     * @protected
+     */
     protected _addEventListeners(): void {
         const el = this.getElement();
         if (!el) return;
 
         const fileInput = el.querySelector<HTMLInputElement>("#avatar-file-input")!;
-        const previewImg = el.querySelector<HTMLImageElement>("#avatar-preview-img")!;
-        const previewInitials = el.querySelector<HTMLElement>("#avatar-preview-initials")!;
         const errorEl = el.querySelector<HTMLElement>("#avatar-error")!;
         const saveBtn = el.querySelector<HTMLButtonElement>("#avatar-save-btn")!;
         const cancelBtn = el.querySelector<HTMLButtonElement>("#avatar-cancel-btn")!;
+
+        // Находим элементы текущего аватара на странице для обновления превью
+        const currentAvatarImg = document.getElementById("current-avatar-img") as HTMLImageElement;
+        const currentAvatarInitials = document.getElementById("current-avatar-initials") as HTMLElement;
 
         this._on(cancelBtn, "click", () => router.navigate("/profile"));
 
         this._on(fileInput, "change", () => {
             const file = fileInput.files?.[0];
             errorEl.innerText = "";
+            this._selectedFile = null;
 
             if (!file) return;
 
@@ -60,20 +105,24 @@ export class AvatarEditForm extends BaseComponent {
                 return;
             }
 
+            this._selectedFile = file;
+
+            // Обновляем СУЩЕСТВУЮЩИЙ аватар на странице
             const reader = new FileReader();
             reader.onload = (e) => {
-                previewImg.src = e.target?.result as string;
-                previewImg.style.display = "block";
-                previewInitials.style.display = "none";
+                if (currentAvatarImg && currentAvatarInitials) {
+                    currentAvatarImg.src = e.target?.result as string;
+                    currentAvatarImg.style.display = "block";
+                    currentAvatarInitials.style.display = "none";
+                }
             };
             reader.readAsDataURL(file);
         });
 
         this._on(saveBtn, "click", async () => {
-            const file = fileInput.files?.[0];
             errorEl.innerText = "";
 
-            if (!file) {
+            if (!this._selectedFile) {
                 errorEl.innerText = "Выберите фото";
                 return;
             }
@@ -81,15 +130,11 @@ export class AvatarEditForm extends BaseComponent {
             saveBtn.disabled = true;
 
             try {
-                const { url: avatarUrl } = await uploadAvatar(file);
-
+                const { url: avatarUrl } = await uploadAvatar(this._selectedFile);
                 await update_profile({ avatar_url: avatarUrl });
-
                 this._onSuccess?.();
             } catch (err) {
-                errorEl.innerText = err instanceof Error
-                    ? err.message
-                    : "Не удалось сохранить аватар";
+                errorEl.innerText = err instanceof Error ? err.message : "Не удалось сохранить аватар";
                 this._onError?.();
             } finally {
                 saveBtn.disabled = false;

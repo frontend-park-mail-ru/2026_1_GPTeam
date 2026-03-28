@@ -9,5 +9,19 @@
     </div>
 
     <h1 class="profile-edit__title">Изменить аватар</h1>
+    
+    <div class="profile-avatar-edit__display">
+        <div class="profile-avatar" id="current-avatar-container">
+            {{#if avatar_url}}
+                <img src="{{avatar_url}}" class="profile-avatar__img" id="current-avatar-img" alt="avatar">
+                <span class="profile-avatar__initials" id="current-avatar-initials" style="display: none;">{{initials}}</span>
+            {{else}}
+                <span class="profile-avatar__initials" id="current-avatar-initials">{{initials}}</span>
+                <img src="" class="profile-avatar__img" id="current-avatar-img" alt="avatar" style="display: none;">
+            {{/if}}
+            <div class="profile-avatar__ring"></div>
+        </div>
+    </div>
+
     <div class="avatar-edit__form-container"></div>
 </div>
