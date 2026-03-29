@@ -32,20 +32,40 @@ export class Header extends BaseComponent {
     }
 
     protected _afterRender(): void {
-        const nav = document.getElementsByTagName("a");
-        for (const elem of nav) {
-            if (elem.getAttribute("href") === this._props.cur_page) {
-                elem.classList.add("active_header_link");
-                if (this._props.cur_page === "/profile") {
-                    const icon = elem.getElementsByTagName("img")[0];
-                    if (icon) icon.src = "/icons/profile_active.svg";
-                    elem.classList.remove("profile_icon");
-                    elem.classList.add("profile_icon_active");
+        this.updateActiveLink(this._props.cur_page as string);
+        this._loadAvatar();
+    }
+
+    updateActiveLink(path: string): void {
+        if (!this._element) return;
+
+        const links = this._element.querySelectorAll<HTMLAnchorElement>("a");
+
+        for (const link of links) {
+            link.classList.remove("active_header_link");
+
+            if (link.getAttribute("href") === "/profile") {
+                link.classList.remove("profile_icon_active");
+                const icon = link.querySelector<HTMLImageElement>("img");
+                if (icon && icon.src.endsWith("/icons/profile_active.svg")) {
+                    icon.src = "/icons/profile.svg";
                 }
             }
         }
 
-        this._loadAvatar();
+        for (const link of links) {
+            if (link.getAttribute("href") === path) {
+                link.classList.add("active_header_link");
+                if (path === "/profile") {
+                    link.classList.remove("profile_icon");
+                    link.classList.add("profile_icon_active");
+                    const icon = link.querySelector<HTMLImageElement>("img");
+                    if (icon && icon.src.endsWith("/icons/profile.svg")) {
+                        icon.src = "/icons/profile_active.svg";
+                    }
+                }
+            }
+        }
     }
 
     private async _loadAvatar(): Promise<void> {

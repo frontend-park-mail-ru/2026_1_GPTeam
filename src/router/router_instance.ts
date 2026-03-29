@@ -4,7 +4,7 @@ import { Router } from "./router.ts";
  * Контейнер для отрисовки приложения.
  * @type {HTMLElement}
  */
-const root = document.getElementById("app") as HTMLElement;
+const root = document.getElementById("app_content") as HTMLElement;
 
 /**
  * Экспортируемый экземпляр маршрутизатора (Singleton).

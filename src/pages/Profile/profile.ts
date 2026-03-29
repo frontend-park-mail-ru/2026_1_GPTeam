@@ -1,6 +1,5 @@
 import { BasePage } from "../base_page.ts";
 import template from "./profile.hbs?raw";
-import { Header } from "../../components/Header/header.ts";
 import { ProfileAvatar } from "../../components/ProfileAvatar/profile_avatar.ts";
 import { ProfileInfo } from "../../components/ProfileInfo/profile_info.ts";
 import { router } from "../../router/router_instance.ts";
@@ -55,14 +54,9 @@ export class ProfilePage extends BasePage {
         const compiledTemplate = Handlebars.compile(template);
         root.innerHTML = `
             <div class="page">
-                <header class="page__header"></header>
                 <main class="page__content">${compiledTemplate({}).trim()}</main>
             </div>
         `;
-
-        const header = new Header({ cur_page: "/profile" });
-        header.render(root.querySelector<HTMLElement>(".page__header")!);
-        this._components.push(header);
 
         const avatar = new ProfileAvatar({
             username: profile.username,

@@ -1,6 +1,5 @@
 import { BasePage } from "../base_page.ts";
 import template from "./balance.hbs?raw";
-import { Header } from "../../components/Header/header.ts";
 import { get_balance } from "../../api/balance.ts";
 import { TotalBalance } from "../../components/TotalBalance/total_balance.ts";
 import "./balance.css";
@@ -40,13 +39,9 @@ export class BalancePage extends BasePage {
     }).trim();
     root.innerHTML = `
 <div class="page">
-<header class="page__header"></header>
 <main class="page__content">${html}</main>
 </div>
 `;
-    const header = new Header({ cur_page: "/balance" });
-    header.render(root.querySelector<HTMLElement>(".page__header")!);
-    this._components.push(header);
     const total_balance = new TotalBalance({
       balance: balance.balance,
       currency: balance.currency,
