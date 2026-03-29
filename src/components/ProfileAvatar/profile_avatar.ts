@@ -7,6 +7,7 @@ import type { User } from "../../types/interfaces.ts";
 interface ProfileAvatarProps {
     username: User["username"];
     email: User["email"];
+    avatar_url: string;
 }
 
 /**
@@ -21,11 +22,11 @@ interface ProfileAvatarProps {
  * avatar.render(document.querySelector(".profile__avatar"));
  */
 export class ProfileAvatar extends BaseComponent {
-    /**
-     * @param {ProfileAvatarProps} props - Имя пользователя и email.
-     */
     constructor(props: ProfileAvatarProps) {
-        const initials = props.username.slice(0, 2).toUpperCase();
+        console.log(props);
+        const initials = props.username
+            ? props.username.slice(0, 2).toUpperCase()
+            : "??";
         super(template, { ...props, initials });
     }
 }

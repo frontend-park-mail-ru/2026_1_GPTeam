@@ -11,8 +11,7 @@ export default defineConfig({
                 swDest: 'dist/service_worker.js'
             },
             devOptions: {
-                enabled: true,
-                type: 'module'
+                enabled: false,
             }
         })
     ],

@@ -59,15 +59,17 @@ export class Header extends BaseComponent {
             const icon = profileLink.querySelector<HTMLImageElement>("img");
             if (!icon) return;
 
+            const avatarUrl = `http://localhost:8081/img/${data.user.avatar_url}`;
+
             const img = new Image();
             img.onload = () => {
-                icon.src = data.user.avatar_url;
+                icon.src = avatarUrl;
                 icon.style.width = "32px";
                 icon.style.height = "32px";
                 icon.style.borderRadius = "50%";
                 icon.style.objectFit = "cover";
             };
-            img.src = data.user.avatar_url;
+            img.src = avatarUrl;
         } catch {
         }
     }
