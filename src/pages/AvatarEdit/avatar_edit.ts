@@ -69,7 +69,7 @@ export class AvatarEditPage extends BasePage {
         const avatarUrl = data.user.avatar_url 
             ? data.user.avatar_url.startsWith('http') 
                 ? data.user.avatar_url 
-                : `http://localhost:8081/img/${data.user.avatar_url}`
+                : `${import.meta.env.VITE_SERVER_URL}/img/${data.user.avatar_url}`
             : '';
 
         const compiledTemplate = Handlebars.compile(template);
