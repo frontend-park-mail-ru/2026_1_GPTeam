@@ -24,7 +24,6 @@ export const client = (url: string, data: RequestInit = {}): Promise<Response> =
     if (!token) {
         token = "";
     }
-    console.log(token);
     const mergedOptions: RequestInit = {
         credentials: "include",
         ...data,
