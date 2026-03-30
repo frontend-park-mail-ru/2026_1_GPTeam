@@ -128,6 +128,7 @@ export class TransactionForm extends BaseComponent {
      * @private
      * @param {TransactionFormData} data - Данные транзакции
      */
+    
     private _fillFormData(data: TransactionFormData): void {
         const form = this.getElement();
         if (!form) return;
@@ -156,8 +157,11 @@ export class TransactionForm extends BaseComponent {
         const dateDisplay = form.querySelector<HTMLInputElement>("#transaction_date_display");
         if (dateInput && dateDisplay) {
             const formattedDate = this._formatDateForDisplay(data.transaction_date);
-            dateInput.value = formattedDate;
             dateDisplay.value = formattedDate;
+
+            const d = new Date(data.transaction_date);
+            const isoDate = `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, "0")}-${String(d.getDate()).padStart(2, "0")}`;
+            dateInput.value = isoDate;
         }
 
         const descriptionInput = form.querySelector<HTMLTextAreaElement>("#description_input");
