@@ -20,6 +20,7 @@ import { TransactionDetailPage } from "./pages/TransactionsDetail/transactions_d
 
 import { load_categories, load_currencies, load_transaction_types } from "./api/currency.ts";
 import { set_currencies, set_categories, set_transaction_types } from "./store/store.ts";
+import { Header } from "./components/Header/header.ts";
 import { TransactionEditPage } from "./pages/TransactionsEdit/transactions_edit.ts";
 
 /**
@@ -67,9 +68,19 @@ async function validateAndLoadData(): Promise<boolean> {
     }
 }
 
+const NO_HEADER_ROUTES = new Set(["/", "/login", "/signup"]);
+
+function getHeaderActivePath(path: string): string {
+    if (path.startsWith("/operations")) return "/operations";
+    if (path.startsWith("/profile")) return "/profile";
+    if (path.startsWith("/budget")) return "/budget";
+    if (path.startsWith("/balance")) return "/balance";
+    return path;
+}
+
 /**
  * Инициализирует жизненный цикл приложения.
- * * @async
+ * @async
  * @function init
  * @description Порядок инициализации:
  * 1. Загрузка справочников (валюты, категории) с сервера.
@@ -78,10 +89,26 @@ async function validateAndLoadData(): Promise<boolean> {
  * @returns {Promise<void>}
  */
 async function init(): Promise<void> {
-    // Ждем загрузки данных перед запуском интерфейса
     await validateAndLoadData();
-    
-    // Активация роутера и отрисовка текущего маршрута
+
+    const headerContainer = document.getElementById("app_header")!;
+    let header: Header | null = null;
+
+    router.onRouteChange((path: string) => {
+        if (NO_HEADER_ROUTES.has(path)) {
+            headerContainer.style.display = "none";
+        } else {
+            headerContainer.style.display = "";
+            const activePath = getHeaderActivePath(path);
+            if (!header) {
+                header = new Header({ cur_page: activePath });
+                header.render(headerContainer);
+            } else {
+                header.updateActiveLink(activePath);
+            }
+        }
+    });
+
     router.start();
 
     /**
@@ -89,8 +116,8 @@ async function init(): Promise<void> {
      * Проверяет: окружение (не DEV), поддержку в браузере и флаг в .env.
      */
     if (
-        !import.meta.env.DEV && 
-        'serviceWorker' in navigator && 
+        !import.meta.env.DEV &&
+        'serviceWorker' in navigator &&
         import.meta.env.VITE_ENABLE_SW === 'true'
     ) {
         try {

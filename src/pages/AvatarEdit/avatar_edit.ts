@@ -1,6 +1,5 @@
 import { BasePage } from "../base_page.ts";
 import template from "./avatar_edit.hbs?raw";
-import { Header } from "../../components/Header/header.ts";
 import { AvatarEditForm } from "../../components/AvatarEditForm/avatar_edit_form.ts";
 import { router } from "../../router/router_instance.ts";
 import "./avatar_edit.css";
@@ -75,7 +74,6 @@ export class AvatarEditPage extends BasePage {
         const compiledTemplate = Handlebars.compile(template);
         root.innerHTML = `
             <div class="page">
-                <header class="page__header"></header>
                 <main class="page__content">
                     ${compiledTemplate({ 
                         avatar_url: avatarUrl, 
@@ -84,10 +82,6 @@ export class AvatarEditPage extends BasePage {
                 </main>
             </div>
         `;
-
-        const header = new Header({ cur_page: "/profile" });
-        header.render(root.querySelector<HTMLElement>(".page__header")!);
-        this._components.push(header);
 
         const form = new AvatarEditForm({
             onSuccess: () => {
