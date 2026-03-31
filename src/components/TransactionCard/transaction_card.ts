@@ -57,12 +57,20 @@ export class TransactionCard extends BaseComponent {
         this._onDeleted = onDeleted;
     }
 
+    /**
+     * @protected
+     */
     protected _addEventListeners(): void {
         const el = this.getElement();
         if (!el) return;
 
         el.querySelector("[data-action='detail']")?.addEventListener("click", () => {
             router.navigate(`/operations/${this._data.id}`);
+        });
+
+        // Обработчик кнопки "Изменить"
+        el.querySelector("[data-action='edit']")?.addEventListener("click", () => {
+            router.navigate(`/transactions/edit/${this._data.id}`);
         });
 
         el.querySelector("[data-action='delete']")?.addEventListener("click", () => {

@@ -1,43 +1,41 @@
-<div class="transactions-page">
-    <section class="transactions-hero">
-        <div class="transactions-hero__copy">
-            <h1 class="transactions-page__title">Транзакции</h1>
-            <p class="transactions-page__subtitle">
-                Единый журнал доходов и расходов с категоризацией, фильтрами и быстрыми действиями.
-            </p>
+<div class="operations-page">
+    <div class="operations-page__head">
+        <div>
+            <h2 class="operations-page__title">Операции</h2>
+            <p class="operations-page__subtitle">Единый журнал доходов и расходов с категоризацией, фильтрами и быстрыми действиями.</p>
         </div>
-
-        <button class="transactions-hero__button" type="button">
-            Новая транзакция
-        </button>
-    </section>
-
-    <div class="transactions-filters" aria-label="Фильтры транзакций">
-        {{#each filters}}
-            <button class="{{class_name}}" type="button">
-                {{label}}
-            </button>
-        {{/each}}
+        <button class="operations-page__add-btn" type="button">+ Новая операция</button>
     </div>
 
-    <section class="transactions-stats">
-        {{#each stats}}
-            <article class="{{class_name}}">
-                <p class="transactions-stat__label">{{label}}</p>
-                <p class="transactions-stat__value">{{value}}</p>
-            </article>
-        {{/each}}
-    </section>
+    <div class="operations-page__toolbar">
+        <button class="operations-page__filter operations-page__filter--active" type="button">Все</button>
+        <button class="operations-page__filter" type="button">Доходы</button>
+        <button class="operations-page__filter" type="button">Расходы</button>
+        <button class="operations-page__filter" type="button">За месяц</button>
+    </div>
 
-    <section class="transactions-feed">
-        <div class="transactions-feed__header">
-            <h2 class="transactions-feed__title">Последние транзакции</h2>
-            <p class="transactions-feed__description">
-                Категория отображается как тег с иконкой и может быть изменена в форме редактирования.
-            </p>
+    <div class="operations-page__summary">
+        <div class="operations-kpi">
+            <span class="operations-kpi__label">Транзакций</span>
+            <strong class="operations-kpi__value">148</strong>
         </div>
+        <div class="operations-kpi">
+            <span class="operations-kpi__label">Доходы</span>
+            <strong class="operations-kpi__value operations-kpi__value--income">RUB 284 500</strong>
+        </div>
+        <div class="operations-kpi">
+            <span class="operations-kpi__label">Расходы</span>
+            <strong class="operations-kpi__value operations-kpi__value--expense">RUB 91 240</strong>
+        </div>
+    </div>
 
-        <div class="transactions-feed__divider"></div>
-        <div class="transactions-feed__list" id="transactions_list"></div>
+    <section class="operations-list">
+        <div class="operations-list__header">
+            <div>
+                <h3 class="operations-list__title">Последние операции</h3>
+                <p class="operations-list__caption">Категория ведёт себя как тег: у транзакции всегда есть наглядная категория с иконкой.</p>
+            </div>
+        </div>
+        <div class="operations-list__body" id="transactions_list"></div>
     </section>
 </div>
