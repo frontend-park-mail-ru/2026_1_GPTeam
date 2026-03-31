@@ -1,3 +1,7 @@
+import {get_token} from "./csrf.ts";
+
+export const CSRF_HEADER_NAME: string = "X-CSRF-Token";
+
 /**
  * URL сервера, получаемый из переменных окружения.
  * @type {string}
@@ -16,13 +20,17 @@ export const SERVER_URL: string = import.meta.env.VITE_SERVER_URL;
  * @throws {TypeError} Если сетевое соединение прервано или URL невалиден
  */
 export const client = (url: string, data: RequestInit = {}): Promise<Response> => {
+    let token = get_token();
+    if (!token) {
+        token = "";
+    }
     const mergedOptions: RequestInit = {
         credentials: "include",
         ...data,
         headers: {
             ...data.headers,
+            [CSRF_HEADER_NAME]: token,
         },
     };
-
     return fetch(SERVER_URL + url, mergedOptions);
 };
