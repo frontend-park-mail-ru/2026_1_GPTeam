@@ -1,5 +1,4 @@
 import { BasePage } from "../base_page";
-import { Header } from "../../components/Header/header";
 import { TransactionCard } from "../../components/TransactionCard/transaction_card";
 import { fetchTransactionIds, fetchTransactionDetail } from "../../api/transactions";
 import { Transaction } from "../../types/interfaces";
@@ -22,14 +21,9 @@ export class OperationsPage extends BasePage {
         const compiledTemplate = Handlebars.compile(template);
         root.innerHTML = `
             <div class="page">
-                <header class="page__header"></header>
                 <main class="page__content">${compiledTemplate({}).trim()}</main>
             </div>
         `;
-
-        const header = new Header({ cur_page: "/operations" });
-        header.render(root.querySelector(".page__header") as HTMLElement);
-        this._components.push(header);
 
         const addBtn = root.querySelector<HTMLButtonElement>(".operations-page__add-btn");
         if (addBtn) addBtn.onclick = () => router.navigate("/operations/create");

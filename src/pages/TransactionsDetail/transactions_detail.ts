@@ -1,5 +1,4 @@
 import { BasePage } from "../base_page";
-import { Header } from "../../components/Header/header";
 import { fetchTransactionDetail, deleteTransaction } from "../../api/transactions";
 import { router } from "../../router/router_instance";
 import { Modal } from "../../components/Modal/modal";
@@ -28,7 +27,6 @@ export class TransactionDetailPage extends BasePage {
     async render(root: HTMLElement): Promise<void> {
         root.innerHTML = `
             <div class="page">
-                <header class="page__header"></header>
                 <main class="page__content">
                     <div class="transaction-detail-page" id="detail_root">
                         <div class="detail-loading">Загрузка...</div>
@@ -36,10 +34,6 @@ export class TransactionDetailPage extends BasePage {
                 </main>
             </div>
         `;
-
-        const header = new Header({ cur_page: "/operations" });
-        header.render(root.querySelector(".page__header") as HTMLElement);
-        this._components.push(header);
 
         await this._loadDetail(root.querySelector<HTMLElement>("#detail_root")!);
     }
