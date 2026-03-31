@@ -1,6 +1,5 @@
 import { BasePage } from "../base_page.ts";
 import template from "./balance.hbs?raw";
-import { Header } from "../../components/Header/header.ts";
 import { get_balance } from "../../api/balance.ts";
 import { TotalBalance } from "../../components/TotalBalance/total_balance.ts";
 import { IncomeBalance } from "../../components/IncomeBalance/income_balance.ts";
@@ -20,7 +19,7 @@ export class BalancePage extends BasePage {
    */
   async render(root: HTMLElement): Promise<void> {
     const response = await get_balance() as BalanceResponseType;
-    
+
     if (response.code === 401) {
       router.navigate("/login");
       return;
@@ -29,14 +28,9 @@ export class BalancePage extends BasePage {
     const compiledTemplate = Handlebars.compile(template);
     root.innerHTML = `
       <div class="page">
-        <header class="page__header"></header>
         <main class="page__content">${compiledTemplate({ date: response.date }).trim()}</main>
       </div>
     `;
-
-    const header = new Header({ cur_page: "/balance" });
-    header.render(root.querySelector<HTMLElement>(".page__header")!);
-    this._components.push(header);
 
     const balanceContent = root.querySelector<HTMLElement>(".balance-content")!;
 
@@ -44,7 +38,7 @@ export class BalancePage extends BasePage {
         const section = document.createElement('div');
         section.className = 'currency-section';
         section.setAttribute('data-currency', item.currency);
-        
+
         section.innerHTML = `
             <h3 class="currency-label">${item.currency}</h3>
             <div class="main-row-${index}"></div>
