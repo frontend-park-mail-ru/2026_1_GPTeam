@@ -1,32 +1,24 @@
-/** Base response returned by every endpoint. */
 export interface SimpleResponse {
   code: number;
   message?: string;
 }
 
-/** A single field-level validation error. */
 export interface FieldError {
   field: string;
   message: string;
 }
 
-/** Response that carries field-level validation errors. */
 export interface RequestWithErrors extends SimpleResponse {
   errors?: FieldError[];
 }
 
-/** Authenticated user returned after login. */
 export interface User {
   username: string;
   email: string;
   created_at: string;
-  last_login?: string;
   avatar_url: string;
-  balance: number;
-  currency: string;
 }
 
-/** User data returned after signup. */
 export interface AuthUser {
   id: number;
   username: string;
@@ -35,34 +27,32 @@ export interface AuthUser {
   created_at?: string;
 }
 
-/** Successful login response. */
 export interface LoginSuccessResponse extends SimpleResponse {
   user: User;
 }
 
-/** Successful signup response. */
 export interface SignupSuccessResponse extends SimpleResponse {
   user: AuthUser;
 }
 
-/** Successful logout response. */
 export interface LogoutSuccessResponse extends SimpleResponse {
   logged_out_at: string;
 }
 
-/** Auth error response (login or signup). */
 export interface AuthResponse extends RequestWithErrors {}
 
-/** Current month balance summary. */
-export interface BalanceResponse extends SimpleResponse {
-  balance: number;
+export interface CurrencyBalance {
   currency: string;
+  balance: number;
   income: number;
   expenses: number;
+}
+
+export interface BalanceResponse extends SimpleResponse {
+  balances: CurrencyBalance[];
   date: string;
 }
 
-/** Budget entity. */
 export interface Budget {
   title: string;
   description: string;
@@ -74,31 +64,23 @@ export interface Budget {
   currency: string;
 }
 
-/** Response with list of budget IDs. */
 export interface BudgetListResponse extends SimpleResponse {
   len: number;
   ids: number[];
 }
 
-/** Response after budget creation. */
 export interface BudgetCreateResponse extends SimpleResponse {
   budget_id: number;
 }
 
-/** Response with a single budget. */
 export interface BudgetGetResponse extends SimpleResponse {
   budget: Budget;
 }
 
-/** Budget error response. */
 export interface BudgetResponse extends RequestWithErrors {}
 
-/** Generic delete response. */
 export interface DeleteResponse extends SimpleResponse {}
 
-/** --- TRANSACTION TYPES --- */
-
-/** Transaction entity. */
 export interface Transaction {
   id: number;
   user_id: number;
@@ -106,34 +88,33 @@ export interface Transaction {
   value: number;
   type: string;
   category: string;
+  currency: string;
   title: string;
   description: string;
   created_at: string;
   transaction_date: string;
 }
 
-/** Список ID транзакций. */
 export interface TransactionListResponse extends SimpleResponse {
   len: number;
   ids: number[];
 }
 
-/** Детальная информация об одной транзакции. */
 export interface TransactionGetResponse extends SimpleResponse {
   transaction: Transaction;
 }
 
-/** Ответ после создания или удаления транзакции. */
 export interface TransactionActionResponse extends SimpleResponse {
   transaction_id: number;
 }
 
 export interface TransactionCreateRequest {
-    account_id: number;
-    value: number;
-    type: string;
-    category: string;
-    title: string;
-    description: string;
-    transaction_date: string;
+  account_id: number;
+  value: number;
+  type: string;
+  category: string;
+  currency: string;
+  title: string;
+  description: string;
+  transaction_date: string;
 }

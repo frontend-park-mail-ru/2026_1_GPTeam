@@ -49,6 +49,7 @@ export class TransactionEditPage extends BasePage {
 
         try {
             const transactionData = await fetchTransactionDetail(this._transactionId);
+            console.log("transactionData:", transactionData);
             
             if (!transactionData) {
                 router.navigate("/operations");
@@ -63,6 +64,7 @@ export class TransactionEditPage extends BasePage {
                     value: transactionData.value,
                     type: transactionData.type,
                     category: transactionData.category,
+                    currency: transactionData.currency,
                     title: transactionData.title,
                     description: transactionData.description,
                     transaction_date: transactionData.transaction_date,
@@ -72,7 +74,7 @@ export class TransactionEditPage extends BasePage {
                 }
             );
             
-            this._formComponent.render(formContainer);
+            await this._formComponent.render(formContainer);
             this._components.push(this._formComponent);
 
         } catch (err) {

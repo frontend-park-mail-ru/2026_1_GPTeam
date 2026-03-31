@@ -35,3 +35,73 @@
     gap: 24px;
     width: 100%;
 }
+
+.balance-page {
+    padding: 20px 40px;
+    color: white;
+}
+
+.balance-filters {
+    display: flex;
+    gap: 12px;
+    margin: 24px 0 32px 0;
+}
+
+.filter-btn {
+    background: #1e1e1e;
+    border: 1px solid #333;
+    color: #888;
+    padding: 10px 24px;
+    border-radius: 25px;
+    cursor: pointer;
+    font-size: 14px;
+    font-weight: 500;
+    transition: 0.3s;
+}
+
+.filter-btn:hover {
+    border-color: #5d5fef;
+    color: #fff;
+}
+
+.filter-btn.active {
+    background: #5d5fef;
+    color: white;
+    border-color: #5d5fef;
+    box-shadow: 0 4px 15px rgba(93, 95, 239, 0.4);
+}
+
+.currency-section {
+    animation: fadeIn 0.4s ease;
+}
+
+.currency-label {
+    margin: 40px 0 20px 0;
+    font-size: 24px;
+    letter-spacing: 1px;
+    color: #fff;
+}
+
+.row {
+    display: flex;
+    flex-direction: row;
+    gap: 20px;
+    margin-top: 20px;
+    width: 100%;
+}
+
+.income-balance-card, 
+.expenses-balance-card {
+    flex: 1;
+    min-width: 200px;
+}
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+.balance-divider {
+    border: none;
+    border-top: 1px solid rgba(255, 255, 255, 0.05);
+    margin: 40px 0;
+}

@@ -79,7 +79,7 @@ export class Header extends BaseComponent {
             const icon = profileLink.querySelector<HTMLImageElement>("img");
             if (!icon) return;
 
-            const avatarUrl = `${import.meta.env.VITE_SERVER_URL}/img/${data.user.avatar_url}`;
+            const avatarUrl = `${import.meta.env.VITE_SERVER_URL}/img/${data.user.avatar_url}`
 
             const img = new Image();
             img.onload = () => {
