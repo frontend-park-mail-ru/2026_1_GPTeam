@@ -51,7 +51,6 @@ export class TransactionCard extends BaseComponent {
             category_title: truncate(props.category, 10),
             title: truncate(props.title, 18),
             note: truncate(props.description, 15),
-            currency: "RUB",
         });
         this._data = props;
         this._onDeleted = onDeleted;

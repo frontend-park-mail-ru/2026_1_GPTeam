@@ -20,6 +20,7 @@ interface TransactionFormData {
     value: number;
     type: string;
     category: string;
+    currency: string;
     title: string;
     description: string;
     transaction_date: string;
@@ -89,7 +90,15 @@ export class TransactionForm extends BaseComponent {
         this._initSelects(form);
         this._initCalendar(form);
 
-        if (this._initialData) {
+        // Если это создание новой транзакции (нет initialData), ставим RUB по умолчанию
+        if (!this._initialData) {
+            const currencyInput = form.querySelector<HTMLInputElement>("#currency_input");
+            const currencyDisplay = form.querySelector<HTMLElement>("#currency_display");
+            if (currencyInput && currencyDisplay) {
+                currencyInput.value = "RUB";
+                currencyDisplay.innerText = "RUB";
+            }
+        } else {
             this._fillFormData(this._initialData);
         }
     }
@@ -151,6 +160,13 @@ export class TransactionForm extends BaseComponent {
         if (categoryInput && categoryDisplay) {
             categoryInput.value = data.category;
             categoryDisplay.innerText = data.category;
+        }
+
+        const currencyInput = form.querySelector<HTMLInputElement>("#currency_input");
+        const currencyDisplay = form.querySelector<HTMLElement>("#currency_display");
+        if (currencyInput && currencyDisplay) {
+            currencyInput.value = data.currency;
+            currencyDisplay.innerText = data.currency;
         }
 
         const dateInput = form.querySelector<HTMLInputElement>("#transaction_date_input");
@@ -385,6 +401,7 @@ export class TransactionForm extends BaseComponent {
             "title": "#title_input",
             "value": "#value_input",
             "type": "#type_input",
+            "currency": "#currency_input",
             "category": "#category_input",
             "transaction_date": "#transaction_date_input",
             "description": "#description_input",
@@ -465,6 +482,7 @@ export class TransactionForm extends BaseComponent {
                 value: parseFloat(fields.value!.value),
                 type: fields.type!.value,
                 category: fields.category!.value,
+                currency: fields.currency!.value,
                 title: fields.title!.value.trim(),
                 description: fields.description!.value.trim(),
                 transaction_date: new Date(fields.transaction_date!.value).toISOString(),

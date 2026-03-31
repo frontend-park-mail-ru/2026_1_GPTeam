@@ -3,19 +3,19 @@ import { is_login } from "./auth.ts";
 import type { BalanceResponse as BalanceResponseType } from "../types/interfaces.ts";
 
 /**
- * Получает баланс профиля пользователя с сервера.
- * При получении кода 401 (Unauthorized) автоматически пытается обновить токен
- * и повторить запрос один раз.
+ * Получает данные о балансах пользователя по всем валютам.
+ * При получении кода 401 (Unauthorized) пытается обновить сессию и повторить запрос.
  *
  * @async
  * @function get_balance
- * @returns {Promise<BalanceResponseType>} Объект с данными ответа (содержит code и данные баланса)
- * @throws {Error} Если сетевой запрос завершился ошибкой или произошёл сбой парсинга JSON
+ * @returns {Promise<BalanceResponseType>} Объект с массивом balances и датой
+ * @throws {Error} Если сетевой запрос завершился ошибкой
  *
  * @example
  * const balanceData = await get_balance();
  * if (balanceData.code === 200) {
- *   console.log('Баланс:', balanceData.balance);
+ * // Теперь данные лежат в массиве balances
+ * balanceData.balances.forEach(b => console.log(`${b.currency}: ${b.balance}`));
  * }
  */
 export const get_balance = async (): Promise<BalanceResponseType> => {
@@ -23,7 +23,9 @@ export const get_balance = async (): Promise<BalanceResponseType> => {
     method: "GET",
     credentials: "include",
   });
+  
   const data: BalanceResponseType = await response.json();
+  
   if (data.code === 401) {
     const login = await is_login();
     if (login) {
@@ -34,5 +36,6 @@ export const get_balance = async (): Promise<BalanceResponseType> => {
       return await retryResponse.json();
     }
   }
+  
   return data;
 };

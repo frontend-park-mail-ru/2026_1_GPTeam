@@ -68,7 +68,6 @@ export class TransactionDetailPage extends BasePage {
             date: new Date(data.transaction_date).toLocaleDateString("ru-RU"),
             created_at: new Date(data.created_at).toLocaleDateString("ru-RU"),
             category_icon: type === "income" ? "💰" : "🛒",
-            currency: "RUB",
         });
 
         container.querySelector("#back_btn")?.addEventListener("click", () => {
