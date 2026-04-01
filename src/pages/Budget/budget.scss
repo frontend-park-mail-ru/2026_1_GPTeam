@@ -1,0 +1,233 @@
+$color-budget-card-gradient-start: rgb(72 79 255 / 15%);
+$color-budget-card-gradient-end: rgb(72 79 255 / 5%);
+$color-budget-card-border: rgb(72 79 255 / 30%);
+$color-budget-delete-border: rgb(255 71 87 / 50%);
+$color-budget-delete-text: #ff4757;
+$color-budget-delete-hover-bg: rgb(255 71 87 / 20%);
+$color-budget-delete-hover-shadow: rgb(255 71 87 / 50%);
+$color-budget-label-text: rgb(255 255 255 / 40%);
+$color-budget-meta-text: rgb(255 255 255 / 50%);
+$color-budget-progress-track: rgb(255 255 255 / 7%);
+$color-budget-progress-fill-start: #484fff;
+$color-budget-progress-fill-end: #a855f7;
+$color-budget-create-bg: #484fff;
+$color-budget-create-shadow: rgb(72 79 255 / 50%);
+$color-budget-create-shadow-hover: rgb(72 79 255 / 70%);
+
+.budget {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 40px;
+  padding: 40px;
+  min-height: 90vh;
+}
+
+.budget__header {
+  width: 100%;
+  max-width: 732px;
+}
+
+.budget__title {
+  margin: 0;
+  color: $color-surface-root-light-scheme;
+  font-size: 28px;
+  font-weight: 700;
+}
+
+.budget__list {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  width: 100%;
+  max-width: 732px;
+}
+
+.budget-card {
+  background: linear-gradient(135deg, $color-budget-card-gradient-start, $color-budget-card-gradient-end);
+  border: 1px solid $color-budget-card-border;
+  border-radius: 16px;
+  padding: 24px;
+  width: 732px;
+  max-width: 100%;
+  box-sizing: border-box;
+  font-family: Manrope, sans-serif;
+  position: relative;
+  overflow: hidden;
+
+  &__delete-btn {
+    position: absolute;
+    top: 16px;
+    right: 16px;
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    background: transparent;
+    border: 1px solid $color-budget-delete-border;
+    color: $color-budget-delete-text;
+    font-size: 18px;
+    font-weight: 700;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s;
+    z-index: 10;
+  }
+
+  &__delete-btn:hover {
+    background: $color-budget-delete-hover-bg;
+    border-color: $color-budget-delete-text;
+    box-shadow: 0 0 15px $color-budget-delete-hover-shadow;
+  }
+
+  &__header {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    margin-bottom: 16px;
+    margin-top: 24px;
+    gap: 16px;
+    min-width: 0;
+  }
+
+  &__header>div:first-child {
+    flex: 1 1 0;
+    min-width: 0;
+    overflow: hidden;
+  }
+
+  &__header>div:last-child {
+    flex: 0 0 auto;
+    text-align: right;
+    white-space: nowrap;
+  }
+
+  &__header>span:first-child {
+    flex: 1 1 0;
+    min-width: 0;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+  }
+
+  &__header>span:last-child,
+  &__header>p:last-child {
+    flex: 0 0 auto;
+    white-space: nowrap;
+    text-align: right;
+  }
+
+  &__label {
+    color: $color-budget-label-text;
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+  }
+
+  &__date {
+    color: $color-budget-meta-text;
+    font-size: 12px;
+    margin: 4px 0 0;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  &__amount {
+    color: $color-surface-root-light-scheme;
+    font-size: 36px;
+    font-weight: 700;
+    margin: 6px 0;
+    display: flex;
+    align-items: baseline;
+    min-width: 0;
+    overflow: hidden;
+    white-space: nowrap;
+  }
+
+  &__currency {
+    display: inline-block;
+    color: $color-text-back-button;
+    font-size: 18px;
+    font-weight: 600;
+    margin-right: 4px;
+    vertical-align: middle;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+  }
+
+  &__desc {
+    color: $color-budget-meta-text;
+    font-size: 13px;
+    margin: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    display: block;
+    width: 100%;
+  }
+
+  &__progress-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 20px;
+    margin-bottom: 8px;
+  }
+
+  &__progress-label,
+  &__progress-percent {
+    color: $color-budget-meta-text;
+    font-size: 13px;
+  }
+
+
+
+  &__progress-bar {
+    width: 100%;
+    height: 4px;
+    background: $color-budget-progress-track;
+    border-radius: 2px;
+    overflow: hidden;
+  }
+
+  &__progress-fill {
+    height: 100%;
+    background: linear-gradient(90deg, $color-budget-progress-fill-start, $color-budget-progress-fill-end);
+    border-radius: 2px;
+    transition: width 0.4s ease;
+  }
+}
+
+.budget__slot {
+  display: flex;
+  justify-content: center;
+  width: 100%;
+}
+
+.budget__empty {
+  color: $color-budget-label-text;
+  font-size: 16px;
+  text-align: center;
+  padding: 40px;
+}
+
+.budget__create {
+  background: $color-budget-create-bg;
+  color: $color-surface-root-light-scheme;
+  border: none;
+  border-radius: 50px;
+  padding: 14px 32px;
+  font-size: 16px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+  box-shadow: 0 0 20px $color-budget-create-shadow;
+
+  &:hover {
+    box-shadow: 0 0 36px $color-budget-create-shadow-hover;
+    transform: translateY(-1px);
+  }
+}
