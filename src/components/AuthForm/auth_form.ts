@@ -7,6 +7,7 @@ import { client } from "../../api/client.ts";
 import { router } from "../../router/router_instance.ts";
 import { is_login } from "../../api/auth.ts";
 import type { AuthResponse as AuthResponseType } from "../../types/interfaces.ts";
+import {clean_data} from "../../utils/xss.ts";
 
 interface AuthFormProps {
     mode: "login" | "signup";
@@ -85,6 +86,11 @@ export class AuthForm extends BaseComponent {
         },
         error_message: HTMLElement
     ): boolean {
+        Object.entries(fields).forEach(([_, value]) => {
+            if (value) {
+                value.value = clean_data(value.value);
+            }
+        });
         const { username, password, confirm_password, email } = fields;
         let firstError = "";
         error_message.innerText = "";
