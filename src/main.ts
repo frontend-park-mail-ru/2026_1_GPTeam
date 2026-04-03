@@ -115,17 +115,10 @@ async function init(): Promise<void> {
      * Регистрация Service Worker для офлайн-режима.
      * Проверяет: окружение (не DEV), поддержку в браузере и флаг в .env.
      */
-    if (
-        !import.meta.env.DEV &&
-        'serviceWorker' in navigator &&
-        import.meta.env.VITE_ENABLE_SW === 'true'
-    ) {
-        try {
-            await navigator.serviceWorker.register('/service_worker.js', { type: 'module' });
-            console.log('Service Worker registered');
-        } catch (e) {
-            console.error('Service Worker registration failed:', e);
-        }
+    if (!import.meta.env.DEV && "serviceWorker" in navigator && import.meta.env.VITE_ENABLE_SW === "true") {
+        navigator.serviceWorker.register("/service_worker.js", { type: "module", scope: "/" })
+            .then(() => console.log("Service Worker registered"))
+            .catch((error) => console.error("Service Worker registration failed:", error));
     }
 }
 
