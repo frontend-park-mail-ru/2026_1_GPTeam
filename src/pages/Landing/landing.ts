@@ -3,6 +3,11 @@ import template from "./landing.hbs?raw";
 import "./landing.css";
 import { is_login } from "../../api/auth.ts";
 import { router } from "../../router/router_instance.ts";
+import "@fontsource/manrope/400.css";
+import "@fontsource/manrope/500.css";
+import "@fontsource/manrope/600.css";
+import "@fontsource/manrope/700.css";
+import "@fontsource/manrope/800.css";
 
 /**
  * Страница лендинга (приветственная страница).
