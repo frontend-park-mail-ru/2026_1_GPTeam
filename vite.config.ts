@@ -1,17 +1,17 @@
-import { defineConfig } from 'vite'
-import { VitePWA } from 'vite-plugin-pwa'
+import { defineConfig } from "vite"
+import { VitePWA } from "vite-plugin-pwa"
 
 export default defineConfig({
     plugins: [
         VitePWA({
-            strategies: 'injectManifest',
-            srcDir: 'public',
-            filename: 'service_worker.js',
+            strategies: "injectManifest",
+            srcDir: "src",
+            filename: "service_worker.ts",
             injectManifest: {
-                swDest: 'dist/service_worker.js'
+                swDest: "dist/service_worker.js"
             },
             devOptions: {
-                enabled: false,
+                type: "module",
             }
         })
     ],
