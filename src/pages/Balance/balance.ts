@@ -7,7 +7,7 @@ import { ExpensesBalance } from "../../components/ExpensesBalance/expenses_balan
 import { router } from "../../router/router_instance.ts";
 import Handlebars from "handlebars";
 import type { BalanceResponse as BalanceResponseType } from "../../types/interfaces.ts";
-import "./balance.css";
+import "./balance.scss";
 
 /**
  * Страница отображения баланса с фильтрацией по валютам (RUB, USD, EUR).
@@ -32,18 +32,18 @@ export class BalancePage extends BasePage {
       </div>
     `;
 
-    const balanceContent = root.querySelector<HTMLElement>(".balance-content")!;
+    const balanceContent = root.querySelector<HTMLElement>(".js--balance-currencies")!;
 
-    response.balances.forEach((item, index) => {
+    response.balances.forEach((item) => {
         const section = document.createElement('div');
-        section.className = 'currency-section';
+        section.className = 'balance__currency-section js--balance-currency-section';
         section.setAttribute('data-currency', item.currency);
 
         section.innerHTML = `
-            <h3 class="currency-label">${item.currency}</h3>
-            <div class="main-row-${index}"></div>
-            <div class="row row-${index}"></div>
-            <hr class="balance-divider">
+            <h3 class="balance__currency-label">${item.currency}</h3>
+            <div class="balance__total-row"></div>
+            <div class="balance__metrics-row"></div>
+            <hr class="balance__divider">
         `;
         balanceContent.appendChild(section);
 
@@ -51,21 +51,21 @@ export class BalancePage extends BasePage {
           balance: item.balance,
           currency: item.currency,
         });
-        total.render(section.querySelector<HTMLElement>(`.main-row-${index}`)!);
+        total.render(section.querySelector<HTMLElement>('.balance__total-row')!);
         this._components.push(total);
 
         const income = new IncomeBalance({
           amount: item.income,
           currency: item.currency,
         });
-        income.render(section.querySelector<HTMLElement>(`.row-${index}`)!);
+        income.render(section.querySelector<HTMLElement>('.balance__metrics-row')!);
         this._components.push(income);
 
         const expenses = new ExpensesBalance({
           amount: item.expenses,
           currency: item.currency,
         });
-        expenses.render(section.querySelector<HTMLElement>(`.row-${index}`)!);
+        expenses.render(section.querySelector<HTMLElement>('.balance__metrics-row')!);
         this._components.push(expenses);
     });
 
@@ -77,15 +77,15 @@ export class BalancePage extends BasePage {
    * @param root Корневой элемент страницы.
    */
   private _initFilters(root: HTMLElement): void {
-    const filterButtons = root.querySelectorAll('.filter-btn');
-    const sections = root.querySelectorAll<HTMLElement>('.currency-section');
+    const filterButtons = root.querySelectorAll('.js--balance-filter');
+    const sections = root.querySelectorAll<HTMLElement>('.js--balance-currency-section');
 
     filterButtons.forEach(btn => {
       btn.addEventListener('click', () => {
         const selectedCurrency = btn.getAttribute('data-currency');
 
-        root.querySelector('.filter-btn.active')?.classList.remove('active');
-        btn.classList.add('active');
+        root.querySelector('.balance__filter--active')?.classList.remove('balance__filter--active');
+        btn.classList.add('balance__filter--active');
 
         sections.forEach(section => {
           const currency = section.getAttribute('data-currency');

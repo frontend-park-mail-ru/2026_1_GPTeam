@@ -357,7 +357,7 @@
     overflow-wrap: break-word;
 }
 
-#budget_content {
+.budget__slot {
     display: flex;
     justify-content: center;
     width: 100%;
