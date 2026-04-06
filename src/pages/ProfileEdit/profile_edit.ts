@@ -1,10 +1,9 @@
 import { BasePage } from "../base_page.ts";
 import template from "./profile_edit.hbs?raw";
-import { Header } from "../../components/Header/header.ts";
 import { ProfileAvatar } from "../../components/ProfileAvatar/profile_avatar.ts";
 import { ProfileEditForm } from "../../components/ProfileEditForm/profile_edit_form.ts";
 import { router } from "../../router/router_instance.ts";
-import "./profile_edit.css";
+import "./profile_edit.scss";
 import Handlebars from "handlebars";
 import type { SimpleResponse } from "../../types/interfaces.ts";
 import { get_profile } from "../../api/profile.ts";
@@ -49,14 +48,9 @@ export class ProfileEditPage extends BasePage {
         const compiledTemplate = Handlebars.compile(template);
         root.innerHTML = `
             <div class="page">
-                <header class="page__header"></header>
                 <main class="page__content">${compiledTemplate({}).trim()}</main>
             </div>
         `;
-
-        const header = new Header({ cur_page: "/profile" });
-        header.render(root.querySelector<HTMLElement>(".page__header")!);
-        this._components.push(header);
 
         const avatar = new ProfileAvatar({
             username: profile.username,
@@ -81,6 +75,8 @@ export class ProfileEditPage extends BasePage {
         if (avatarEmail) avatarEmail.style.display = "none";
 
         const form = new ProfileEditForm({
+            initialUsername: profile.username,
+            initialEmail: profile.email,
             onSuccess: () => {
                 this._showToast(root, "success");
                 setTimeout(() => router.navigate("/profile"), 2000);

@@ -1,10 +1,9 @@
 import { BasePage } from "../base_page.ts";
 import template from "./profile.hbs?raw";
-import { Header } from "../../components/Header/header.ts";
 import { ProfileAvatar } from "../../components/ProfileAvatar/profile_avatar.ts";
 import { ProfileInfo } from "../../components/ProfileInfo/profile_info.ts";
 import { router } from "../../router/router_instance.ts";
-import "./profile.css";
+import "./profile.scss";
 import Handlebars from "handlebars";
 import type { SimpleResponse } from "../../types/interfaces.ts";
 import { Modal } from "../../components/Modal/modal.ts";
@@ -56,14 +55,9 @@ export class ProfilePage extends BasePage {
         const compiledTemplate = Handlebars.compile(template);
         root.innerHTML = `
             <div class="page">
-                <header class="page__header"></header>
                 <main class="page__content">${compiledTemplate({}).trim()}</main>
             </div>
         `;
-
-        const header = new Header({ cur_page: "/profile" });
-        header.render(root.querySelector<HTMLElement>(".page__header")!);
-        this._components.push(header);
 
         const avatar = new ProfileAvatar({
             username: profile.username,
@@ -73,10 +67,10 @@ export class ProfilePage extends BasePage {
                 : "",
         });
         console.log(avatar);
-        avatar.render(root.querySelector<HTMLElement>(".profile__avatar")!);
+        avatar.render(root.querySelector<HTMLElement>(".js--profile-avatar-slot")!);
         this._components.push(avatar);
 
-        const changeBtn = root.querySelector<HTMLElement>("#avatar-change-btn");
+        const changeBtn = root.querySelector<HTMLElement>(".js--profile-avatar-change");
         if (changeBtn) {
             changeBtn.addEventListener("click", () => {
                 router.navigate("/profile/avatar");
@@ -88,15 +82,15 @@ export class ProfilePage extends BasePage {
             email: truncate(profile.email, 10),
             created_at: formatDate(profile.created_at),
         });
-        info.render(root.querySelector<HTMLElement>(".profile__info")!);
+        info.render(root.querySelector<HTMLElement>(".js--profile-info")!);
         this._components.push(info);
 
-        root.querySelector<HTMLElement>("#profile-edit-btn")!
+        root.querySelector<HTMLElement>(".js--profile-open-edit")!
             .addEventListener("click", () => {
                 router.navigate("/profile/edit");
             });
 
-        root.querySelector<HTMLElement>("#profile-logout-btn")!
+        root.querySelector<HTMLElement>(".js--profile-logout")!
             .addEventListener("click", () => {
                 const modal = new Modal({
                     title: "Выйти из аккаунта?",

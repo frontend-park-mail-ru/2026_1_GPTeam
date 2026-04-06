@@ -1,9 +1,8 @@
 import { BasePage } from "../base_page.ts";
 import template from "./avatar_edit.hbs?raw";
-import { Header } from "../../components/Header/header.ts";
 import { AvatarEditForm } from "../../components/AvatarEditForm/avatar_edit_form.ts";
 import { router } from "../../router/router_instance.ts";
-import "./avatar_edit.css";
+import "./avatar_edit.scss";
 import Handlebars from "handlebars";
 import type { SimpleResponse } from "../../types/interfaces.ts";
 import { get_profile } from "../../api/profile.ts";
@@ -69,13 +68,12 @@ export class AvatarEditPage extends BasePage {
         const avatarUrl = data.user.avatar_url 
             ? data.user.avatar_url.startsWith('http') 
                 ? data.user.avatar_url 
-                : `http://localhost:8081/img/${data.user.avatar_url}`
+                : `${import.meta.env.VITE_SERVER_URL}/img/${data.user.avatar_url}`
             : '';
 
         const compiledTemplate = Handlebars.compile(template);
         root.innerHTML = `
             <div class="page">
-                <header class="page__header"></header>
                 <main class="page__content">
                     ${compiledTemplate({ 
                         avatar_url: avatarUrl, 
@@ -84,10 +82,6 @@ export class AvatarEditPage extends BasePage {
                 </main>
             </div>
         `;
-
-        const header = new Header({ cur_page: "/profile" });
-        header.render(root.querySelector<HTMLElement>(".page__header")!);
-        this._components.push(header);
 
         const form = new AvatarEditForm({
             onSuccess: () => {

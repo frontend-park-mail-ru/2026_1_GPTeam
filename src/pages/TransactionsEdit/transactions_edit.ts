@@ -1,12 +1,11 @@
 import { BasePage } from "../base_page.ts";
-import { Header } from "../../components/Header/header";
 import { TransactionForm } from "../../components/TransactionsForm/transactions_form";
 import { fetchTransactionDetail, updateTransaction } from "../../api/transactions";
 import { router } from "../../router/router_instance";
 import type { TransactionCreateRequest } from "../../types/interfaces";
 // @ts-ignore
 import template from "./transactions_edit.hbs?raw";
-import "./transactions_edit.css";
+import "./transactions_edit.scss";
 
 /**
  * Страница редактирования транзакции.
@@ -31,14 +30,9 @@ export class TransactionEditPage extends BasePage {
     async render(root: HTMLElement): Promise<void> {
         root.innerHTML = `
             <div class="page">
-                <header class="page__header"></header>
                 <main class="page__content">${template}</main>
             </div>
         `;
-
-        const header = new Header({ cur_page: "/operations" });
-        header.render(root.querySelector(".page__header") as HTMLElement);
-        this._components.push(header);
 
         this._transactionId = this._params["id"] ? parseInt(this._params["id"]) : null;
 
@@ -49,6 +43,7 @@ export class TransactionEditPage extends BasePage {
 
         try {
             const transactionData = await fetchTransactionDetail(this._transactionId);
+            console.log("transactionData:", transactionData);
             
             if (!transactionData) {
                 router.navigate("/operations");
@@ -63,6 +58,7 @@ export class TransactionEditPage extends BasePage {
                     value: transactionData.value,
                     type: transactionData.type,
                     category: transactionData.category,
+                    currency: transactionData.currency,
                     title: transactionData.title,
                     description: transactionData.description,
                     transaction_date: transactionData.transaction_date,
@@ -72,7 +68,7 @@ export class TransactionEditPage extends BasePage {
                 }
             );
             
-            this._formComponent.render(formContainer);
+            await this._formComponent.render(formContainer);
             this._components.push(this._formComponent);
 
         } catch (err) {

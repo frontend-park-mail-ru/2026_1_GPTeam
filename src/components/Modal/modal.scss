@@ -1,4 +1,4 @@
-.modal-overlay {
+.modal {
   position: fixed;
   top: 0;
   left: 0;
@@ -11,7 +11,7 @@
   z-index: 1000;
 }
 
-.modal-card {
+.modal__card {
   background: #000;
   border-radius: 20px;
   padding: 40px 32px;
@@ -27,7 +27,7 @@
   flex-direction: column;
 }
 
-.modal-title {
+.modal__title {
   color: #fff;
   font-size: 22px;
   font-weight: 700;
@@ -38,7 +38,7 @@
   white-space: nowrap;
 }
 
-.modal-message {
+.modal__message {
   color: rgb(255 255 255 / 60%);
   font-size: 15px;
   text-align: center;
@@ -51,13 +51,13 @@
   overflow-wrap: anywhere;
 }
 
-.modal-buttons {
+.modal__buttons {
   display: flex;
   gap: 16px;
   margin-top: auto;
 }
 
-.modal-btn {
+.modal__btn {
   flex: 1;
   padding: 14px 24px;
   border-radius: 50px;
@@ -68,24 +68,24 @@
   border: none;
 }
 
-.modal-btn-cancel {
+.modal__btn--cancel {
   background: transparent;
   color: rgb(255 255 255 / 50%);
   border: 1px solid rgb(255 255 255 / 30%);
 }
 
-.modal-btn-cancel:hover {
+.modal__btn--cancel:hover {
   border-color: rgb(255 255 255 / 60%);
   color: #fff;
 }
 
-.modal-btn-confirm {
+.modal__btn--confirm {
   background: #ff4757;
   color: #fff;
   box-shadow: 0 0 20px rgb(255 71 87 / 50%);
 }
 
-.modal-btn-confirm:hover {
+.modal__btn--confirm:hover {
   box-shadow: 0 0 36px rgb(255 71 87 / 70%);
   transform: translateY(-1px);
 }

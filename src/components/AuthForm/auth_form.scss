@@ -1,15 +1,15 @@
-.auth-wrapper {
+.auth-form {
     display: flex;
     flex-direction: column;
     align-items: center;
     font-family: Manrope, sans-serif;
 }
 
-.auth-logo {
+.auth-form__logo {
     margin-bottom: 40px;
 }
 
-.auth-logo__text {
+.auth-form__logo-text {
     display: inline-block;
     margin-top: 60px;
     font-size: 85.5px;
@@ -21,7 +21,7 @@
     text-decoration: none;
 }
 
-.card {
+.auth-form__card {
     background: #000;
     border-radius: 20px;
     padding: 54px 48px;
@@ -30,7 +30,7 @@
     0 0 80px rgb(72 79 255 / 30%);
 }
 
-.title {
+.auth-form__title {
     color: #fff;
     font-size: 36px;
     font-weight: 600;
@@ -39,19 +39,19 @@
     margin-bottom: 32px;
 }
 
-.card label {
+.auth-form__card label {
     display: block;
     color: rgb(255 255 255 / 70%);
     font-size: 14px;
     margin-bottom: 6px;
 }
 
-.input-wrapper {
+.auth-form__input-wrapper {
     position: relative;
     margin-bottom: 15px;
 }
 
-.input {
+.auth-form__input {
     width: 100%;
     background: transparent;
     border: 1px solid rgb(72 79 255 / 50%);
@@ -72,7 +72,7 @@
     padding: 15px 44px 15px 20px;
 }
 
-.eye_btn, .confirm_eye_btn {
+.auth-form__eye-btn, .auth-form__confirm-eye-btn {
     width: 24px;
     height: 24px;
     position: absolute;
@@ -84,11 +84,11 @@
     transition: opacity 0.2s;
 }
 
-.eye_btn:hover, .confirm_eye_btn:hover {
+.auth-form__eye-btn:hover, .auth-form__confirm-eye-btn:hover {
     opacity: 1;
 }
 
-.help_abc, .help_email, .help_password {
+.auth-form__help-abc, .auth-form__help-email, .auth-form__help-password {
     width: 24px;
     height: 24px;
     cursor: pointer;
@@ -96,24 +96,24 @@
     transition: opacity 0.2s;
 }
 
-.help_abc:hover, .help_email:hover, .help_password:hover {
+.auth-form__help-abc:hover, .auth-form__help-email:hover, .auth-form__help-password:hover {
     opacity: 1;
 }
 
-.input::placeholder {
+.auth-form__input::placeholder {
     color: rgb(255 255 255 / 30%);
 }
 
-.input:focus {
+.auth-form__input:focus {
     border-color: #484fff;
     box-shadow: 0 0 10px rgb(72 79 255 / 30%);
 }
 
-.input.error {
+.auth-form__input.auth-form__input--error {
     border-color: red;
 }
 
-.help-wrap {
+.auth-form__help-wrap {
     position: absolute;
     right: 14px;
     top: 50%;
@@ -122,11 +122,11 @@
     align-items: center;
 }
 
-.help-wrap--password {
+.auth-form__help-wrap--password {
     right: 42px;
 }
 
-.help-tooltip {
+.auth-form__help-tooltip {
     visibility: hidden;
     opacity: 0;
     position: absolute;
@@ -147,7 +147,7 @@
     z-index: 10;
 }
 
-.help-tooltip::after {
+.auth-form__help-tooltip::after {
     content: '';
     position: absolute;
     bottom: -5px;
@@ -160,12 +160,12 @@
     border-bottom: 1px solid rgb(72 79 255 / 30%);
 }
 
-.help-wrap:hover .help-tooltip {
+.auth-form__help-wrap:hover .auth-form__help-tooltip {
     visibility: visible;
     opacity: 1;
 }
 
-.btn {
+.auth-form__btn {
     width: 100%;
     background: #484fff;
     color: #fff;
@@ -181,19 +181,19 @@
     box-sizing: border-box;
 }
 
-.btn:hover {
+.auth-form__btn:hover {
     box-shadow: 0 0 36px rgb(72 79 255 / 70%);
     transform: translateY(-1px);
 }
 
-.btn:disabled {
+.auth-form__btn:disabled {
     background-color: gray;
     box-shadow: none;
     cursor: not-allowed;
     transform: none;
 }
 
-.error-message {
+.auth-form__error-message {
     color: red;
     font-size: 14px;
     text-align: center;
@@ -202,14 +202,14 @@
     overflow-wrap: break-word;
 }
 
-.footer-text {
+.auth-form__footer-text {
     text-align: center;
     font-size: 14px;
     color: rgb(255 255 255 / 50%);
     margin-top: 20px;
 }
 
-.footer-text a {
+.auth-form__footer-text a {
     color: #484fff;
     text-decoration: none;
 }
@@ -223,10 +223,10 @@ input::-ms-reveal, input::-ms-clear {
     display: none;
 }
 
-.valid {
+.auth-form__input--valid {
     border: #86E58A solid 1px !important;
 }
 
-.invalid {
+.auth-form__input--invalid {
     border: #F22 solid 1px !important;
 }

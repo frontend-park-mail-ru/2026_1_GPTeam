@@ -33,7 +33,7 @@ export const fetchTransactionIds = async (): Promise<number[]> => {
 export const fetchTransactionDetail = async (id: number): Promise<Transaction | null> => {
     const response = await client(`/transactions/${id}`, { method: "GET" });
     const data: TransactionGetResponse = await response.json();
-    
+    console.log("fetchTransactionDetail response:", data);
     if (data.code === 200) {
         return data.transaction;
     }

@@ -1,6 +1,6 @@
 import { BaseComponent } from "../base_component.ts";
 import template from "./budget_form.hbs?raw";
-import "./budget_form.css";
+import "./budget_form.scss";
 import { client } from "../../api/client.ts";
 import { get_currencies } from "../../store/store.ts";
 import { router } from "../../router/router_instance.ts";

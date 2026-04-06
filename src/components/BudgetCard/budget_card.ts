@@ -1,6 +1,6 @@
 import { BaseComponent } from "../base_component.ts";
 import template from "./budget_card.hbs?raw";
-import "./budget_card.css";
+import "./budget_card.scss";
 
 interface Budget {
     title?: string;

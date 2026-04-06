@@ -3,9 +3,8 @@ import { BudgetForm } from "../../components/BudgetForm/budget_form.ts";
 import { BudgetCard } from "../../components/BudgetCard/budget_card.ts";
 import { Modal } from "../../components/Modal/modal.ts";
 import { ModalForm } from "../../components/ModalForm/modal_form.ts";
-import "./budget.css";
+import "./budget.scss";
 import { router } from "../../router/router_instance.ts";
-import { Header } from "../../components/Header/header.ts";
 import { client } from "../../api/client.ts";
 import { is_login } from "../../api/auth.ts";
 import type {
@@ -25,26 +24,32 @@ export class BudgetPage extends BasePage {
      * @param {HTMLElement} root
      */
     async render(root: HTMLElement): Promise<void> {
+        const today = new Date().toLocaleDateString("ru-RU", {
+            day: "2-digit",
+            month: "long",
+            year: "numeric",
+        });
+
         root.innerHTML = `
             <div class="page">
-                <header class="page__header"></header>
                 <main class="page__content">
-                    <div class="budget-page">
-                        <div class="budget-list" id="budget_list"></div>
-                        <div id="budget_content"></div>
+                    <div class="budget">
+                        <div class="budget__header">
+                            <h2 class="budget__title js--inner-header">Бюджет</h2>
+                            <p class="budget__page-date">${today}</p>
+                        </div>
+                        <div class="budget__list js--budget-list"></div>
+                        <div class="budget__slot js--budget-slot"></div>
                     </div>
                 </main>
             </div>
         `;
-        const header = new Header({ cur_page: "/budget" });
-        header.render(root.querySelector<HTMLElement>(".page__header")!);
-        this._components.push(header);
         await this._loadBudgets(root);
     }
 
     destroy(): void {
         super.destroy();
-        document.querySelectorAll(".modal-overlay, .modal-form-overlay").forEach(el => el.remove());
+        document.querySelectorAll(".modal, .modal-form").forEach(el => el.remove());
     }
 
     /**
@@ -77,7 +82,7 @@ export class BudgetPage extends BasePage {
      * @private
      */
     private async _loadBudgetCards(root: HTMLElement, ids: number[]): Promise<void> {
-        const list = root.querySelector<HTMLElement>("#budget_list");
+        const list = root.querySelector<HTMLElement>(".js--budget-list");
         if (!list) return;
         for (const id of ids) {
             try {
@@ -104,7 +109,7 @@ export class BudgetPage extends BasePage {
      */
     private _renderInlineForm(root: HTMLElement): void {
         const form = new BudgetForm({});
-        form.render(root.querySelector<HTMLElement>("#budget_content")!);
+        form.render(root.querySelector<HTMLElement>(".js--budget-slot")!);
         this._components.push(form);
     }
 
@@ -113,10 +118,10 @@ export class BudgetPage extends BasePage {
      * @private
      */
     private _renderCreateButton(root: HTMLElement): void {
-        const container = root.querySelector<HTMLElement>("#budget_content");
+        const container = root.querySelector<HTMLElement>(".js--budget-slot");
         if (!container) return;
-        container.innerHTML = `<button class="budget-create-btn" id="create_budget_btn">+ Создать бюджет</button>`;
-        container.querySelector<HTMLButtonElement>("#create_budget_btn")?.addEventListener("click", () => {
+        container.innerHTML = `<button type="button" class="budget__create js--budget-create">+ Создать бюджет</button>`;
+        container.querySelector<HTMLButtonElement>(".js--budget-create")?.addEventListener("click", () => {
             this._renderModalForm();
         });
     }

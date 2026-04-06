@@ -3,7 +3,7 @@ import template from "./avatar_edit_form.hbs?raw";
 import { uploadAvatar } from "../../api/avatar.ts";
 import { update_profile } from "../../api/profile.ts";
 import { router } from "../../router/router_instance.ts";
-import "./avatar_edit_form.css";
+import "./avatar_edit_form.scss";
 
 /**
  * Интерфейс свойств компонента формы редактирования аватара

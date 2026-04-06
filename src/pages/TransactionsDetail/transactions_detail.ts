@@ -1,12 +1,11 @@
 import { BasePage } from "../base_page";
-import { Header } from "../../components/Header/header";
 import { fetchTransactionDetail, deleteTransaction } from "../../api/transactions";
 import { router } from "../../router/router_instance";
 import { Modal } from "../../components/Modal/modal";
 import Handlebars from "handlebars";
 // @ts-ignore
 import template from "./transactions_detail.hbs?raw";
-import "./transactions_detail.css";
+import "./transactions_detail.scss";
 
 /**
  * Страница детального просмотра транзакции.
@@ -28,18 +27,13 @@ export class TransactionDetailPage extends BasePage {
     async render(root: HTMLElement): Promise<void> {
         root.innerHTML = `
             <div class="page">
-                <header class="page__header"></header>
                 <main class="page__content">
-                    <div class="transaction-detail-page" id="detail_root">
-                        <div class="detail-loading">Загрузка...</div>
+                    <div class="transactions-detail-page" id="detail_root">
+                        <div class="transactions-detail__loading">Загрузка...</div>
                     </div>
                 </main>
             </div>
         `;
-
-        const header = new Header({ cur_page: "/operations" });
-        header.render(root.querySelector(".page__header") as HTMLElement);
-        this._components.push(header);
 
         await this._loadDetail(root.querySelector<HTMLElement>("#detail_root")!);
     }
@@ -53,7 +47,7 @@ export class TransactionDetailPage extends BasePage {
         const data = await fetchTransactionDetail(this._transactionId);
 
         if (!data) {
-            container.innerHTML = `<div class="detail-error">Транзакция не найдена</div>`;
+            container.innerHTML = `<div class="transactions-detail__error">Транзакция не найдена</div>`;
             return;
         }
 
@@ -68,7 +62,6 @@ export class TransactionDetailPage extends BasePage {
             date: new Date(data.transaction_date).toLocaleDateString("ru-RU"),
             created_at: new Date(data.created_at).toLocaleDateString("ru-RU"),
             category_icon: type === "income" ? "💰" : "🛒",
-            currency: "RUB",
         });
 
         container.querySelector("#back_btn")?.addEventListener("click", () => {

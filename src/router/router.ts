@@ -8,6 +8,7 @@ export class Router {
     private root: HTMLElement;
     private routes: { pattern: RegExp; keys: string[]; factory: (params: Record<string, string>) => BasePage }[];
     private _currentPage: BasePage | null;
+    private _onRouteChange?: (path: string) => void;
 
     /**
      * @param {HTMLElement} root - Контейнер для рендера страниц.
@@ -55,6 +56,14 @@ export class Router {
         this._handleRoute();
     }
 
+    /**
+     * Регистрирует колбэк, вызываемый после каждой смены маршрута.
+     * @param {(path: string) => void} cb
+     */
+    onRouteChange(cb: (path: string) => void): void {
+        this._onRouteChange = cb;
+    }
+
     /** Перезагружает текущий маршрут. */
     refresh(): void {
         this._handleRoute();
@@ -92,6 +101,8 @@ export class Router {
                 this.root.innerHTML = "";
                 await page.render(this.root);
             }
+            // pathname may have changed if render() triggered a nested navigate()
+            this._onRouteChange?.(window.location.pathname);
             return;
         }
 
@@ -99,6 +110,9 @@ export class Router {
         this._currentPage = page;
         this.root.innerHTML = "";
         await page.render(this.root);
+        // Do not use the captured `path`: during await, render() may call navigate()
+        // (e.g. BalancePage 401 → /login). The outer frame would otherwise notify with a stale path.
+        this._onRouteChange?.(window.location.pathname);
     }
 
     /** Запускает роутер при первичной загрузке. */

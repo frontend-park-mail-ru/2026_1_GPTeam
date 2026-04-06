@@ -1,18 +1,17 @@
-.transaction-form-card {
+.budget-form {
     background: transparent;
     border-radius: 20px;
     padding: 0;
     font-family: Manrope, sans-serif;
     width: 510px;
-    margin: 0 auto;
 }
 
-.transaction-form-card label span {
+.budget-form label span {
     margin-left: 15px;
     color: rgb(255 255 255 / 60%);
 }
 
-.transaction-form-title {
+.budget-form__title {
     color: #fff;
     font-size: 28px;
     font-weight: 700;
@@ -20,14 +19,14 @@
     margin-bottom: 32px;
 }
 
-.transaction-form-card label {
+.budget-form label {
     display: block;
     color: rgb(255 255 255 / 70%);
     font-size: 14px;
     margin-bottom: 6px;
 }
 
-.transaction-date-display {
+.budget-form__date-display {
     background: transparent;
     border: none;
     outline: none;
@@ -35,12 +34,12 @@
     width: 100%;
 }
 
-.input-wrapper {
+.budget-form__input-wrapper {
     position: relative;
     margin-bottom: 16px;
 }
 
-.transaction-form-input {
+.budget-form__input {
     width: 100%;
     background: transparent;
     border: 1px solid rgb(72 79 255 / 50%);
@@ -55,17 +54,13 @@
     display: block;
 }
 
-.transaction-form-input::-webkit-inner-spin-button,
-.transaction-form-input::-webkit-outer-spin-button {
+.budget-form__input::-webkit-inner-spin-button,
+.budget-form__input::-webkit-outer-spin-button {
     appearance: none;
     margin: 0;
 }
 
-.transaction-form-input.invalid {
-    border-color: #ef4444;
-}
-
-.transaction-help-wrap {
+.budget-form__help-wrap {
     position: absolute;
     right: 14px;
     top: 50%;
@@ -74,7 +69,7 @@
     align-items: center;
 }
 
-.transaction-calendar-icon {
+.budget-form__calendar-icon {
     position: absolute;
     right: 42px;
     top: 50%;
@@ -85,11 +80,11 @@
     transition: opacity 0.2s;
 }
 
-.transaction-calendar-icon:hover {
+.budget-form__calendar-icon:hover {
     opacity: 1;
 }
 
-.transaction-date-wrapper {
+.budget-form__date-wrapper {
     position: relative;
 }
 
@@ -227,10 +222,6 @@
     padding-right: 44px;
 }
 
-.custom-select__display.invalid {
-    border-color: #ef4444;
-}
-
 .custom-select__arrow {
     position: absolute;
     right: 18px;
@@ -278,7 +269,7 @@
     background: rgb(72 79 255 / 15%);
 }
 
-.transaction-help {
+.budget-form__help {
     width: 20px;
     height: 20px;
     cursor: pointer;
@@ -286,11 +277,11 @@
     transition: opacity 0.2s;
 }
 
-.transaction-help:hover {
+.budget-form__help:hover {
     opacity: 1;
 }
 
-.transaction-tooltip {
+.budget-form__tooltip {
     visibility: hidden;
     opacity: 0;
     position: absolute;
@@ -311,7 +302,7 @@
     z-index: 10;
 }
 
-.transaction-tooltip::after {
+.budget-form__tooltip::after {
     content: '';
     position: absolute;
     bottom: -5px;
@@ -324,19 +315,13 @@
     border-bottom: 1px solid rgb(72 79 255 / 30%);
 }
 
-.transaction-help-wrap:hover .transaction-tooltip {
+.budget-form__help-wrap:hover .budget-form__tooltip {
     visibility: visible;
     opacity: 1;
 }
 
-.transaction-form-actions {
-    display: flex;
-    gap: 12px;
-    margin-top: 24px;
-}
-
-.transaction-form-btn {
-    flex: 1;
+.budget-form__btn {
+    width: 100%;
     background: #484fff;
     color: #fff;
     border: none;
@@ -345,43 +330,26 @@
     font-size: 16px;
     font-weight: 600;
     cursor: pointer;
+    margin-top: 10px;
     transition: all 0.2s;
     box-shadow: 0 0 20px rgb(72 79 255 / 50%);
     box-sizing: border-box;
 }
 
-.transaction-form-btn:disabled {
+.budget-form__btn:disabled {
     background-color: gray;
     box-shadow: none;
     cursor: not-allowed;
     transform: none;
 }
 
-.transaction-form-btn:hover:not(:disabled) {
+.budget-form__btn:hover:not(:disabled) {
     box-shadow: 0 0 36px rgb(72 79 255 / 70%);
     transform: translateY(-1px);
 }
 
-.transaction-form-btn-secondary {
-    flex: 1;
-    background: rgb(72 79 255 / 20%);
-    color: #fff;
-    border: 1px solid rgb(72 79 255 / 40%);
-    border-radius: 50px;
-    padding: 16px;
-    font-size: 16px;
-    font-weight: 600;
-    cursor: pointer;
-    transition: all 0.2s;
-    box-sizing: border-box;
-}
-
-.transaction-form-btn-secondary:hover {
-    background: rgb(72 79 255 / 30%);
-}
-
-.transaction-form-error {
-    color: #ef4444;
+.budget-form__error {
+    color: red;
     font-size: 14px;
     text-align: center;
     min-height: 20px;
@@ -389,20 +357,8 @@
     overflow-wrap: break-word;
 }
 
-.transaction-form-row {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 16px;
-}
-
-@media (max-width: 600px) {
-    .transaction-form-row {
-        grid-template-columns: 1fr;
-    }
-    
-    .transaction-form-card {
-        width: 100%;
-        padding: 0 16px;
-        box-sizing: border-box;
-    }
+.budget__slot {
+    display: flex;
+    justify-content: center;
+    width: 100%;
 }

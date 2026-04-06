@@ -3,7 +3,7 @@ import { createTransaction } from "../../api/transactions";
 import { fetchAccountId } from "../../api/accounts";
 // @ts-ignore
 import template from "./transactions_form.hbs?raw";
-import "./transactions_form.css";
+import "./transactions_form.scss";
 import { router } from "../../router/router_instance";
 import { CustomCalendar } from "../CustomCalendar/custom_calendar";
 import { CustomSelect } from "../CustomSelect/custom_select";
@@ -21,6 +21,7 @@ interface TransactionFormData {
     value: number;
     type: string;
     category: string;
+    currency: string;
     title: string;
     description: string;
     transaction_date: string;
@@ -90,7 +91,15 @@ export class TransactionForm extends BaseComponent {
         this._initSelects(form);
         this._initCalendar(form);
 
-        if (this._initialData) {
+        // Если это создание новой транзакции (нет initialData), ставим RUB по умолчанию
+        if (!this._initialData) {
+            const currencyInput = form.querySelector<HTMLInputElement>("#currency_input");
+            const currencyDisplay = form.querySelector<HTMLElement>("#currency_display");
+            if (currencyInput && currencyDisplay) {
+                currencyInput.value = "RUB";
+                currencyDisplay.innerText = "RUB";
+            }
+        } else {
             this._fillFormData(this._initialData);
         }
     }
@@ -116,9 +125,9 @@ export class TransactionForm extends BaseComponent {
         form.querySelectorAll<HTMLInputElement | HTMLTextAreaElement>("input:not([type='hidden']), textarea").forEach(input => {
             input.addEventListener("input", () => {
                 input.style.borderColor = "";
-                input.classList.remove("invalid");
+                input.classList.remove("transactions-form__input--invalid");
                 const display = form.querySelector<HTMLElement>(`#${input.id.replace("_input", "_display")}`);
-                display?.classList.remove("invalid");
+                display?.classList.remove("transactions-form__input--invalid");
                 form.querySelector<HTMLElement>("#error_message")!.innerText = "";
             });
         });
@@ -129,6 +138,7 @@ export class TransactionForm extends BaseComponent {
      * @private
      * @param {TransactionFormData} data - Данные транзакции
      */
+    
     private _fillFormData(data: TransactionFormData): void {
         const form = this.getElement();
         if (!form) return;
@@ -153,12 +163,22 @@ export class TransactionForm extends BaseComponent {
             categoryDisplay.innerText = data.category;
         }
 
+        const currencyInput = form.querySelector<HTMLInputElement>("#currency_input");
+        const currencyDisplay = form.querySelector<HTMLElement>("#currency_display");
+        if (currencyInput && currencyDisplay) {
+            currencyInput.value = data.currency;
+            currencyDisplay.innerText = data.currency;
+        }
+
         const dateInput = form.querySelector<HTMLInputElement>("#transaction_date_input");
         const dateDisplay = form.querySelector<HTMLInputElement>("#transaction_date_display");
         if (dateInput && dateDisplay) {
             const formattedDate = this._formatDateForDisplay(data.transaction_date);
-            dateInput.value = formattedDate;
             dateDisplay.value = formattedDate;
+
+            const d = new Date(data.transaction_date);
+            const isoDate = `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, "0")}-${String(d.getDate()).padStart(2, "0")}`;
+            dateInput.value = isoDate;
         }
 
         const descriptionInput = form.querySelector<HTMLTextAreaElement>("#description_input");
@@ -310,8 +330,8 @@ export class TransactionForm extends BaseComponent {
         const categoryDisplay = form.querySelector<HTMLElement>("#category_display");
         const dateDisplay = form.querySelector<HTMLInputElement>("#transaction_date_display");
         
-        currencyDisplay?.classList.remove("invalid");
-        categoryDisplay?.classList.remove("invalid");
+        currencyDisplay?.classList.remove("transactions-form__input--invalid");
+        categoryDisplay?.classList.remove("transactions-form__input--invalid");
         if (dateDisplay) dateDisplay.style.borderColor = "rgba(72, 79, 255, 0.5)";
 
         if (!title || !title.value.trim()) {
@@ -339,13 +359,13 @@ export class TransactionForm extends BaseComponent {
 
         if (!currency || !currency.value) {
             errors = true;
-            currencyDisplay?.classList.add("invalid");
+            currencyDisplay?.classList.add("transactions-form__input--invalid");
             if (!errorText) errorText = "Выберите валюту";
         }
 
         if (!category || !category.value) {
             errors = true;
-            categoryDisplay?.classList.add("invalid");
+            categoryDisplay?.classList.add("transactions-form__input--invalid");
             if (!errorText) errorText = "Выберите категорию";
         }
 
@@ -387,6 +407,7 @@ export class TransactionForm extends BaseComponent {
             "title": "#title_input",
             "value": "#value_input",
             "type": "#type_input",
+            "currency": "#currency_input",
             "category": "#category_input",
             "transaction_date": "#transaction_date_input",
             "description": "#description_input",
@@ -398,13 +419,13 @@ export class TransactionForm extends BaseComponent {
                 const input = form.querySelector<HTMLInputElement | HTMLTextAreaElement>(selector);
                 if (input) {
                     input.style.borderColor = "red";
-                    input.classList.add("invalid");
+                    input.classList.add("transactions-form__input--invalid");
                 }
                 
                 const displaySelector = selector.replace("_input", "_display");
                 const displayEl = form.querySelector<HTMLElement>(displaySelector);
                 if (displayEl) {
-                    displayEl.classList.add("invalid");
+                    displayEl.classList.add("transactions-form__input--invalid");
                 }
             }
         });
@@ -421,13 +442,13 @@ export class TransactionForm extends BaseComponent {
         const inputs = form.querySelectorAll<HTMLInputElement | HTMLTextAreaElement>("input, textarea");
         inputs.forEach(input => {
             input.style.borderColor = "";
-            input.classList.remove("invalid");
+            input.classList.remove("transactions-form__input--invalid");
         });
 
         const categoryDisplay = form.querySelector<HTMLElement>("#category_display");
         const currencyDisplay = form.querySelector<HTMLElement>("#currency_display");
-        categoryDisplay?.classList.remove("invalid");
-        currencyDisplay?.classList.remove("invalid");
+        categoryDisplay?.classList.remove("transactions-form__input--invalid");
+        currencyDisplay?.classList.remove("transactions-form__input--invalid");
     }
 
     /**
@@ -467,6 +488,7 @@ export class TransactionForm extends BaseComponent {
                 value: parseFloat(fields.value!.value),
                 type: fields.type!.value,
                 category: fields.category!.value,
+                currency: fields.currency!.value,
                 title: fields.title!.value.trim(),
                 description: fields.description!.value.trim(),
                 transaction_date: new Date(fields.transaction_date!.value).toISOString(),

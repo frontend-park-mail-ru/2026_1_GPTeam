@@ -1,5 +1,10 @@
+import path from 'node:path'
+import { fileURLToPath } from 'node:url'
 import { defineConfig } from 'vite'
 import { VitePWA } from 'vite-plugin-pwa'
+
+const __dirname = path.dirname(fileURLToPath(import.meta.url))
+const scssVariablesPath = path.resolve(__dirname, 'src/_variables.scss').replace(/\\/g, '/')
 
 export default defineConfig({
     plugins: [
@@ -28,6 +33,13 @@ export default defineConfig({
             'www.money-first.ru',
             'localhost'
         ]
+    },
+    css: {
+        preprocessorOptions: {
+            scss: {
+                additionalData: `@use "${scssVariablesPath}" as *;\n`
+            }
+        }
     },
     publicDir: 'public',
 })
