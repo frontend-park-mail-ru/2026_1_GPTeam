@@ -10,6 +10,7 @@ import { CustomSelect } from "../CustomSelect/custom_select";
 import { get_categories, get_currencies } from "../../store/store";
 import { validate_transaction_value, validate_transaction_date } from "../../utils/validation";
 import type { TransactionCreateRequest } from "../../types/interfaces";
+import {clean_data} from "../../utils/xss.ts";
 
 /**
  * Данные для инициализации формы в режиме редактирования.
@@ -307,6 +308,11 @@ export class TransactionForm extends BaseComponent {
      * @returns {boolean} true если есть ошибки валидации
      */
     private validate(fields: TransactionFormFields, error_message: HTMLElement): boolean {
+        for (let elem in fields) {
+            let field: any = fields[elem as keyof TransactionFormFields];
+            if (field)
+                field.value = clean_data(field.value);
+        }
         const { title, value, currency, category, transaction_date, description } = fields;
         let errors = false;
         let errorText = "";

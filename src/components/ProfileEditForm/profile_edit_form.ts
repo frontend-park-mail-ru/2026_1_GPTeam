@@ -10,6 +10,7 @@ import {
 } from "../../utils/validation.ts";
 import { router } from "../../router/router_instance.ts";
 import { update_profile } from "../../api/profile.ts";
+import {clean_data} from "../../utils/xss.ts";
 
 interface ProfileEditFormProps extends Record<string, unknown> {
     onSuccess?: () => void;
@@ -93,6 +94,11 @@ export class ProfileEditForm extends BaseComponent {
         },
         errorEl: HTMLElement
     ): boolean {
+        Object.entries(fields).forEach(([_, value]) => {
+            if (value) {
+                value.value = clean_data(value.value);
+            }
+        });
         const { username, email, currentPassword, newPassword, confirmPassword } = fields;
         let hasErrors = false;
         errorEl.innerText = "";
