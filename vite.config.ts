@@ -1,7 +1,7 @@
-import path from 'node:path'
-import { fileURLToPath } from 'node:url'
-import { defineConfig } from 'vite'
-import { VitePWA } from 'vite-plugin-pwa'
+import path from "node:path"
+import { fileURLToPath } from "node:url"
+import { defineConfig } from "vite"
+import { VitePWA } from "vite-plugin-pwa"
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url))
 const scssVariablesPath = path.resolve(__dirname, 'src/_variables.scss').replace(/\\/g, '/')
@@ -9,14 +9,14 @@ const scssVariablesPath = path.resolve(__dirname, 'src/_variables.scss').replace
 export default defineConfig({
     plugins: [
         VitePWA({
-            strategies: 'injectManifest',
-            srcDir: 'public',
-            filename: 'service_worker.js',
+            strategies: "injectManifest",
+            srcDir: "src",
+            filename: "service_worker.ts",
             injectManifest: {
-                swDest: 'dist/service_worker.js'
+                swDest: "dist/service_worker.js"
             },
             devOptions: {
-                enabled: false,
+                type: "module",
             }
         })
     ],

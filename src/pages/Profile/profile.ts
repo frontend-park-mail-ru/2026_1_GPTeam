@@ -38,7 +38,6 @@ export class ProfilePage extends BasePage {
         }
 
         const profile = data.user;
-        console.log(profile);
 
         const formatDate = (isoDate: string): string => {
             const date = new Date(isoDate);
@@ -66,7 +65,6 @@ export class ProfilePage extends BasePage {
                 ? `http://localhost:8081/img/${profile.avatar_url}`
                 : "",
         });
-        console.log(avatar);
         avatar.render(root.querySelector<HTMLElement>(".js--profile-avatar-slot")!);
         this._components.push(avatar);
 

@@ -23,7 +23,6 @@ interface ProfileAvatarProps {
  */
 export class ProfileAvatar extends BaseComponent {
     constructor(props: ProfileAvatarProps) {
-        console.log(props);
         const initials = props.username
             ? props.username.slice(0, 2).toUpperCase()
             : "??";
