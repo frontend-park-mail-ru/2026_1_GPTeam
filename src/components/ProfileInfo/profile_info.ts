@@ -1,6 +1,6 @@
 import { BaseComponent } from "../base_component.ts";
 import template from "./profile_info.hbs?raw";
-import "./profile_info.css";
+import "./profile_info.scss";
 import type { User } from "../../types/interfaces.ts";
 
 /** Props для компонента ProfileInfo. */

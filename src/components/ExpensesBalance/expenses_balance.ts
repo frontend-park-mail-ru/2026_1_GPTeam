@@ -1,6 +1,6 @@
 import { BaseComponent } from "../base_component.ts";
 import template from "./expenses_balance.hbs?raw";
-import "./expenses_balance.css";
+import "./expenses_balance.scss";
 
 /**
  * Компонент отображения баланса расходов.

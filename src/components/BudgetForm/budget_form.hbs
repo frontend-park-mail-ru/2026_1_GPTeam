@@ -1,72 +1,72 @@
-<div class="budget-form-card">
-    <h3 class="budget-form-title">Новый бюджет</h3>
+<div class="budget-form">
+    <h3 class="budget-form__title">Новый бюджет</h3>
     <form>
         <label for="title_input">Название</label>
-        <div class="input-wrapper">
-            <input class="budget-form-input" id="title_input" type="text" name="title" placeholder="Название" autocomplete="off">
+        <div class="budget-form__input-wrapper">
+            <input class="budget-form__input" id="title_input" type="text" name="title" placeholder="Название" autocomplete="off">
         </div>
 
         <label for="description_input">Описание</label>
-        <div class="input-wrapper">
-            <input class="budget-form-input" id="description_input" type="text" name="description" placeholder="Описание" autocomplete="off">
+        <div class="budget-form__input-wrapper">
+            <input class="budget-form__input" id="description_input" type="text" name="description" placeholder="Описание" autocomplete="off">
         </div>
 
         <label for="target_input">Планируемый бюджет</label>
-        <div class="input-wrapper">
-            <input class="budget-form-input" id="target_input" type="number" step="any" name="target" placeholder="100" autocomplete="off">
-            <div class="budget-help-wrap">
-                <img class="budget-help" src="/icons/question.svg" alt="Справка">
-                <div class="budget-tooltip">Число больше 0, не больше триллиона</div>
+        <div class="budget-form__input-wrapper">
+            <input class="budget-form__input" id="target_input" type="number" step="any" name="target" placeholder="100" autocomplete="off">
+            <div class="budget-form__help-wrap">
+                <img class="budget-form__help" src="/icons/question.svg" alt="Справка">
+                <div class="budget-form__tooltip">Число больше 0, не больше триллиона</div>
             </div>
         </div>
 
         <label>Валюта</label>
-        <div class="input-wrapper">
-            <div class="budget-form-input custom-select__display" id="currency_display"></div>
+        <div class="budget-form__input-wrapper">
+            <div class="budget-form__input custom-select__display" id="currency_display"></div>
             <input type="hidden" id="currency_input" name="currency">
             <span class="custom-select__arrow">▾</span>
             <div class="custom-select__dropdown" id="currency_dropdown"></div>
         </div>
 
         <label>Начало</label>
-        <div class="budget-date-wrapper">
-            <div class="input-wrapper">
+        <div class="budget-form__date-wrapper">
+            <div class="budget-form__input-wrapper">
                 <input type="text"
-                    class="budget-form-input budget-date-display"
+                    class="budget-form__input budget-form__date-display"
                     id="start_at_display"
                     placeholder="ДД.ММ.ГГГГ"
                     maxlength="10"
                     autocomplete="off">
                 <input type="hidden" id="start_at_input" name="start_at">
-                <img class="budget-calendar-icon" id="start_at_calendar_btn" src="/icons/calendar.png" alt="Календарь">
-                <div class="budget-help-wrap">
-                    <img class="budget-help" src="/icons/question.svg" alt="Справка">
-                    <div class="budget-tooltip">Не раньше сегодня и не позже чем через 5 лет</div>
+                <img class="budget-form__calendar-icon" id="start_at_calendar_btn" src="/icons/calendar.png" alt="Календарь">
+                <div class="budget-form__help-wrap">
+                    <img class="budget-form__help" src="/icons/question.svg" alt="Справка">
+                    <div class="budget-form__tooltip">Не раньше сегодня и не позже чем через 5 лет</div>
                 </div>
             </div>
             <div class="custom-calendar__popup" id="start_at_calendar"></div>
         </div>
 
         <label>Конец (необязательно)</label>
-        <div class="budget-date-wrapper">
-            <div class="input-wrapper">
+        <div class="budget-form__date-wrapper">
+            <div class="budget-form__input-wrapper">
                 <input type="text"
-                    class="budget-form-input budget-date-display"
+                    class="budget-form__input budget-form__date-display"
                     id="end_at_display"
                     placeholder="ДД.ММ.ГГГГ"
                     maxlength="10"
                     autocomplete="off">
                 <input type="hidden" id="end_at_input" name="end_at">
-                <img class="budget-calendar-icon" id="end_at_calendar_btn" src="/icons/calendar.png" alt="Календарь">
-                <div class="budget-help-wrap">
-                    <img class="budget-help" src="/icons/question.svg" alt="Справка">
-                    <div class="budget-tooltip">Позже даты начала, разрыв не более 5 лет</div>
+                <img class="budget-form__calendar-icon" id="end_at_calendar_btn" src="/icons/calendar.png" alt="Календарь">
+                <div class="budget-form__help-wrap">
+                    <img class="budget-form__help" src="/icons/question.svg" alt="Справка">
+                    <div class="budget-form__tooltip">Позже даты начала, разрыв не более 5 лет</div>
                 </div>
             </div>
             <div class="custom-calendar__popup" id="end_at_calendar"></div>
         </div>
 
-        <p class="budget-form-error" id="error_message"></p>
-        <button class="budget-form-btn" type="submit">Создать бюджет</button>
+        <p class="budget-form__error" id="error_message"></p>
+        <button class="budget-form__btn" type="submit">Создать бюджет</button>
     </form>
 </div>

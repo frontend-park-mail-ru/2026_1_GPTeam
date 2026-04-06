@@ -1,7 +1,7 @@
 import { BasePage } from "../base_page.ts";
 import { AuthForm } from "../../components/AuthForm/auth_form.ts";
 import { router } from "../../router/router_instance.ts";
-import "./login.css";
+import "./login.scss";
 
 /**
  * Страница входа в систему.
