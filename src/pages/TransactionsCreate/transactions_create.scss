@@ -1,4 +1,4 @@
-.transaction-create-page {
+.transactions-create {
     display: flex;
     justify-content: center;
     align-items: center;
@@ -8,7 +8,7 @@
     box-sizing: border-box;
 }
 
-.transaction-create-page .container {
+.transactions-create .transactions-create__container {
     width: 100%;
     max-width: 860px;
     animation: fadeIn 0.4s ease-out;

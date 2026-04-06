@@ -1,65 +1,65 @@
-<div class="auth-wrapper">
-    <div class="auth-logo">
-        <a href="/" data-link class="auth-logo__text">MoneyFirst</a>
+<div class="auth-form">
+    <div class="auth-form__logo">
+        <a href="/" data-link class="auth-form__logo-text">MoneyFirst</a>
     </div>
-    <div class="card">
+    <div class="auth-form__card">
         {{#equal mode "login"}}
-            <h3 class="title">Вход</h3>
+            <h3 class="auth-form__title">Вход</h3>
         {{else}}
-            <h3 class="title">Регистрация</h3>
+            <h3 class="auth-form__title">Регистрация</h3>
         {{/equal}}
 
         <form>
             <label for="username_input">Логин</label>
-            <div class="input-wrapper">
-                <input class="input" id="username_input" type="text" name="username" placeholder="Логин" autocomplete="off">
-                <div class="help-wrap">
-                    <img class="help_abc" src="/icons/question.svg" alt="Справка">
-                    <div class="help-tooltip" id="help_abc_text">Доступны символы латинского алфавита и цифры</div>
+            <div class="auth-form__input-wrapper">
+                <input class="auth-form__input" id="username_input" type="text" name="username" placeholder="Логин" autocomplete="off">
+                <div class="auth-form__help-wrap">
+                    <img class="auth-form__help-abc" src="/icons/question.svg" alt="Справка">
+                    <div class="auth-form__help-tooltip" id="help_abc_text">Доступны символы латинского алфавита и цифры</div>
                 </div>
             </div>
 
             {{#equal mode "signup"}}
                 <label for="email_input">Email</label>
-                <div class="input-wrapper">
-                    <input class="input" id="email_input" type="text" name="email" placeholder="Email" autocomplete="off">
-                    <div class="help-wrap">
-                        <img class="help_email" src="/icons/question.svg" alt="Справка">
-                        <div class="help-tooltip">Формат: email@email.com или почта@почта.рф</div>
+                <div class="auth-form__input-wrapper">
+                    <input class="auth-form__input" id="email_input" type="text" name="email" placeholder="Email" autocomplete="off">
+                    <div class="auth-form__help-wrap">
+                        <img class="auth-form__help-email" src="/icons/question.svg" alt="Справка">
+                        <div class="auth-form__help-tooltip">Формат: email@email.com или почта@почта.рф</div>
                     </div>
                 </div>
             {{/equal}}
 
             <label for="password_input">Пароль</label>
-            <div class="input-wrapper">
-                <input class="input" id="password_input" type="password" name="password" placeholder="Пароль" autocomplete="off">
-                <img class="eye_btn" src="/icons/closed_eye.svg" alt="Показать пароль">
+            <div class="auth-form__input-wrapper">
+                <input class="auth-form__input" id="password_input" type="password" name="password" placeholder="Пароль" autocomplete="off">
+                <img class="auth-form__eye-btn" src="/icons/closed_eye.svg" alt="Показать пароль">
                 {{#equal mode "signup"}}
-                    <div class="help-wrap help-wrap--password">
-                        <img class="help_password" src="/icons/question.svg" alt="Справка">
-                        <div class="help-tooltip">Минимум 8 символов, заглавная буква и цифра</div>
+                    <div class="auth-form__help-wrap auth-form__help-wrap--password">
+                        <img class="auth-form__help-password" src="/icons/question.svg" alt="Справка">
+                        <div class="auth-form__help-tooltip">Минимум 8 символов, заглавная буква и цифра</div>
                     </div>
                 {{/equal}}
             </div>
 
             {{#equal mode "signup"}}
                 <label for="confirm_password_input">Повторите пароль</label>
-                <div class="input-wrapper">
-                    <input class="input" id="confirm_password_input" type="password" name="confirm_password" placeholder="Пароль снова" autocomplete="off">
-                    <img class="confirm_eye_btn" src="/icons/closed_eye.svg" alt="Показать пароль">
+                <div class="auth-form__input-wrapper">
+                    <input class="auth-form__input" id="confirm_password_input" type="password" name="confirm_password" placeholder="Пароль снова" autocomplete="off">
+                    <img class="auth-form__confirm-eye-btn" src="/icons/closed_eye.svg" alt="Показать пароль">
                 </div>
             {{/equal}}
 
-            <p class="error-message" id="error_message"></p>
+            <p class="auth-form__error-message" id="error_message"></p>
 
             {{#equal mode "login"}}
-                <button class="btn" type="submit">Войти</button>
+                <button class="auth-form__btn" type="submit">Войти</button>
             {{else}}
-                <button class="btn" type="submit">Зарегистрироваться</button>
+                <button class="auth-form__btn" type="submit">Зарегистрироваться</button>
             {{/equal}}
         </form>
 
-        <p class="footer-text">
+        <p class="auth-form__footer-text">
             {{#equal mode "login"}}
                 Ещё нет аккаунта? <a href="/signup" data-link>Зарегистрироваться</a>
             {{else}}

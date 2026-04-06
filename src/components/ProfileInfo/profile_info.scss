@@ -1,22 +1,22 @@
-.profile-info-cards {
+.profile-info {
     display: grid;
     grid-template-columns: 1fr 1fr;
     gap: 16px;
     width: 100%;
 }
 
-.profile-info-card {
+.profile-info__card {
     background: rgb(255 255 255 / 3%);
     border: 1px solid rgb(255 255 255 / 8%);
     border-radius: 20px;
     padding: 28px;
 }
 
-.profile-info-card--wide {
+.profile-info__card--wide {
     grid-column: span 2;
 }
 
-.profile-info-card__label {
+.profile-info__label {
     font-size: 12px;
     font-weight: 700;
     text-transform: uppercase;
@@ -26,7 +26,7 @@
     font-family: Manrope, sans-serif;
 }
 
-.profile-info-card__value {
+.profile-info__value {
     font-size: 18px;
     font-weight: 600;
     color: #fff;

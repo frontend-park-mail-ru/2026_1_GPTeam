@@ -1,4 +1,4 @@
-.transaction-form-card {
+.transactions-form {
     background: transparent;
     border-radius: 20px;
     padding: 0;
@@ -7,12 +7,12 @@
     margin: 0 auto;
 }
 
-.transaction-form-card label span {
+.transactions-form label span {
     margin-left: 15px;
     color: rgb(255 255 255 / 60%);
 }
 
-.transaction-form-title {
+.transactions-form__title {
     color: #fff;
     font-size: 28px;
     font-weight: 700;
@@ -20,14 +20,14 @@
     margin-bottom: 32px;
 }
 
-.transaction-form-card label {
+.transactions-form label {
     display: block;
     color: rgb(255 255 255 / 70%);
     font-size: 14px;
     margin-bottom: 6px;
 }
 
-.transaction-date-display {
+.transactions-form__date-display {
     background: transparent;
     border: none;
     outline: none;
@@ -35,12 +35,12 @@
     width: 100%;
 }
 
-.input-wrapper {
+.transactions-form__input-wrapper {
     position: relative;
     margin-bottom: 16px;
 }
 
-.transaction-form-input {
+.transactions-form__input {
     width: 100%;
     background: transparent;
     border: 1px solid rgb(72 79 255 / 50%);
@@ -55,17 +55,17 @@
     display: block;
 }
 
-.transaction-form-input::-webkit-inner-spin-button,
-.transaction-form-input::-webkit-outer-spin-button {
+.transactions-form__input::-webkit-inner-spin-button,
+.transactions-form__input::-webkit-outer-spin-button {
     appearance: none;
     margin: 0;
 }
 
-.transaction-form-input.invalid {
+.transactions-form__input.transactions-form__input--invalid {
     border-color: #ef4444;
 }
 
-.transaction-help-wrap {
+.transactions-form__help-wrap {
     position: absolute;
     right: 14px;
     top: 50%;
@@ -74,7 +74,7 @@
     align-items: center;
 }
 
-.transaction-calendar-icon {
+.transactions-form__calendar-icon {
     position: absolute;
     right: 42px;
     top: 50%;
@@ -85,11 +85,11 @@
     transition: opacity 0.2s;
 }
 
-.transaction-calendar-icon:hover {
+.transactions-form__calendar-icon:hover {
     opacity: 1;
 }
 
-.transaction-date-wrapper {
+.transactions-form__date-wrapper {
     position: relative;
 }
 
@@ -227,7 +227,7 @@
     padding-right: 44px;
 }
 
-.custom-select__display.invalid {
+.custom-select__display.transactions-form__input--invalid {
     border-color: #ef4444;
 }
 
@@ -278,7 +278,7 @@
     background: rgb(72 79 255 / 15%);
 }
 
-.transaction-help {
+.transactions-form__help {
     width: 20px;
     height: 20px;
     cursor: pointer;
@@ -286,11 +286,11 @@
     transition: opacity 0.2s;
 }
 
-.transaction-help:hover {
+.transactions-form__help:hover {
     opacity: 1;
 }
 
-.transaction-tooltip {
+.transactions-form__tooltip {
     visibility: hidden;
     opacity: 0;
     position: absolute;
@@ -311,7 +311,7 @@
     z-index: 10;
 }
 
-.transaction-tooltip::after {
+.transactions-form__tooltip::after {
     content: '';
     position: absolute;
     bottom: -5px;
@@ -324,18 +324,18 @@
     border-bottom: 1px solid rgb(72 79 255 / 30%);
 }
 
-.transaction-help-wrap:hover .transaction-tooltip {
+.transactions-form__help-wrap:hover .transactions-form__tooltip {
     visibility: visible;
     opacity: 1;
 }
 
-.transaction-form-actions {
+.transactions-form__actions {
     display: flex;
     gap: 12px;
     margin-top: 24px;
 }
 
-.transaction-form-btn {
+.transactions-form__btn {
     flex: 1;
     background: #484fff;
     color: #fff;
@@ -350,19 +350,19 @@
     box-sizing: border-box;
 }
 
-.transaction-form-btn:disabled {
+.transactions-form__btn:disabled {
     background-color: gray;
     box-shadow: none;
     cursor: not-allowed;
     transform: none;
 }
 
-.transaction-form-btn:hover:not(:disabled) {
+.transactions-form__btn:hover:not(:disabled) {
     box-shadow: 0 0 36px rgb(72 79 255 / 70%);
     transform: translateY(-1px);
 }
 
-.transaction-form-btn-secondary {
+.transactions-form__btn--secondary {
     flex: 1;
     background: rgb(72 79 255 / 20%);
     color: #fff;
@@ -376,11 +376,11 @@
     box-sizing: border-box;
 }
 
-.transaction-form-btn-secondary:hover {
+.transactions-form__btn--secondary:hover {
     background: rgb(72 79 255 / 30%);
 }
 
-.transaction-form-error {
+.transactions-form__error {
     color: #ef4444;
     font-size: 14px;
     text-align: center;
@@ -389,18 +389,18 @@
     overflow-wrap: break-word;
 }
 
-.transaction-form-row {
+.transactions-form__row {
     display: grid;
     grid-template-columns: 1fr 1fr;
     gap: 16px;
 }
 
 @media (max-width: 600px) {
-    .transaction-form-row {
+    .transactions-form__row {
         grid-template-columns: 1fr;
     }
     
-    .transaction-form-card {
+    .transactions-form {
         width: 100%;
         padding: 0 16px;
         box-sizing: border-box;

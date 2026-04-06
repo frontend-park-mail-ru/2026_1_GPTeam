@@ -1,6 +1,6 @@
 import { BaseComponent } from "../base_component.ts";
 import template from "./modal.hbs?raw";
-import "./modal.css";
+import "./modal.scss";
 
 interface ModalProps extends Record<string, unknown> {
     title?: string;
@@ -37,8 +37,8 @@ export class Modal extends BaseComponent {
      * @protected
      */
     protected _afterRender(): void {
-        const confirmBtn = this._element?.querySelector<HTMLElement>(".modal-btn-confirm");
-        const cancelBtn = this._element?.querySelector<HTMLElement>(".modal-btn-cancel");
+        const confirmBtn = this._element?.querySelector<HTMLElement>(".modal__btn--confirm");
+        const cancelBtn = this._element?.querySelector<HTMLElement>(".modal__btn--cancel");
 
         if (confirmBtn) this._on(confirmBtn, "click", () => this._onConfirm?.());
         if (cancelBtn) this._on(cancelBtn, "click", () => this._onCancel?.());

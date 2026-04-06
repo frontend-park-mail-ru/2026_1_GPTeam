@@ -1,4 +1,4 @@
-.income-balance {
+.expenses-balance {
     background: linear-gradient(135deg, rgb(72 79 255 / 15%), rgb(72 79 255 / 5%));
     border-radius: 16px;
     width: 100%;
@@ -8,7 +8,7 @@
     overflow: hidden;
 }
 
-.income-balance__label {
+.expenses-balance__label {
     color: rgb(255 255 255 / 40%);
     font-size: 11px;
     font-weight: 600;
@@ -17,7 +17,7 @@
     margin: 0 0 12px;
 }
 
-.income-balance__amount {
+.expenses-balance__amount {
     color: #fff;
     font-size: 32px;
     font-weight: 700;
@@ -27,13 +27,18 @@
     gap: 6px;
 }
 
-.income-balance__currency {
+.expenses-balance__currency {
     color: rgb(255 255 255 / 60%);
     font-size: 18px;
     font-weight: 600;
 }
 
-.balance_up_icon {
+.expenses-balance__value {
+    max-width: 84%;
+    overflow-wrap: break-word;
+}
+
+.expenses-balance__icon {
     width: 20px;
     height: 20px;
 }

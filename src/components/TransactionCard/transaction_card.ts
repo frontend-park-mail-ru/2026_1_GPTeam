@@ -1,7 +1,7 @@
 import { BaseComponent } from "../base_component";
 // @ts-ignore
 import template from "./transaction_card.hbs?raw";
-import "./transaction_card.css";
+import "./transaction_card.scss";
 import { Transaction } from "../../types/interfaces";
 import { deleteTransaction } from "../../api/transactions";
 import { Modal } from "../Modal/modal";

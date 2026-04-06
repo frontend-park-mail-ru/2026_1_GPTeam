@@ -1,6 +1,6 @@
 import { BaseComponent } from "../base_component.ts";
 import template from "./profile_avatar.hbs?raw";
-import "./profile_avatar.css";
+import "./profile_avatar.scss";
 import type { User } from "../../types/interfaces.ts";
 
 /** Props для компонента ProfileAvatar. */
