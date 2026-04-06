@@ -6,7 +6,7 @@ import Handlebars from "handlebars";
 import { router } from "../../router/router_instance";
 // @ts-ignore
 import template from "./operations.hbs?raw";
-import "./operations.css";
+import "./operations.scss";
 
 /**
  * Страница списка операций с фильтрацией по типу и периоду.

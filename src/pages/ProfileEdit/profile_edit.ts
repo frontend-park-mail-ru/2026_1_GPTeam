@@ -3,7 +3,7 @@ import template from "./profile_edit.hbs?raw";
 import { ProfileAvatar } from "../../components/ProfileAvatar/profile_avatar.ts";
 import { ProfileEditForm } from "../../components/ProfileEditForm/profile_edit_form.ts";
 import { router } from "../../router/router_instance.ts";
-import "./profile_edit.css";
+import "./profile_edit.scss";
 import Handlebars from "handlebars";
 import type { SimpleResponse } from "../../types/interfaces.ts";
 import { get_profile } from "../../api/profile.ts";
@@ -75,6 +75,8 @@ export class ProfileEditPage extends BasePage {
         if (avatarEmail) avatarEmail.style.display = "none";
 
         const form = new ProfileEditForm({
+            initialUsername: profile.username,
+            initialEmail: profile.email,
             onSuccess: () => {
                 this._showToast(root, "success");
                 setTimeout(() => router.navigate("/profile"), 2000);

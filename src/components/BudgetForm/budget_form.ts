@@ -1,6 +1,6 @@
 import { BaseComponent } from "../base_component.ts";
 import template from "./budget_form.hbs?raw";
-import "./budget_form.css";
+import "./budget_form.scss";
 import { client } from "../../api/client.ts";
 import { get_currencies } from "../../store/store.ts";
 import { router } from "../../router/router_instance.ts";
@@ -11,6 +11,7 @@ import {
     validate_end_date,
     validate_start_date,
 } from "../../utils/validation.ts";
+import {clean_data} from "../../utils/xss.ts";
 
 interface BudgetFormFields {
     title: HTMLInputElement | null;
@@ -168,6 +169,13 @@ export class BudgetForm extends BaseComponent {
      * @returns {boolean} true если есть ошибки
      */
     validate(fields: BudgetFormFields, error_message: HTMLElement): boolean {
+        for (let elem in fields) {
+            let field: HTMLInputElement | null = fields[elem as keyof BudgetFormFields];
+            if (field) {
+                field.value = clean_data(field.value);
+            }
+            console.log(elem, ":", field?.value)
+        }
         const { title, description, target, currency, start_at, end_at } = fields;
         let errors = false;
         let errorText = "";

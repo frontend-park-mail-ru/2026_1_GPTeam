@@ -1,6 +1,6 @@
 import { BaseComponent } from "../base_component.ts";
 import template from "./total_balance.hbs?raw";
-import "./total_balance.css";
+import "./total_balance.scss";
 
 interface TotalBalanceProps extends Record<string, unknown> {
     balance?: string | number;

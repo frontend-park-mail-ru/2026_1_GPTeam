@@ -8,7 +8,7 @@ import { router } from "./router/router_instance.ts";
 import { LoginPage } from "./pages/Login/login.ts";
 import { SignupPage } from "./pages/Signup/signup.ts";
 import { BudgetPage } from "./pages/Budget/budget.ts";
-import "./styles/global.css";
+import "./styles/global.scss";
 import { LandingPage } from "./pages/Landing/landing.ts";
 import { ProfilePage } from "./pages/Profile/profile.ts";
 import { BalancePage } from "./pages/Balance/balance.ts";

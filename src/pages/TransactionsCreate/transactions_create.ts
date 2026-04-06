@@ -2,7 +2,7 @@ import { BasePage } from "../base_page";
 import { TransactionForm } from "../../components/TransactionsForm/transactions_form";
 // @ts-ignore
 import template from "./transactions_create.hbs?raw";
-import "./transactions_create.css";
+import "./transactions_create.scss";
 
 /**
  * Страница создания новой транзакции.

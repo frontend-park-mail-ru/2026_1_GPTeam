@@ -5,7 +5,7 @@ import { Modal } from "../../components/Modal/modal";
 import Handlebars from "handlebars";
 // @ts-ignore
 import template from "./transactions_detail.hbs?raw";
-import "./transactions_detail.css";
+import "./transactions_detail.scss";
 
 /**
  * Страница детального просмотра транзакции.
@@ -28,8 +28,8 @@ export class TransactionDetailPage extends BasePage {
         root.innerHTML = `
             <div class="page">
                 <main class="page__content">
-                    <div class="transaction-detail-page" id="detail_root">
-                        <div class="detail-loading">Загрузка...</div>
+                    <div class="transactions-detail-page" id="detail_root">
+                        <div class="transactions-detail__loading">Загрузка...</div>
                     </div>
                 </main>
             </div>
@@ -47,7 +47,7 @@ export class TransactionDetailPage extends BasePage {
         const data = await fetchTransactionDetail(this._transactionId);
 
         if (!data) {
-            container.innerHTML = `<div class="detail-error">Транзакция не найдена</div>`;
+            container.innerHTML = `<div class="transactions-detail__error">Транзакция не найдена</div>`;
             return;
         }
 

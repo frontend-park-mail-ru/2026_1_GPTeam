@@ -1,6 +1,6 @@
 import { BasePage } from "../base_page.ts";
 import template from "./landing.hbs?raw";
-import "./landing.css";
+import "./landing.scss";
 import { is_login } from "../../api/auth.ts";
 import { router } from "../../router/router_instance.ts";
 import "@fontsource/manrope/400.css";
@@ -54,7 +54,7 @@ export class LandingPage extends BasePage {
             });
         }
 
-        root.querySelectorAll<HTMLElement>(".cta-primary").forEach(btn => {
+        root.querySelectorAll<HTMLElement>(".landing__cta-primary").forEach(btn => {
             btn.addEventListener("click", (e) => {
                 e.preventDefault();
                 router.navigate(authorized ? "/balance" : "/signup");

@@ -1,0 +1,43 @@
+.header {
+    border: #484fff solid 2px;
+    border-radius: 15px;
+    width: 70vw;
+    margin: auto;
+    padding: 15px 0;
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    background-color: black;
+
+    &__link {
+        text-decoration: none;
+        color: white;
+        padding: 10px;
+        display: flex;
+        align-items: center;
+        font-size: 14px;
+        font-family: Manrope, sans-serif;
+        gap: 6px;
+        border-radius: 30px;
+
+        &:hover {
+            background-color: #1c1a1a;
+        }
+
+        img {
+            width: 30px;
+            height: 30px;
+        }
+
+        &--brand {
+            font-size: 18px;
+            transition: background-color 0.2s;
+        }
+
+        &--active {
+            color: #484fff;
+            background-color: #1c1a1a;
+            border-radius: 30px;
+        }
+    }
+}

@@ -1,12 +1,13 @@
 import { BaseComponent } from "../base_component.ts";
 import template from "./auth_form.hbs?raw";
-import "./auth_form.css";
+import "./auth_form.scss";
 import "../../utils/helpers.ts";
 import { is_empty, validate_username, validate_password, are_password_equal, validate_email } from "../../utils/validation.ts";
 import { client } from "../../api/client.ts";
 import { router } from "../../router/router_instance.ts";
 import { is_login } from "../../api/auth.ts";
 import type { AuthResponse as AuthResponseType } from "../../types/interfaces.ts";
+import {clean_data} from "../../utils/xss.ts";
 
 interface AuthFormProps {
     mode: "login" | "signup";
@@ -49,8 +50,8 @@ export class AuthForm extends BaseComponent {
     protected _addEventListeners(): void {
         const form = this.getElement();
         if (!form) return;
-        const eye_btn = form.querySelector<HTMLImageElement>(".eye_btn");
-        const confirm_eye_btn = form.querySelector<HTMLImageElement>(".confirm_eye_btn");
+        const eye_btn = form.querySelector<HTMLImageElement>(".auth-form__eye-btn");
+        const confirm_eye_btn = form.querySelector<HTMLImageElement>(".auth-form__confirm-eye-btn");
         const password = form.querySelector<HTMLInputElement>("#password_input");
         const confirm_password = form.querySelector<HTMLInputElement>("#confirm_password_input");
 
@@ -85,6 +86,11 @@ export class AuthForm extends BaseComponent {
         },
         error_message: HTMLElement
     ): boolean {
+        Object.entries(fields).forEach(([_, value]) => {
+            if (value) {
+                value.value = clean_data(value.value);
+            }
+        });
         const { username, password, confirm_password, email } = fields;
         let firstError = "";
         error_message.innerText = "";
@@ -92,12 +98,12 @@ export class AuthForm extends BaseComponent {
         const allFields = [username, password, confirm_password, email].filter((f): f is HTMLInputElement => f !== null);
         allFields.forEach(f => {
             f.style.borderColor = "#484FFF";
-            f.classList.remove("invalid");
+            f.classList.remove("auth-form__input--invalid");
         });
 
         const markInvalid = (input: HTMLInputElement, error: string): void => {
-            input.classList.add("invalid");
-            input.classList.remove("valid");
+            input.classList.add("auth-form__input--invalid");
+            input.classList.remove("auth-form__input--valid");
             if (!firstError) firstError = error;
         };
 
@@ -185,8 +191,8 @@ export class AuthForm extends BaseComponent {
                 console.error(data.message);
             } else {
                 const markInvalid = (input: HTMLInputElement): void => {
-                    input.classList.add("invalid");
-                    input.classList.remove("valid");
+                    input.classList.add("auth-form__input--invalid");
+                    input.classList.remove("auth-form__input--valid");
                 };
                 if (data.errors && Array.isArray(data.errors)) {
                     data.errors.forEach(err => {

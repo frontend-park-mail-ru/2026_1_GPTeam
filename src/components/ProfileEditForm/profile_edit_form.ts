@@ -1,6 +1,6 @@
 import { BaseComponent } from "../base_component.ts";
 import template from "./profile_edit_form.hbs?raw";
-import "./profile_edit_form.css";
+import "./profile_edit_form.scss";
 import {
     is_empty,
     validate_username,
@@ -10,10 +10,13 @@ import {
 } from "../../utils/validation.ts";
 import { router } from "../../router/router_instance.ts";
 import { update_profile } from "../../api/profile.ts";
+import {clean_data} from "../../utils/xss.ts";
 
 interface ProfileEditFormProps extends Record<string, unknown> {
     onSuccess?: () => void;
     onError?: () => void;
+    initialUsername?: string;
+    initialEmail?: string;
 }
 
 /**
@@ -27,11 +30,15 @@ interface ProfileEditFormProps extends Record<string, unknown> {
 export class ProfileEditForm extends BaseComponent {
     private _onSuccess?: () => void;
     private _onError?: () => void;
+    private _initialUsername: string;
+    private _initialEmail: string;
 
     constructor(props: ProfileEditFormProps) {
         super(template, props);
         this._onSuccess = props.onSuccess;
         this._onError = props.onError;
+        this._initialUsername = props.initialUsername ?? "";
+        this._initialEmail = props.initialEmail ?? "";
     }
 
     protected _addEventListeners(): void {
@@ -87,6 +94,11 @@ export class ProfileEditForm extends BaseComponent {
         },
         errorEl: HTMLElement
     ): boolean {
+        Object.entries(fields).forEach(([_, value]) => {
+            if (value) {
+                value.value = clean_data(value.value);
+            }
+        });
         const { username, email, currentPassword, newPassword, confirmPassword } = fields;
         let hasErrors = false;
         errorEl.innerText = "";
@@ -184,17 +196,22 @@ export class ProfileEditForm extends BaseComponent {
 
         try {
             const body: Record<string, string> = {};
-            if (usernameInput.value.trim()) body.username = usernameInput.value.trim();
-            if (emailInput.value.trim()) body.email = emailInput.value.trim();
-            if (newPasswordInput.value) body.password = newPasswordInput.value;
+            body.username = usernameInput.value.trim() || this._initialUsername;
+            body.email = emailInput.value.trim() || this._initialEmail;
+            if (newPasswordInput.value) {
+                body.password = newPasswordInput.value;
+                body.current_password = currentPasswordInput.value;
+            }
 
             const result = await update_profile(body);
             if (result.code === 200) {
                 this._onSuccess?.();
             } else {
+                errorEl.innerText = result.message || "Не удалось обновить профиль";
                 this._onError?.();
             }
         } catch {
+            errorEl.innerText = "Ошибка сети при обновлении профиля";
             this._onError?.();
         } finally {
             saveBtn.disabled = false;

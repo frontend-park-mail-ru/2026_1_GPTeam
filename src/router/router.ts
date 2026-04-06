@@ -101,7 +101,8 @@ export class Router {
                 this.root.innerHTML = "";
                 await page.render(this.root);
             }
-            this._onRouteChange?.(path);
+            // pathname may have changed if render() triggered a nested navigate()
+            this._onRouteChange?.(window.location.pathname);
             return;
         }
 
@@ -109,7 +110,9 @@ export class Router {
         this._currentPage = page;
         this.root.innerHTML = "";
         await page.render(this.root);
-        this._onRouteChange?.(path);
+        // Do not use the captured `path`: during await, render() may call navigate()
+        // (e.g. BalancePage 401 → /login). The outer frame would otherwise notify with a stale path.
+        this._onRouteChange?.(window.location.pathname);
     }
 
     /** Запускает роутер при первичной загрузке. */
