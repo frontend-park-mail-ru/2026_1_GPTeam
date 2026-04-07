@@ -78,7 +78,7 @@ export class TransactionCreatePage extends BasePage {
         fastBtn.onclick = () => {
             this.isFastMode = true;
             this.handleStart(startBtn, fastBtn, stopBtn, statusEl);
-            this.setStatus(statusEl, "⚡ Режим «Сразу» 🔴 запись...", "recording");
+            this.setStatus(statusEl, "⚡ Режим «Сразу» 🔴 запись (лимит 10 секунд)...", "recording");
             
             this.fastModeTimer = window.setTimeout(() => {
                 this.handleStop(startBtn, fastBtn, stopBtn, statusEl, root);
