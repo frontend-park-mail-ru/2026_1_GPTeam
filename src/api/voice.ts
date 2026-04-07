@@ -23,8 +23,6 @@ export async function sendVoiceTransaction(
     form.append("audio", blob, filename);
     form.append("recorded_at", new Date().toISOString());
 
-    // Content-Type не выставляем вручную —
-    // браузер сам проставит multipart/form-data с корректным boundary
     let response: Response;
     try {
         response = await client("/transactions/voice", {
