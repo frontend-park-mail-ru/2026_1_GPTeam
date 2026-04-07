@@ -1,6 +1,6 @@
 import { BaseComponent } from "../base_component.ts";
 import template from "./modal_form.hbs?raw";
-import "./modal_form.css";
+import "./modal_form.scss";
 
 interface ModalFormProps extends Record<string, unknown> {
     onClose?: () => void;
@@ -28,12 +28,12 @@ export class ModalForm extends BaseComponent {
 
     /**
      * Жизненный цикл компонента: вызывается после рендеринга.
-     * Настраивает обработчики закрытия окна через кнопку `.modal-form-close-btn`
+     * Настраивает обработчики закрытия окна через кнопку `.modal-form__close-btn`
      * или клик по подложке (оверлею).
      * @protected
      */
     protected _afterRender(): void {
-        const closeBtn = this._element?.querySelector<HTMLElement>(".modal-form-close-btn");
+        const closeBtn = this._element?.querySelector<HTMLElement>(".modal-form__close-btn");
         if (closeBtn) {
             this._on(closeBtn, "click", () => this._onClose?.());
         }

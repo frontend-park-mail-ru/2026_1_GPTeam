@@ -24,12 +24,19 @@ export class BudgetPage extends BasePage {
      * @param {HTMLElement} root
      */
     async render(root: HTMLElement): Promise<void> {
+        const today = new Date().toLocaleDateString("ru-RU", {
+            day: "2-digit",
+            month: "long",
+            year: "numeric",
+        });
+
         root.innerHTML = `
             <div class="page">
                 <main class="page__content">
                     <div class="budget">
                         <div class="budget__header">
                             <h2 class="budget__title js--inner-header">Бюджет</h2>
+                            <p class="budget__page-date">${today}</p>
                         </div>
                         <div class="budget__list js--budget-list"></div>
                         <div class="budget__slot js--budget-slot"></div>
@@ -42,7 +49,7 @@ export class BudgetPage extends BasePage {
 
     destroy(): void {
         super.destroy();
-        document.querySelectorAll(".modal-overlay, .modal-form-overlay").forEach(el => el.remove());
+        document.querySelectorAll(".modal, .modal-form").forEach(el => el.remove());
     }
 
     /**

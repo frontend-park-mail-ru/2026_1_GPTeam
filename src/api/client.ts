@@ -20,7 +20,7 @@ export const SERVER_URL: string = import.meta.env.VITE_SERVER_URL;
  * @throws {TypeError} Если сетевое соединение прервано или URL невалиден
  */
 export const client = (url: string, data: RequestInit = {}): Promise<Response> => {
-    let token = get_token();
+    let token: string | null= get_token();
     if (!token) {
         token = "";
     }

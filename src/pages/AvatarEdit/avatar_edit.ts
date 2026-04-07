@@ -2,7 +2,7 @@ import { BasePage } from "../base_page.ts";
 import template from "./avatar_edit.hbs?raw";
 import { AvatarEditForm } from "../../components/AvatarEditForm/avatar_edit_form.ts";
 import { router } from "../../router/router_instance.ts";
-import "./avatar_edit.css";
+import "./avatar_edit.scss";
 import Handlebars from "handlebars";
 import type { SimpleResponse } from "../../types/interfaces.ts";
 import { get_profile } from "../../api/profile.ts";

@@ -1,6 +1,6 @@
 import { BaseComponent } from "../base_component.ts";
 import template from "./header.hbs?raw";
-import "./header.css";
+import "./header.scss";
 import { get_profile } from "../../api/profile.ts";
 import type { SimpleResponse } from "../../types/interfaces.ts";
 
@@ -56,10 +56,10 @@ export class Header extends BaseComponent {
         const links = this._element.querySelectorAll<HTMLAnchorElement>("a");
 
         for (const link of links) {
-            link.classList.remove("active_header_link");
+            link.classList.remove("header__link--active");
 
             if (link.getAttribute("href") === "/profile") {
-                link.classList.remove("profile_icon_active");
+                link.classList.remove("header__link--profile-active");
                 const icon = link.querySelector<HTMLImageElement>("img");
                 if (icon && icon.src.endsWith("/icons/profile_active.svg")) {
                     icon.src = "/icons/profile.svg";
@@ -69,10 +69,9 @@ export class Header extends BaseComponent {
 
         for (const link of links) {
             if (link.getAttribute("href") === path) {
-                link.classList.add("active_header_link");
+                link.classList.add("header__link--active");
                 if (path === "/profile") {
-                    link.classList.remove("profile_icon");
-                    link.classList.add("profile_icon_active");
+                    link.classList.add("header__link--profile-active");
                     const icon = link.querySelector<HTMLImageElement>("img");
                     if (icon && icon.src.endsWith("/icons/profile.svg")) {
                         icon.src = "/icons/profile_active.svg";
@@ -87,7 +86,7 @@ export class Header extends BaseComponent {
             const data = await get_profile() as ProfileApiResponse;
             if (data.code !== 200 || !data.user?.avatar_url) return;
 
-            const profileLink = document.querySelector<HTMLAnchorElement>("a[href='/profile']");
+            const profileLink = this._element?.querySelector<HTMLAnchorElement>("a[href='/profile']");
             if (!profileLink) return;
 
             const icon = profileLink.querySelector<HTMLImageElement>("img");

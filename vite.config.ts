@@ -1,39 +1,62 @@
-import path from 'node:path'
-import { fileURLToPath } from 'node:url'
-import { defineConfig } from 'vite'
-import { VitePWA } from 'vite-plugin-pwa'
-
+import path from "node:path"
+import { fileURLToPath } from "node:url"
+import { defineConfig } from "vite"
+import { VitePWA } from "vite-plugin-pwa"
+import fs from "fs";
+import dotenv from "dotenv";
 const __dirname = path.dirname(fileURLToPath(import.meta.url))
-const scssVariablesPath = path.resolve(__dirname, 'src/_variables.scss').replace(/\\/g, '/')
+
+const scssVariablesPath = path.resolve(__dirname, "src/_variables.scss").replace(/\\/g, "/")
+
+dotenv.config()
+let DEBUG: boolean = process.env.DEBUG === "true";
+let port: number = Number(process.env.PORT)
+
+let server: any = {
+    host: true,
+    port: port,
+    strictPort: true,
+    hmr: {
+        host: "localhost",
+        protocol: "ws"
+    },
+    allowedHosts: [
+        "money-first.ru",
+        "www.money-first.ru",
+        "localhost",
+    ]
+};
+
+if (!DEBUG) {
+    let cerf_file: string | undefined = process.env.CERT_FILE;
+    if (!cerf_file) {
+        throw new Error("CERT_FILE not set");
+    }
+    let key_file: string | undefined = process.env.KEY_FILE;
+    if (!key_file) {
+        throw new Error("KEY_FILE not set");
+    }
+    server.https = {
+        key: fs.readFileSync(path.resolve(__dirname, key_file)),
+        cert: fs.readFileSync(path.resolve(__dirname, cerf_file)),
+    };
+}
 
 export default defineConfig({
     plugins: [
         VitePWA({
-            strategies: 'injectManifest',
-            srcDir: 'public',
-            filename: 'service_worker.js',
+            strategies: "injectManifest",
+            srcDir: "src",
+            filename: "service_worker.ts",
             injectManifest: {
-                swDest: 'dist/service_worker.js'
+                swDest: "dist/service_worker.js"
             },
             devOptions: {
-                enabled: false,
+                type: "module",
             }
         })
     ],
-    server: {
-        host: true,
-        port: 5173,
-        strictPort: true,
-        hmr: {
-            host: 'localhost',
-            protocol: 'ws'
-        },
-        allowedHosts: [
-            'money-first.ru',
-            'www.money-first.ru',
-            'localhost'
-        ]
-    },
+    server: server,
     css: {
         preprocessorOptions: {
             scss: {
@@ -41,5 +64,5 @@ export default defineConfig({
             }
         }
     },
-    publicDir: 'public',
+    publicDir: "public",
 })

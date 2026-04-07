@@ -1,6 +1,6 @@
 import { BaseComponent } from "../base_component.ts";
 import template from "./profile_avatar.hbs?raw";
-import "./profile_avatar.css";
+import "./profile_avatar.scss";
 import type { User } from "../../types/interfaces.ts";
 
 /** Props для компонента ProfileAvatar. */
@@ -23,7 +23,6 @@ interface ProfileAvatarProps {
  */
 export class ProfileAvatar extends BaseComponent {
     constructor(props: ProfileAvatarProps) {
-        console.log(props);
         const initials = props.username
             ? props.username.slice(0, 2).toUpperCase()
             : "??";

@@ -1,4 +1,4 @@
-.modal-form-overlay {
+.modal-form {
     position: fixed;
     top: 0;
     left: 0;
@@ -11,7 +11,7 @@
     z-index: 1000;
 }
 
-.modal-form-card {
+.modal-form__card {
     position: relative;
     background: #000;
     border-radius: 20px;
@@ -22,7 +22,7 @@
     border: 1px solid rgb(72 79 255 / 30%);
 }
 
-.modal-form-close-btn {
+.modal-form__close-btn {
     position: absolute;
     top: 16px;
     right: 16px;
@@ -41,7 +41,7 @@
     transition: all 0.2s;
 }
 
-.modal-form-close-btn:hover {
+.modal-form__close-btn:hover {
     background: rgb(255 71 87 / 20%);
     border-color: #ff4757;
     box-shadow: 0 0 15px rgb(255 71 87 / 50%);

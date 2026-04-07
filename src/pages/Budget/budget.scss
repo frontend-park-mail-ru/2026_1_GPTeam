@@ -35,6 +35,12 @@ $color-budget-create-shadow-hover: rgb(72 79 255 / 70%);
   font-weight: 700;
 }
 
+.budget__page-date {
+  color: rgb(255 255 255 / 40%);
+  font-size: 13px;
+  margin: 0;
+}
+
 .budget__list {
   display: flex;
   flex-direction: column;

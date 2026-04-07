@@ -8,7 +8,7 @@ import { router } from "./router/router_instance.ts";
 import { LoginPage } from "./pages/Login/login.ts";
 import { SignupPage } from "./pages/Signup/signup.ts";
 import { BudgetPage } from "./pages/Budget/budget.ts";
-import "./styles/global.css";
+import "./styles/global.scss";
 import { LandingPage } from "./pages/Landing/landing.ts";
 import { ProfilePage } from "./pages/Profile/profile.ts";
 import { BalancePage } from "./pages/Balance/balance.ts";
@@ -115,17 +115,10 @@ async function init(): Promise<void> {
      * Регистрация Service Worker для офлайн-режима.
      * Проверяет: окружение (не DEV), поддержку в браузере и флаг в .env.
      */
-    if (
-        !import.meta.env.DEV &&
-        'serviceWorker' in navigator &&
-        import.meta.env.VITE_ENABLE_SW === 'true'
-    ) {
-        try {
-            await navigator.serviceWorker.register('/service_worker.js', { type: 'module' });
-            console.log('Service Worker registered');
-        } catch (e) {
-            console.error('Service Worker registration failed:', e);
-        }
+    if (!import.meta.env.DEV && "serviceWorker" in navigator && import.meta.env.VITE_ENABLE_SW === "true") {
+        navigator.serviceWorker.register("/service_worker.js", { type: "module", scope: "/" })
+            .then(() => console.log("Service Worker registered"))
+            .catch((error) => console.error("Service Worker registration failed:", error));
     }
 }
 

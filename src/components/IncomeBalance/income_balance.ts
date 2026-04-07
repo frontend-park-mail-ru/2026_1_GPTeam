@@ -1,5 +1,5 @@
 import { BaseComponent } from "../base_component.ts";
-import "./income_balance.css";
+import "./income_balance.scss";
 import template from "./income_balance.hbs?raw";
 
 interface IncomeBalanceProps extends Record<string, unknown> {

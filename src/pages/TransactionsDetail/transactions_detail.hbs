@@ -1,49 +1,49 @@
-<div class="transaction-detail">
-    <div class="transaction-detail__back">
-        <button type="button" class="transaction-detail__back-btn" id="back_btn">
+<div class="transactions-detail">
+    <div class="transactions-detail__back">
+        <button type="button" class="transactions-detail__back-btn" id="back_btn">
             ← Назад к операциям
         </button>
     </div>
 
-    <div class="transaction-detail__card transaction-detail__card--{{type}}" id="detail_card">
-        <div class="transaction-detail__icon">{{category_icon}}</div>
+    <div class="transactions-detail__card transactions-detail__card--{{type}}" id="detail_card">
+        <div class="transactions-detail__icon">{{category_icon}}</div>
 
-        <h2 class="transaction-detail__title">{{title}}</h2>
-        <div class="transaction-detail__amount transaction-detail__amount--{{type}}">
+        <h2 class="transactions-detail__title">{{title}}</h2>
+        <div class="transactions-detail__amount transactions-detail__amount--{{type}}">
             {{amount_sign}}{{currency}} {{amount}}
         </div>
 
-        <div class="transaction-detail__meta">
-            <div class="transaction-detail__row">
-                <span class="transaction-detail__key">Тип</span>
-                <span class="transaction-detail__val">{{type_label}}</span>
+        <div class="transactions-detail__meta">
+            <div class="transactions-detail__row">
+                <span class="transactions-detail__key">Тип</span>
+                <span class="transactions-detail__val">{{type_label}}</span>
             </div>
-            <div class="transaction-detail__row">
-                <span class="transaction-detail__key">Категория</span>
-                <span class="transaction-detail__val">{{category}}</span>
+            <div class="transactions-detail__row">
+                <span class="transactions-detail__key">Категория</span>
+                <span class="transactions-detail__val">{{category}}</span>
             </div>
-            <div class="transaction-detail__row">
-                <span class="transaction-detail__key">Валюта</span>
-                <span class="transaction-detail__val">{{currency}}</span>
+            <div class="transactions-detail__row">
+                <span class="transactions-detail__key">Валюта</span>
+                <span class="transactions-detail__val">{{currency}}</span>
             </div>
-            <div class="transaction-detail__row">
-                <span class="transaction-detail__key">Дата операции</span>
-                <span class="transaction-detail__val">{{date}}</span>
+            <div class="transactions-detail__row">
+                <span class="transactions-detail__key">Дата операции</span>
+                <span class="transactions-detail__val">{{date}}</span>
             </div>
-            <div class="transaction-detail__row">
-                <span class="transaction-detail__key">Создана</span>
-                <span class="transaction-detail__val">{{created_at}}</span>
+            <div class="transactions-detail__row">
+                <span class="transactions-detail__key">Создана</span>
+                <span class="transactions-detail__val">{{created_at}}</span>
             </div>
             {{#if description}}
-            <div class="transaction-detail__row transaction-detail__row--desc">
-                <span class="transaction-detail__key">Описание</span>
-                <span class="transaction-detail__val">{{description}}</span>
+            <div class="transactions-detail__row transactions-detail__row--desc">
+                <span class="transactions-detail__key">Описание</span>
+                <span class="transactions-detail__val">{{description}}</span>
             </div>
             {{/if}}
         </div>
 
-        <div class="transaction-detail__actions">
-            <button type="button" class="btn-danger" id="delete_btn">Удалить операцию</button>
+        <div class="transactions-detail__actions">
+            <button type="button" class="transactions-detail__btn transactions-detail__btn--danger" id="delete_btn">Удалить операцию</button>
         </div>
     </div>
 </div>
