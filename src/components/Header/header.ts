@@ -4,6 +4,9 @@ import "./header.scss";
 import { get_profile } from "../../api/profile.ts";
 import type { SimpleResponse } from "../../types/interfaces.ts";
 
+/** Событие после успешной загрузки аватара — хедер подписан и обновляет превью без перезагрузки страницы */
+export const AVATAR_UPDATED_EVENT = "avatar-updated";
+
 interface HeaderProps extends Record<string, unknown> {
     cur_page: string;
 }
@@ -27,13 +30,24 @@ interface ProfileApiResponse extends SimpleResponse {
  * @extends BaseComponent
  */
 export class Header extends BaseComponent {
+    private readonly _onAvatarUpdated = (): void => {
+        void this._loadAvatar(true);
+    };
+
     constructor(props: HeaderProps) {
         super(template, props);
     }
 
+    destroy(): void {
+        window.removeEventListener(AVATAR_UPDATED_EVENT, this._onAvatarUpdated);
+        super.destroy();
+    }
+
     protected _afterRender(): void {
         this.updateActiveLink(this._props.cur_page as string);
-        this._loadAvatar();
+        window.removeEventListener(AVATAR_UPDATED_EVENT, this._onAvatarUpdated);
+        window.addEventListener(AVATAR_UPDATED_EVENT, this._onAvatarUpdated);
+        void this._loadAvatar(false);
     }
 
     updateActiveLink(path: string): void {
@@ -67,7 +81,7 @@ export class Header extends BaseComponent {
         }
     }
 
-    private async _loadAvatar(): Promise<void> {
+    private async _loadAvatar(cacheBust: boolean): Promise<void> {
         try {
             const data = await get_profile() as ProfileApiResponse;
             if (data.code !== 200 || !data.user?.avatar_url) return;
@@ -78,7 +92,10 @@ export class Header extends BaseComponent {
             const icon = profileLink.querySelector<HTMLImageElement>("img");
             if (!icon) return;
 
-            const avatarUrl = `${import.meta.env.VITE_SERVER_URL}/img/${data.user.avatar_url}`
+            const base = `${import.meta.env.VITE_SERVER_URL}/img/${data.user.avatar_url}`;
+            const avatarUrl = cacheBust
+                ? `${base}${base.includes("?") ? "&" : "?"}t=${Date.now()}`
+                : base;
 
             const img = new Image();
             img.onload = () => {

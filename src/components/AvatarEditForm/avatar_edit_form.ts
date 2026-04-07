@@ -3,6 +3,7 @@ import template from "./avatar_edit_form.hbs?raw";
 import { uploadAvatar } from "../../api/avatar.ts";
 import { update_profile } from "../../api/profile.ts";
 import { router } from "../../router/router_instance.ts";
+import { AVATAR_UPDATED_EVENT } from "../Header/header.ts";
 import "./avatar_edit_form.scss";
 
 /**
@@ -132,6 +133,7 @@ export class AvatarEditForm extends BaseComponent {
             try {
                 const { url: avatarUrl } = await uploadAvatar(this._selectedFile);
                 await update_profile({ avatar_url: avatarUrl });
+                window.dispatchEvent(new CustomEvent(AVATAR_UPDATED_EVENT));
                 this._onSuccess?.();
             } catch (err) {
                 errorEl.innerText = err instanceof Error ? err.message : "Не удалось сохранить аватар";
