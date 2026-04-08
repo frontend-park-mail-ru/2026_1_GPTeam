@@ -25,7 +25,7 @@ export async function sendVoiceTransaction(
 
     let response: Response;
     try {
-        response = await client("/transactions/voice", {
+        response = await client("/api/transactions/voice", {
             method: "POST",
             body: form,
             signal,
