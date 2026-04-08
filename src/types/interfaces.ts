@@ -131,12 +131,9 @@ export interface TransactionDraft {
     title: string;
     description: string;
     recorded_at: string;
-    date?: string; // <-- ДОБАВИЛИ ПОЛЕ ДЛЯ ДАТЫ ОТ НЕЙРОСЕТИ
+    date?: string;
 }
 
-/**
- * Ответ сервера на POST /transactions/voice.
- */
 export interface VoiceTransactionDraftResponse extends SimpleResponse {
     draft: TransactionDraft;
 }
