@@ -32,7 +32,7 @@ interface UpdateProfileRequest {
  * @returns {Promise<ProfileResponse>}
  */
 export const get_profile = async (): Promise<ProfileResponse> => {
-    const response = await client("/profile", {
+    const response = await client("/api/profile", {
         method: "GET",
         credentials: "include",
     });
@@ -40,7 +40,7 @@ export const get_profile = async (): Promise<ProfileResponse> => {
     if (data.code === 401) {
         const login = await is_login();
         if (login) {
-            const retryResponse = await client("/profile", {
+            const retryResponse = await client("/api/profile", {
                 method: "GET",
                 credentials: "include",
             });
@@ -61,7 +61,7 @@ export const get_profile = async (): Promise<ProfileResponse> => {
  * @returns {Promise<ProfileResponse>}
  */
 export const update_profile = async (body: UpdateProfileRequest): Promise<ProfileResponse> => {
-    const response = await client("/profile", {
+    const response = await client("/api/profile", {
         method: "PATCH",
         credentials: "include",
         headers: { "Content-Type": "application/json" },
@@ -71,7 +71,7 @@ export const update_profile = async (body: UpdateProfileRequest): Promise<Profil
     if (data.code === 401) {
         const login = await is_login();
         if (login) {
-            const retryResponse = await client("/profile", {
+            const retryResponse = await client("/api/profile", {
                 method: "PATCH",
                 credentials: "include",
                 headers: { "Content-Type": "application/json" },

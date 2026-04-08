@@ -15,7 +15,7 @@ import {
  * @returns {Promise<number[]>} Массив ID транзакций
  */
 export const fetchTransactionIds = async (): Promise<number[]> => {
-    const response = await client("/transactions", { method: "GET" });
+    const response = await client("/api/transactions", { method: "GET" });
     const data: TransactionListResponse = await response.json();
     
     if (data.code === 200) {
@@ -31,7 +31,7 @@ export const fetchTransactionIds = async (): Promise<number[]> => {
  * @returns {Promise<Transaction | null>} Данные транзакции или null
  */
 export const fetchTransactionDetail = async (id: number): Promise<Transaction | null> => {
-    const response = await client(`/transactions/${id}`, { method: "GET" });
+    const response = await client(`/api/transactions/${id}`, { method: "GET" });
     const data: TransactionGetResponse = await response.json();
     if (data.code === 200) {
         return data.transaction;
@@ -46,7 +46,7 @@ export const fetchTransactionDetail = async (id: number): Promise<Transaction | 
  * @returns {Promise<boolean>} true если успешно, иначе false
  */
 export const deleteTransaction = async (id: number): Promise<boolean> => {
-    const response = await client(`/transactions/${id}`, { method: "DELETE" });
+    const response = await client(`/api/transactions/${id}`, { method: "DELETE" });
     const data: SimpleResponse = await response.json();
     return data.code === 200;
 };
@@ -58,7 +58,7 @@ export const deleteTransaction = async (id: number): Promise<boolean> => {
  * @returns {Promise<number | null>} ID созданной транзакции или null
  */
 export const createTransaction = async (transactionData: TransactionCreateRequest): Promise<number | null> => {
-    const response = await client("/transactions", {
+    const response = await client("/api/transactions", {
         method: "POST",
         body: JSON.stringify(transactionData),
     });
@@ -81,7 +81,7 @@ export const updateTransaction = async (
     id: number, 
     transactionData: TransactionCreateRequest
 ): Promise<{ success: boolean; errors?: Array<{ field: string; message: string }> }> => {
-    const response = await client(`/transactions/${id}`, {
+    const response = await client(`/api/transactions/${id}`, {
         method: "PUT",
         body: JSON.stringify(transactionData),
     });

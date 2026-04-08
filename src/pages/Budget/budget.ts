@@ -58,12 +58,12 @@ export class BudgetPage extends BasePage {
      */
     private async _loadBudgets(root: HTMLElement): Promise<void> {
         try {
-            let response = await client("/get_budgets", { method: "GET", credentials: "include" });
+            let response = await client("/api/get_budgets", { method: "GET", credentials: "include" });
             let data: BudgetListResponseType = await response.json();
             if (data.code === 401) {
                 const login = await is_login();
                 if (!login) { router.navigate("/login"); return; }
-                response = await client("/get_budgets", { method: "GET", credentials: "include" });
+                response = await client("/api/get_budgets", { method: "GET", credentials: "include" });
                 data = await response.json();
             }
             if (data.code === 200 && data.ids && data.ids.length > 0) {
@@ -86,7 +86,7 @@ export class BudgetPage extends BasePage {
         if (!list) return;
         for (const id of ids) {
             try {
-                const response = await client(`/get_budget/${id}`, { method: "GET", credentials: "include" });
+                const response = await client(`/api/get_budget/${id}`, { method: "GET", credentials: "include" });
                 const data: BudgetGetResponse = await response.json();
                 if (data.code === 200 && data.budget) {
                     const card = new BudgetCard({
@@ -149,7 +149,7 @@ export class BudgetPage extends BasePage {
      */
     private async _deleteBudget(id: number, modal: Modal): Promise<void> {
         try {
-            const response = await client(`/budget/${id}`, { method: "DELETE", credentials: "include" });
+            const response = await client(`/api/budget/${id}`, { method: "DELETE", credentials: "include" });
             const data: DeleteResponseType = await response.json();
             if (data.code === 200) {
                 modal.destroy();
