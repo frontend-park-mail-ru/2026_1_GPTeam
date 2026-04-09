@@ -154,9 +154,8 @@ export class BudgetPage extends BasePage {
             if (data.code === 200) {
                 modal.destroy();
                 router.refresh();
-            } else {
-                console.error("Ошибка удаления:", data.message);
-            }
+            } else
+                modal.show_error(data.message ? data.message : "Ошибка сервера");
         } catch (err) {
             console.error("Fetch error:", err);
         }
