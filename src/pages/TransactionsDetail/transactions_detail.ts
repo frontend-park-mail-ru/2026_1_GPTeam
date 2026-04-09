@@ -85,8 +85,7 @@ export class TransactionDetailPage extends BasePage {
             confirmText: "Удалить",
             cancelText: "Отмена",
             onConfirm: () => {
-                modal.destroy();
-                this._handleDelete(container);
+                this._handleDelete(container, modal);
             },
             onCancel: () => {
                 modal.destroy();
@@ -99,20 +98,24 @@ export class TransactionDetailPage extends BasePage {
      * Удаляет транзакцию и перенаправляет на список.
      * @private
      * @param {HTMLElement} container
+     * @param {Modal} modal - модальное окно для подтверждения удаления.
      */
-    private async _handleDelete(container: HTMLElement): Promise<void> {
+    private async _handleDelete(container: HTMLElement, modal: Modal): Promise<void> {
         const btn = container.querySelector<HTMLButtonElement>("#delete_btn");
         if (btn) btn.disabled = true;
 
         try {
-            const ok = await deleteTransaction(this._transactionId);
+            const [ok, message] = await deleteTransaction(this._transactionId);
             if (ok) {
+                modal.destroy();
                 router.navigate("/operations");
             } else {
+                modal.show_error(message);
                 if (btn) btn.disabled = false;
             }
         } catch {
             if (btn) btn.disabled = false;
+            modal.destroy();
         }
     }
 }

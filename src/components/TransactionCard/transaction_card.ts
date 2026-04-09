@@ -88,8 +88,7 @@ export class TransactionCard extends BaseComponent {
             confirmText: "Удалить",
             cancelText: "Отмена",
             onConfirm: () => {
-                modal.destroy();
-                this._handleDelete();
+                this._handleDelete(modal);
             },
             onCancel: () => {
                 modal.destroy();
@@ -101,22 +100,26 @@ export class TransactionCard extends BaseComponent {
     /**
      * Удаляет транзакцию и вызывает колбэк при успехе.
      * @private
+     * @param {Modal} modal - модальное окно для подтверждения удаления.
      */
-    private async _handleDelete(): Promise<void> {
+    private async _handleDelete(modal: Modal): Promise<void> {
         const el = this.getElement();
         const deleteBtn = el?.querySelector<HTMLButtonElement>("[data-action='delete']");
         if (deleteBtn) deleteBtn.disabled = true;
 
         try {
-            const ok = await deleteTransaction(this._data.id);
+            const [ok, message] = await deleteTransaction(this._data.id);
             if (ok) {
+                modal.destroy();
                 el?.remove();
                 this._onDeleted?.(this._data.id);
             } else {
+                modal.show_error(message);
                 if (deleteBtn) deleteBtn.disabled = false;
             }
         } catch {
             if (deleteBtn) deleteBtn.disabled = false;
+            modal.destroy();
         }
     }
 }

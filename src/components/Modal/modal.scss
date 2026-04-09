@@ -42,7 +42,7 @@
   color: rgb(255 255 255 / 60%);
   font-size: 15px;
   text-align: center;
-  margin-bottom: 32px;
+  margin-bottom: 20px;
   line-height: 1.5;
   overflow: hidden;
   display: -webkit-box;
@@ -88,4 +88,10 @@
 .modal__btn--confirm:hover {
   box-shadow: 0 0 36px rgb(255 71 87 / 70%);
   transform: translateY(-1px);
+}
+
+.modal-error__message {
+  text-align: center;
+  color: #f87171;
+  margin: 0 0 20px 0;
 }
