@@ -19,7 +19,7 @@ import type { BalanceResponse as BalanceResponseType } from "../types/interfaces
  * }
  */
 export const get_balance = async (): Promise<BalanceResponseType> => {
-  const response = await client("/profile/balance", {
+  const response = await client("/api/profile/balance", {
     method: "GET",
     credentials: "include",
   });
@@ -29,7 +29,7 @@ export const get_balance = async (): Promise<BalanceResponseType> => {
   if (data.code === 401) {
     const login = await is_login();
     if (login) {
-      const retryResponse = await client("/profile/balance", {
+      const retryResponse = await client("/api/profile/balance", {
         method: "GET",
         credentials: "include",
       });

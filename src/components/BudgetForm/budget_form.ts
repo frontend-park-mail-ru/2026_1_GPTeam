@@ -47,7 +47,7 @@ export class BudgetForm extends BaseComponent {
      */
     private async _fetchServerTime(): Promise<void> {
         try {
-            const response = await client("/get_budgets", { method: "GET", credentials: "include" });
+            const response = await client("/api/get_budgets", { method: "GET", credentials: "include" });
             const dateHeader = response.headers.get("date");
             this.serverTime = dateHeader ? new Date(dateHeader) : new Date();
         } catch {
@@ -251,7 +251,7 @@ export class BudgetForm extends BaseComponent {
         if (submitBtn) submitBtn.disabled = true;
 
         try {
-            const response = await client("/budget", {
+            const response = await client("/api/budget", {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify(payload),

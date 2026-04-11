@@ -5,7 +5,7 @@ import { client } from "./client";
  * @returns {Promise<number>}
  */
 export const fetchAccountId = async (): Promise<number> => {
-    const response = await client("/account", { method: "GET" });
+    const response = await client("/api/account", { method: "GET" });
     const data = await response.json();
     if (data.code === 200) {
         return data.account_id;

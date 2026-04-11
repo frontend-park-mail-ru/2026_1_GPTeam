@@ -56,7 +56,7 @@ export class ProfileEditPage extends BasePage {
             username: profile.username,
             email: profile.email,
             avatar_url: profile.avatar_url && profile.avatar_url !== "img/default.png"
-                ? `http://localhost:8081/img/${profile.avatar_url}`
+                ? `${import.meta.env.VITE_SERVER_URL}/img/${profile.avatar_url}`
                 : "",
         });
         avatar.render(root.querySelector<HTMLElement>(".profile-edit__avatar")!);
