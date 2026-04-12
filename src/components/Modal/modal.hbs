@@ -1,10 +1,13 @@
 <div class="modal">
-  <div class="modal__card">
-    <h3 class="modal__title">{{title}}</h3>
-    <p class="modal__message">{{message}}</p>
-    <div class="modal__buttons">
-      <button class="modal__btn modal__btn--cancel" type="button">{{cancelText}}</button>
-      <button class="modal__btn modal__btn--confirm" type="button">{{confirmText}}</button>
+    <div class="modal__card">
+        <h3 class="modal__title">{{title}}</h3>
+        <p class="modal__message">{{message}}</p>
+        <div class="modal-error__message" style="display: none">
+            Error message
+        </div>
+        <div class="modal__buttons">
+            <button class="modal__btn modal__btn--cancel" type="button">{{cancelText}}</button>
+            <button class="modal__btn modal__btn--confirm" type="button">{{confirmText}}</button>
+        </div>
     </div>
-  </div>
 </div>

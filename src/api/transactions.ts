@@ -43,12 +43,12 @@ export const fetchTransactionDetail = async (id: number): Promise<Transaction | 
  * Удаляет транзакцию.
  * @endpoint DELETE /transactions/{id}
  * @param {number} id - ID транзакции
- * @returns {Promise<boolean>} true если успешно, иначе false
+ * @returns {Promise<[boolean, string]>} true если успешно, иначе false и сообщение от сервера
  */
-export const deleteTransaction = async (id: number): Promise<boolean> => {
+export const deleteTransaction = async (id: number): Promise<[boolean, string]> => {
     const response = await client(`/api/transactions/${id}`, { method: "DELETE" });
     const data: SimpleResponse = await response.json();
-    return data.code === 200;
+    return [data.code === 200, data.message ? data.message : ""];
 };
 
 /**
