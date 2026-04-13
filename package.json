@@ -10,19 +10,30 @@
     "lint:css": "stylelint \"**/*.css\"",
     "lint:js": "eslint .",
     "lint:hbs": "ember-template-lint .",
-    "lint": "npm run lint:css && npm run lint:js && npm run lint:hbs"
+    "lint:ts": "tsc --noEmit",
+    "lint": "npm run lint:css && npm run lint:js && npm run lint:hbs && npm run lint:ts"
   },
   "devDependencies": {
     "@eslint/js": "^10.0.1",
+    "@types/handlebars": "^4.1.0",
+    "@types/node": "^25.5.0",
     "ember-template-lint": "^7.9.3",
     "eslint": "^10.0.3",
     "globals": "^17.4.0",
+    "jiti": "^2.6.1",
+    "sass-embedded": "^1.99.0",
     "stylelint": "^17.4.0",
     "stylelint-config-standard": "^40.0.0",
-    "vite": "^7.3.1"
+    "typescript": "^5.9.3",
+    "vite": "^7.3.1",
+    "vite-plugin-pwa": "^1.2.0"
   },
   "dependencies": {
+    "@fontsource/manrope": "^5.2.8",
+    "dompurify": "^3.3.3",
+    "dotenv": "^17.4.1",
     "handlebars": "^4.7.8",
+    "scss": "^0.2.4",
     "vite-plugin-handlebars": "^2.0.0"
   }
 }

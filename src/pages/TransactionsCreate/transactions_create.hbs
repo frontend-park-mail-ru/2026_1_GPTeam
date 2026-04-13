@@ -1,0 +1,28 @@
+<div class="transactions-create">
+    <div class="transactions-create__container">
+
+        <div class="transactions-create__voice">
+            <p class="transactions-create__voice-label">Добавить голосом</p>
+            <div class="transactions-create__voice-controls">
+                <button id="voice-start-btn" class="transactions-create__voice-btn transactions-create__voice-btn--primary" type="button">
+                    <span class="transactions-create__voice-btn-icon">🎙</span>
+                    <span class="transactions-create__voice-btn-text">Начать запись</span>
+                </button>
+                <button id="voice-stop-btn" class="transactions-create__voice-btn transactions-create__voice-btn--secondary" type="button" disabled>
+                    <span class="transactions-create__voice-btn-icon">⏹</span>
+                    <span class="transactions-create__voice-btn-text">Остановить</span>
+                </button>
+            </div>
+            <div id="voice-status" class="transactions-create__voice-status"></div>
+        </div>
+
+        <div class="transactions-create__divider">
+            <span class="transactions-create__divider-line"></span>
+            <span class="transactions-create__divider-text">или введите вручную</span>
+            <span class="transactions-create__divider-line"></span>
+        </div>
+
+        <div id="form_container"></div>
+
+    </div>
+</div>

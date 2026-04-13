@@ -1,0 +1,13 @@
+<div class="profile-avatar-wrap">
+    <div class="profile-avatar">
+        {{#if avatar_url}}
+            <img src="{{avatar_url}}" class="profile-avatar__img">
+        {{else}}
+            <span class="profile-avatar__initials">{{initials}}</span>
+        {{/if}}
+        <div class="profile-avatar__ring"></div>
+    </div>
+    <button type="button" class="profile-avatar__change-btn js--profile-avatar-change">Изменить аватар</button>
+    <div class="profile-avatar__name">{{username}}</div>
+    <div class="profile-avatar__email">{{email}}</div>
+</div>

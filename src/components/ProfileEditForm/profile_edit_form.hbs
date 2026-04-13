@@ -1,0 +1,54 @@
+<form class="profile-edit-form" id="profile-edit-form">
+    <div class="profile-edit__field">
+        <label class="profile-edit__label" for="edit-username">Логин</label>
+        <div class="profile-edit__input-wrapper">
+            <input class="profile-edit__input" id="edit-username" type="text" placeholder="Новый логин" autocomplete="off">
+            <div class="profile-edit__help-wrap">
+                <img class="profile-edit__help" src="/icons/question.svg" alt="Справка">
+                <div class="profile-edit__tooltip">Доступны символы латинского алфавита и цифры</div>
+            </div>
+        </div>
+    </div>
+    <div class="profile-edit__field">
+        <label class="profile-edit__label" for="edit-email">Email</label>
+        <div class="profile-edit__input-wrapper">
+            <input class="profile-edit__input" id="edit-email" type="text" placeholder="Новый email" autocomplete="off">
+        </div>
+    </div>
+
+    <div class="profile-edit__divider"></div>
+    <div class="profile-edit__section-label">Смена пароля</div>
+
+    <div class="profile-edit__field">
+        <label class="profile-edit__label" for="edit-password-current">Текущий пароль</label>
+        <div class="profile-edit__input-wrapper">
+            <input class="profile-edit__input" id="edit-password-current" type="password" placeholder="••••••••">
+            <img class="profile-edit__eye" id="eye-current" src="/icons/closed_eye.svg" alt="Показать пароль">
+        </div>
+    </div>
+    <div class="profile-edit__field">
+        <label class="profile-edit__label" for="edit-password-new">Новый пароль</label>
+        <div class="profile-edit__input-wrapper">
+            <input class="profile-edit__input" id="edit-password-new" type="password" placeholder="••••••••">
+            <img class="profile-edit__eye" id="eye-new" src="/icons/closed_eye.svg" alt="Показать пароль">
+            <div class="profile-edit__help-wrap">
+                <img class="profile-edit__help" src="/icons/question.svg" alt="Справка">
+                <div class="profile-edit__tooltip">Минимум 8 символов, заглавная буква и цифра</div>
+            </div>
+        </div>
+    </div>
+    <div class="profile-edit__field">
+        <label class="profile-edit__label" for="edit-password-confirm">Повторите пароль</label>
+        <div class="profile-edit__input-wrapper">
+            <input class="profile-edit__input" id="edit-password-confirm" type="password" placeholder="••••••••">
+            <img class="profile-edit__eye" id="eye-confirm" src="/icons/closed_eye.svg" alt="Показать пароль">
+        </div>
+    </div>
+
+    <p class="profile-edit__error" id="edit-error"></p>
+
+    <div class="profile-edit__actions">
+        <button type="submit" class="profile-edit__btn-save">Сохранить изменения</button>
+        <button type="button" class="profile-edit__btn-cancel" id="edit-cancel-btn">Отмена</button>
+    </div>
+</form>

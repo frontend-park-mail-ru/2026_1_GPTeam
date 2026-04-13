@@ -1,0 +1,27 @@
+<div class="avatar-edit-page">
+    <div class="profile-edit__toast profile-edit__toast--success" id="toast-success" style="display:none;">
+        <span class="profile-edit__toast-dot profile-edit__toast-dot--green"></span>
+        Аватар успешно обновлён!
+    </div>
+    <div class="profile-edit__toast profile-edit__toast--error" id="toast-error" style="display:none;">
+        <span class="profile-edit__toast-dot profile-edit__toast-dot--red"></span>
+        Не удалось загрузить аватар
+    </div>
+
+    <h1 class="profile-edit__title">Изменить аватар</h1>
+    
+    <div class="profile-avatar-edit__display">
+        <div class="profile-avatar" id="current-avatar-container">
+            {{#if avatar_url}}
+                <img src="{{avatar_url}}" class="profile-avatar__img" id="current-avatar-img" alt="" onerror="this.style.display='none'; document.getElementById('current-avatar-initials').style.display='';">
+                <span class="profile-avatar__initials" id="current-avatar-initials" style="display: none;">{{initials}}</span>
+            {{else}}
+                <span class="profile-avatar__initials" id="current-avatar-initials">{{initials}}</span>
+                <img src="" class="profile-avatar__img" id="current-avatar-img" alt="" style="display: none;">
+            {{/if}}
+            <div class="profile-avatar__ring"></div>
+        </div>
+    </div>
+
+    <div class="avatar-edit__form-container"></div>
+</div>

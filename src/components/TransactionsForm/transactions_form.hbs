@@ -1,0 +1,86 @@
+<div class="transactions-form">
+    <h3 class="transactions-form__title">{{#if mode}}Редактирование транзакции{{else}}Новая операция{{/if}}</h3>
+    <form id="transaction_form">
+        <label for="title_input">Название</label>
+        <div class="transactions-form__input-wrapper">
+            <input class="transactions-form__input" id="title_input" type="text" name="title" placeholder="Например, Обед в кафе" maxlength="255" autocomplete="off">
+        </div>
+
+        <div class="transactions-form__row">
+            <div>
+                <label for="value_input">Сумма</label>
+                <div class="transactions-form__input-wrapper">
+                    <input class="transactions-form__input" id="value_input" type="number" step="0.01" min="0.01" name="value" placeholder="0.00" autocomplete="off">
+                    <div class="transactions-form__help-wrap">
+                        <img class="transactions-form__help" src="/icons/question.svg" alt="Справка">
+                        <div class="transactions-form__tooltip">Положительное число, не более 1 000 000 000</div>
+                    </div>
+                </div>
+            </div>
+            <div>
+                <label>Валюта</label>
+                <div class="transactions-form__input-wrapper">
+                    <div class="transactions-form__input custom-select__display" id="currency_display"></div>
+                    <input type="hidden" id="currency_input" name="currency">
+                    <span class="custom-select__arrow">▾</span>
+                    <div class="custom-select__dropdown" id="currency_dropdown"></div>
+                </div>
+            </div>
+        </div>
+
+        <div class="transactions-form__row">
+            <div>
+                <label>Тип операции</label>
+                <div class="transactions-form__input-wrapper">
+                    <div class="transactions-form__input custom-select__display" id="type_display"></div>
+                    <input type="hidden" id="type_input" name="type">
+                    <span class="custom-select__arrow">▾</span>
+                    <div class="custom-select__dropdown" id="type_dropdown">
+                        <div class="custom-select__option" data-value="EXPENSE">Расход</div>
+                        <div class="custom-select__option" data-value="INCOME">Доход</div>
+                    </div>
+                </div>
+            </div>
+            <div>
+                <label>Категория</label>
+                <div class="transactions-form__input-wrapper">
+                    <div class="transactions-form__input custom-select__display" id="category_display"></div>
+                    <input type="hidden" id="category_input" name="category">
+                    <span class="custom-select__arrow">▾</span>
+                    <div class="custom-select__dropdown" id="category_dropdown"></div>
+                </div>
+            </div>
+        </div>
+
+        <label>Дата операции</label>
+        <div class="transactions-form__date-wrapper">
+            <div class="transactions-form__input-wrapper">
+                <input type="text"
+                    class="transactions-form__input transactions-form__date-display"
+                    id="transaction_date_display"
+                    placeholder="ДД.ММ.ГГГГ"
+                    maxlength="10"
+                    autocomplete="off">
+                <input type="hidden" id="transaction_date_input" name="transaction_date">
+                <img class="transactions-form__calendar-icon" id="transaction_date_btn" src="/icons/calendar.png" alt="Календарь">
+                <div class="transactions-form__help-wrap">
+                    <img class="transactions-form__help" src="/icons/question.svg" alt="Справка">
+                    <div class="transactions-form__tooltip">Дата в пределах ±5 лет от сегодня</div>
+                </div>
+            </div>
+            <div class="custom-calendar__popup" id="transaction_date_calendar"></div>
+        </div>
+
+        <label for="description_input">Описание</label>
+        <div class="transactions-form__input-wrapper">
+            <textarea class="transactions-form__input" id="description_input" name="description" rows="3" placeholder="Краткое описание операции" style="border-radius: 16px; resize: vertical;"></textarea>
+        </div>
+
+        <p class="transactions-form__error" id="error_message"></p>
+        
+        <div class="transactions-form__actions">
+            <button type="button" class="transactions-form__btn transactions-form__btn--secondary" id="cancel_btn">Отмена</button>
+            <button class="transactions-form__btn" type="submit">{{#if mode}}Сохранить{{else}}Создать{{/if}}</button>
+        </div>
+    </form>
+</div>

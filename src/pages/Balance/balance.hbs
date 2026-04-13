@@ -1,7 +1,13 @@
-<div class="balance-page">
-    <h2 class="balance-title">Баланс</h2>
-    <p class="balance-date">{{date}}</p>
-    <div class="main_row"></div>
-    <hr class="balance-divider">
-    <div class="balance-row row"></div>
+<div class="balance">
+    <h2 class="balance__title js--inner-header">Баланс</h2>
+    <p class="balance__date">{{date}}</p>
+
+    <div class="balance__filters">
+        <button type="button" class="balance__filter balance__filter--active js--balance-filter" data-currency="all">Все</button>
+        <button type="button" class="balance__filter js--balance-filter" data-currency="RUB">RUB</button>
+        <button type="button" class="balance__filter js--balance-filter" data-currency="USD">USD</button>
+        <button type="button" class="balance__filter js--balance-filter" data-currency="EUR">EUR</button>
+    </div>
+
+    <div class="balance__currencies js--balance-currencies"></div>
 </div>

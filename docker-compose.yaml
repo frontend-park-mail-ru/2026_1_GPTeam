@@ -1,0 +1,20 @@
+include:
+  - back/docker-compose.yaml
+
+services:
+  nginx:
+    image: nginx:alpine
+    container_name: gpteam-nginx
+    restart: always
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./nginx/nginx.conf:/etc/nginx/nginx.conf:ro
+      - ./ssl:/etc/nginx/ssl:ro
+      - ./back/static:/app/back/static:ro
+      - ./front/dist:/usr/share/nginx/html:ro
+    depends_on:
+      - app
+    networks:
+      - gpteam-network

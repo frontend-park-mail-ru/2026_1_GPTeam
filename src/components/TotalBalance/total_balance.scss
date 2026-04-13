@@ -1,0 +1,39 @@
+.total-balance {
+    background: linear-gradient(135deg, rgb(72 79 255 / 30%), rgb(72 79 255 / 8%));
+    border-radius: 16px;
+    width: 100%;
+    padding: 24px;
+    border: 1px solid rgb(72 79 255 / 50%);
+    max-width: 100%;
+    overflow: hidden;
+}
+
+.total-balance__label {
+    color: rgb(255 255 255 / 40%);
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    margin: 0 0 12px;
+}
+
+.total-balance__amount {
+    color: #fff;
+    font-size: 40px;
+    font-weight: 700;
+    margin: 0;
+    display: flex;
+    align-items: baseline;
+    gap: 6px;
+}
+
+.total-balance__currency {
+    color: rgb(255 255 255 / 60%);
+    font-size: 22px;
+    font-weight: 600;
+}
+
+.total-balance__value {
+    max-width: 84%;
+    overflow-wrap: break-word;
+}
