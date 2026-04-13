@@ -62,7 +62,9 @@ export class ProfilePage extends BasePage {
             username: profile.username,
             email: profile.email,
             avatar_url: profile.avatar_url && profile.avatar_url !== "img/default.png"
-                ? `${import.meta.env.VITE_SERVER_URL}/img/${profile.avatar_url}`
+                ? (profile.avatar_url.startsWith("http")
+                    ? profile.avatar_url
+                    : `${import.meta.env.VITE_SERVER_URL}/img/${profile.avatar_url}`)
                 : "",
         });
         avatar.render(root.querySelector<HTMLElement>(".js--profile-avatar-slot")!);

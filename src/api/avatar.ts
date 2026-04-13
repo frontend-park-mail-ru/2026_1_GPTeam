@@ -1,7 +1,8 @@
 import { client } from "./client";
 
 export interface UploadAvatarResponse {
-    url: string;
+    url?: string;
+    avatar_url?: string;
 }
 
 export async function uploadAvatar(file: File): Promise<UploadAvatarResponse> {
@@ -19,5 +20,10 @@ export async function uploadAvatar(file: File): Promise<UploadAvatarResponse> {
         throw new Error(data?.message ?? "Ошибка загрузки аватара");
     }
 
-    return response.json();
+    const data = await response.json();
+    const url = data.url ?? data.avatar_url;
+    if (!url) {
+        throw new Error("Сервер не вернул URL аватара");
+    }
+    return { url };
 }

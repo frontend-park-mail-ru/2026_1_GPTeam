@@ -92,7 +92,9 @@ export class Header extends BaseComponent {
             const icon = profileLink.querySelector<HTMLImageElement>("img");
             if (!icon) return;
 
-            const base = `${import.meta.env.VITE_SERVER_URL}/img/${data.user.avatar_url}`;
+            const base = data.user.avatar_url.startsWith("http")
+                ? data.user.avatar_url
+                : `${import.meta.env.VITE_SERVER_URL}/img/${data.user.avatar_url}`;
             const avatarUrl = cacheBust
                 ? `${base}${base.includes("?") ? "&" : "?"}t=${Date.now()}`
                 : base;
