@@ -15,6 +15,10 @@ export const fetchAccountId = async (): Promise<number> => {
     throw new Error("Не удалось получить счёт");
 };
 
+/**
+ * Получает список счетов пользователя с упрощённым количеством полей
+ * @returns {Promise<ShortAccountResponse>}
+ */
 export const get_short_accounts = async (): Promise<ShortAccountResponse> => {
     let response: Response = await client("/api/accounts", {
         method: "GET",
