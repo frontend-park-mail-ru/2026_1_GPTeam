@@ -222,7 +222,7 @@ export class TransactionForm extends BaseComponent {
             return;
         }
         dropdown.innerHTML = accounts.accounts
-            .map((acc: ShortAccount) => `<div class="custom-select__option" data-value="${acc.id.toString()}">${acc.id.toString()}</div>`)
+            .map((acc: ShortAccount) => `<div class="custom-select__option" data-value="${acc.id}">${acc.name}</div>`)
             .join("");
     }
 
