@@ -90,10 +90,11 @@ export const updateTransaction = async (
     if (data.code === 200) {
         return { success: true };
     }
-    
+
     if ("errors" in data && data.errors) {
-        return { success: false, errors: data.errors };
+        let errors: Array<{ field: string; message: string }> = data.errors;
+        errors.push({field: "", message: data.message ? data.message : "Ошибка сервера"})
+        return { success: false, errors: errors };
     }
-    
-    return { success: false };
+    return { success: false, errors: [] };
 };
