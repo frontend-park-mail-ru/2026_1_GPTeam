@@ -86,14 +86,16 @@ export const updateTransaction = async (
         body: JSON.stringify(transactionData),
     });
     const data: SimpleResponse | RequestWithErrors = await response.json();
-    
     if (data.code === 200) {
         return { success: true };
     }
 
     if ("errors" in data && data.errors) {
         let errors: Array<{ field: string; message: string }> = data.errors;
-        errors.push({field: "", message: data.message ? data.message : "Ошибка сервера"})
+        let server_message = data.message ? data.message : "Ошибка сервера";
+        if (server_message === "constraint error")
+            server_message = "Невозможно выполнить такую транзакцию"
+        errors.push({field: "", message: server_message})
         return { success: false, errors: errors };
     }
     return { success: false, errors: [] };
