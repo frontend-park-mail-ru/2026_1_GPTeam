@@ -96,7 +96,6 @@ export class TransactionEditPage extends BasePage {
                 router.navigate(`/operations`);
             } else {
                 if (errorBlock) {
-                    console.log(result.errors?.[0]?.message)
                     errorBlock.textContent = result.errors?.[0]?.message || "Ошибка при сохранении транзакции";
                     errorBlock.classList.remove("hidden");
                 }
