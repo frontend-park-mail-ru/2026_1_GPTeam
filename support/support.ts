@@ -1,7 +1,7 @@
 import template from "./support.hbs?raw";
 import { BaseComponent } from "../src/components/base_component.ts";
-import { router } from "../src/router/router_instance.ts"; // <-- ДОБАВИЛИ ИМПОРТ РОУТЕРА
 import "./support.scss";
+import {get_user_id} from "../src/store/store.ts";
 
 const IFRAME_SRC_ENV = (import.meta.env.VITE_SUPPORT_IFRAME_URL as string | undefined)?.trim();
 const IFRAME_FALLBACK = "/support-form.html";
@@ -27,8 +27,9 @@ export class SupportWidget extends BaseComponent {
         const closeBtn = el.querySelector<HTMLButtonElement>("[data-support-close]");
 
         if (panel && toggle) {
-            this._on(toggle, "click", (e) => {
+            this._on(toggle, "click", async (e) => {
                 e.stopPropagation();
+                console.log(await get_user_id())
                 const willOpen = !el.classList.contains("support-widget--open");
                 this._setOpen(el, panel, toggle, willOpen);
             });
