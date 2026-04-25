@@ -146,3 +146,17 @@ export interface ShortAccount {
 export interface ShortAccountResponse extends SimpleResponse {
     accounts: ShortAccount[];
 }
+
+export interface ShortSupport {
+    category: string;
+    message: string;
+}
+
+export interface AppealCardProps extends Record<string, unknown> {
+    id: string | number;
+    category: string;
+    message: string;
+    status: string;
+    statusType: "new" | "in_progress" | "resolved";
+    date: string;
+}

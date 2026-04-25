@@ -1,5 +1,6 @@
 import template from "./support.hbs?raw";
 import { BaseComponent } from "../src/components/base_component.ts";
+import { router } from "../src/router/router_instance.ts"; // <-- ДОБАВИЛИ ИМПОРТ РОУТЕРА
 import "./support.scss";
 
 const supportUrl: string = import.meta.env.VITE_SUPPORT_IFRAME_URL ?? "";
@@ -31,9 +32,11 @@ export class SupportWidget extends BaseComponent {
         const toggle = el.querySelector<HTMLButtonElement>("[data-support-toggle]");
         const menu = el.querySelector<HTMLElement>("[data-support-menu]");
         const openTicket = el.querySelector<HTMLButtonElement>("[data-open-ticket]");
+        const myAppeals = el.querySelector<HTMLButtonElement>("[data-my-appeals]"); // <-- НАШЛИ НОВУЮ КНОПКУ
         const closeBtn = el.querySelector<HTMLButtonElement>("[data-support-close]");
         const panel = el.querySelector<HTMLElement>("[data-support-panel]");
 
+        // Открытие/закрытие меню по клику на кругляшок
         if (toggle && menu) {
             this._on(toggle, "click", (e) => {
                 e.stopPropagation();
@@ -42,6 +45,7 @@ export class SupportWidget extends BaseComponent {
             });
         }
 
+        // Клик: Сделать обращение (открывает iframe)
         if (openTicket && menu && panel && toggle) {
             this._on(openTicket, "click", (e) => {
                 e.stopPropagation();
@@ -49,6 +53,24 @@ export class SupportWidget extends BaseComponent {
             });
         }
 
+        // Клик: Показать мои обращения (переход по роуту)
+        if (myAppeals && menu && toggle && panel) {
+            this._on(myAppeals, "click", (e) => {
+                e.stopPropagation();
+                
+                // Закрываем меню
+                this._menuOpen = false;
+                this._applyMenuState(menu, toggle);
+                
+                // Если панель с iframe открыта - тоже закрываем её, чтобы не мешалась
+                this._closePanel(el, panel);
+
+                // Летим на страницу списка
+                router.navigate("/my_appeals");
+            });
+        }
+
+        // Кнопка крестика внутри панели iframe
         if (closeBtn && panel) {
             this._on(closeBtn, "click", () => {
                 this._closePanel(el, panel);
