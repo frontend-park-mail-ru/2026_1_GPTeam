@@ -1,100 +1,182 @@
 <!doctype html>
 <html lang="ru">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<head>
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
     <title>Обращение в поддержку</title>
     <style>
-      * { box-sizing: border-box; }
-      body {
-        margin: 0;
-        padding: 12px 16px 20px;
-        background: #111;
-        color: #fff;
-        font-family: Manrope, system-ui, sans-serif;
-        font-size: 14px;
-        line-height: 1.5;
-      }
-      label { display: block; margin-top: 12px; margin-bottom: 6px; }
-      .support-form__input-wrapper { position: relative; }
-      .support-form__input {
-        width: 100%;
-        padding: 10px 12px;
-        border: 1px solid rgb(255 255 255 / 12%);
-        border-radius: 8px;
-        background: #0d0d0d;
-        color: #fff;
-        font: inherit;
-      }
-      .support-form__input:focus {
-        outline: none;
-        border-color: #484fff;
-      }
-      .support-form__help-wrap { margin-top: 4px; }
-      .support-form__help-tooltip {
-        font-size: 12px;
-        color: rgb(255 255 255 / 50%);
-      }
-      .auth-form__error-message {
-        margin: 12px 0 0;
-        min-height: 1.2em;
-        color: #f66;
-        font-size: 13px;
-      }
-      .auth-form__btn {
-        width: 100%;
-        margin-top: 16px;
-        padding: 12px 16px;
-        font: inherit;
-        font-weight: 600;
-        color: #fff;
-        background: #000;
-        border: 2px solid #484fff;
-        border-radius: 8px;
-        cursor: pointer;
-      }
-      .auth-form__btn:hover {
-        background: rgb(72 79 255 / 12%);
-      }
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            padding: 12px 16px 20px;
+            background: #111;
+            color: #fff;
+            font-family: Manrope, system-ui, sans-serif;
+            font-size: 14px;
+            line-height: 1.5;
+        }
+
+        label {
+            display: block;
+            margin-top: 12px;
+            margin-bottom: 6px;
+        }
+
+        .support-form__input-wrapper {
+            position: relative;
+        }
+
+        .support-form__input {
+            width: 100%;
+            padding: 10px 12px;
+            border: 1px solid rgb(255 255 255 / 12%);
+            border-radius: 8px;
+            background: #0d0d0d;
+            color: #fff;
+            font: inherit;
+        }
+
+        .support-form__input:focus {
+            outline: none;
+            border-color: #484fff;
+        }
+
+        .support-form__help-wrap {
+            margin-top: 4px;
+        }
+
+        .support-form__help-tooltip {
+            font-size: 12px;
+            color: rgb(255 255 255 / 50%);
+        }
+
+        .auth-form__error-message {
+            margin: 12px 0 0;
+            min-height: 1.2em;
+            color: #f66;
+            font-size: 13px;
+        }
+
+        .auth-form__btn {
+            width: 100%;
+            margin-top: 16px;
+            padding: 12px 16px;
+            font: inherit;
+            font-weight: 600;
+            color: #fff;
+            background: #000;
+            border: 2px solid #484fff;
+            border-radius: 8px;
+            cursor: pointer;
+        }
+
+        .auth-form__btn:hover {
+            background: rgb(72 79 255 / 12%);
+        }
     </style>
-  </head>
-  <body>
-    <form>
-      <label for="category_input">С чем связано ваше обращение?</label>
-      <div class="support-form__input-wrapper">
+</head>
+<body>
+<form>
+    <label for="category_input">С чем связано ваше обращение?</label>
+    <div class="support-form__input-wrapper">
         <input
-          class="support-form__input"
-          id="category_input"
-          type="text"
-          name="category"
-          placeholder="Категория обращения"
-          autocomplete="off"
-          required
+                class="support-form__input"
+                id="category_input"
+                type="text"
+                name="category"
+                placeholder="Категория обращения"
+                autocomplete="off"
+                required
         />
         <div class="support-form__help-wrap">
-          <div class="support-form__help-tooltip" id="help_abc_text"></div>
+            <div class="support-form__help-tooltip" id="help_abc_text"></div>
         </div>
-      </div>
+    </div>
 
-      <label for="description_input">Опишите проблему как можно подробнее</label>
-      <div class="support-form__input-wrapper">
+    <label for="description_input">Опишите проблему как можно подробнее</label>
+    <div class="support-form__input-wrapper">
         <input
-          class="support-form__input"
-          id="description_input"
-          type="text"
-          name="description"
-          placeholder="Описание проблемы"
-          autocomplete="off"
-          required
+                class="support-form__input"
+                id="description_input"
+                type="text"
+                name="description"
+                placeholder="Описание проблемы"
+                autocomplete="off"
+                required
         />
         <div class="support-form__help-wrap">
-          <div class="support-form__help-tooltip" id="help_desc_text"></div>
+            <div class="support-form__help-tooltip" id="help_desc_text"></div>
         </div>
-      </div>
+    </div>
 
-      <p class="auth-form__error-message" id="error_message"></p>
+    <p class="auth-form__error-message" id="error_message"></p>
 
-      <button class="auth-form__btn" type="submit">Отправить обращение</button>
-    </form>
-  </body>
+    <button class="auth-form__btn" type="submit">Отправить обращение</button>
+</form>
+</body>
+<script>
+    function getCookie(name) {
+        return document.cookie
+            .split("; ")
+            .find(row => row.startsWith(name + "="))
+            ?.split("=")[1] || "";
+    }
+
+    document.querySelector("form").addEventListener("submit", async (e) => {
+        e.preventDefault();
+
+        const category = document.getElementById("category_input").value;
+        const message = document.getElementById("description_input").value;
+
+        const csrf = getCookie("csrf_token");
+
+        const payload = {
+            category,
+            message,
+        };
+        const body = JSON.stringify(payload);
+
+        try {
+            if (window.parent !== window) {
+                window.parent.postMessage(
+                    {
+                        source: "support-form.html",
+                        kind: "appeal-submit-json",
+                        body,
+                    },
+                    window.location.origin,
+                );
+            }
+        } catch (_) {
+            /* cross-origin parent — не шлём */
+        }
+
+        try {
+            const res = await fetch("http://localhost:8080/support/create_appeal", {
+                method: "POST",
+                credentials: "include",
+                headers: {
+                    "Content-Type": "application/json",
+                    "X-CSRF-Token": csrf
+                },
+                body,
+            });
+            console.log(res)
+            if (!res.ok) {
+                document.getElementById("error_message").textContent =
+                    "Ошибка отправки (" + res.status + ")";
+                return;
+            }
+
+            document.getElementById("error_message").textContent = "";
+
+        } catch (err) {
+            document.getElementById("error_message").textContent =
+                err;
+        }
+    });
+</script>
 </html>

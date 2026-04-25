@@ -1,5 +1,3 @@
-import {client} from "../api/client.ts";
-
 export const MONTHS: string[] = [
     "Январь", "Февраль", "Март", "Апрель", "Май", "Июнь",
     "Июль", "Август", "Сентябрь", "Октябрь", "Ноябрь", "Декабрь",
@@ -29,17 +27,3 @@ export function get_transaction_types(): any[] { return transactionTypes; }
 
 /** @param {any[]} v */
 export function set_transaction_types(v: any[]): void { transactionTypes = v; }
-
-let id: number = -1;
-
-export async function get_user_id(): Promise<number> {
-    if (id == -1) {
-        let response: Response = await client("/auth/refresh", {
-            method: "POST",
-            credentials: "include",
-        });
-        let data: any = await response.json();
-        id = data.user.id;
-    }
-    return id;
-}
