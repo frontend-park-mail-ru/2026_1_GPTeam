@@ -1,21 +1,20 @@
 import { client } from "./client.ts";
 import { is_login } from "./auth.ts";
-import type { SimpleResponse } from "../types/interfaces.ts";
+// ДОБАВИЛИ ИМПОРТ User
+import type { SimpleResponse, User } from "../types/interfaces.ts";
 
 /**
  * Ответ сервера с данными профиля.
+ * Теперь он правильно говорит, что внутри лежит объект user типа User (где есть id)
  */
-interface ProfileResponse extends SimpleResponse {
-    username?: string;
-    email?: string;
-    created_at?: string;
-    avatar_url?: string;
+export interface ProfileResponse extends SimpleResponse {
+    user?: User; 
 }
 
 /**
  * Тело запроса на обновление профиля.
  */
-interface UpdateProfileRequest {
+export interface UpdateProfileRequest {
     username?: string;
     email?: string;
     password?: string;

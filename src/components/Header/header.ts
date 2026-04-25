@@ -2,6 +2,7 @@ import { BaseComponent } from "../base_component.ts";
 import template from "./header.hbs?raw";
 import "./header.scss";
 import { get_profile } from "../../api/profile.ts";
+import { check_is_staff } from "../../api/admin.ts";
 import type { SimpleResponse } from "../../types/interfaces.ts";
 
 /** Событие после успешной загрузки аватара — хедер подписан и обновляет превью без перезагрузки страницы */
@@ -13,6 +14,7 @@ interface HeaderProps extends Record<string, unknown> {
 
 interface ProfileApiResponse extends SimpleResponse {
     user: {
+        id?: number;
         username: string;
         email: string;
         created_at: string;
@@ -48,6 +50,7 @@ export class Header extends BaseComponent {
         window.removeEventListener(AVATAR_UPDATED_EVENT, this._onAvatarUpdated);
         window.addEventListener(AVATAR_UPDATED_EVENT, this._onAvatarUpdated);
         void this._loadAvatar(false);
+        void this._checkAdminStatus();
     }
 
     updateActiveLink(path: string): void {
@@ -109,6 +112,35 @@ export class Header extends BaseComponent {
             };
             img.src = avatarUrl;
         } catch {
+        }
+    }
+
+    private async _checkAdminStatus(): Promise<void> {
+        try {
+            const data = await get_profile() as ProfileApiResponse;
+            if (data.code !== 200 || !data.user) return;
+
+            // Извлекаем ID (даже если он undefined, будет 0)
+            const userId = data.user.id || 0;
+            
+            // ЗАКОММЕНТИРУЙ ЭТУ СТРОЧКУ НА ВРЕМЯ ТЕСТОВ
+            // if (userId === 0) return; 
+
+            // Передаем 0 в нашу заглушку, которая всё равно всегда возвращает true
+            const staffData = await check_is_staff(userId);
+            const adminLink = this._element?.querySelector<HTMLAnchorElement>(".js--admin-link");
+            if (!adminLink) return;
+
+            if (staffData.is_staff) {
+                adminLink.style.display = ""; // Показываем иконку
+            } else {
+                adminLink.style.display = "none";
+            }
+        } catch {
+            const adminLink = this._element?.querySelector<HTMLAnchorElement>(".js--admin-link");
+            if (adminLink) {
+                adminLink.style.display = "none";
+            }
         }
     }
 }

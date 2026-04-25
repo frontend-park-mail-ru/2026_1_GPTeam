@@ -7,5 +7,8 @@
     <div class="appeal-card__footer">
         <span class="appeal-card__date">{{date}}</span>
         <span class="appeal-card__id">#{{id}}</span>
+        {{#if author_id}}
+        <span class="appeal-card__author">Автор: {{author_id}}</span>
+        {{/if}}
     </div>
 </div>

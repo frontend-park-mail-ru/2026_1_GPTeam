@@ -13,6 +13,7 @@ export interface RequestWithErrors extends SimpleResponse {
 }
 
 export interface User {
+    id: number; // <--- ДОБАВЬ ЭТУ СТРОКУ
     username: string;
     email: string;
     created_at: string;
@@ -159,4 +160,9 @@ export interface AppealCardProps extends Record<string, unknown> {
     status: string;
     statusType: "new" | "in_progress" | "resolved";
     date: string;
+    author_id?: number;
+}
+
+export interface IsStaffResponse extends SimpleResponse {
+    is_staff: boolean;
 }
