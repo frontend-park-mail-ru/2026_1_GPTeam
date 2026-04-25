@@ -58,7 +58,6 @@ export class TransactionEditPage extends BasePage {
                     value: transactionData.value,
                     type: transactionData.type,
                     category: transactionData.category,
-                    currency: transactionData.currency,
                     title: transactionData.title,
                     description: transactionData.description,
                     transaction_date: transactionData.transaction_date,
@@ -86,7 +85,7 @@ export class TransactionEditPage extends BasePage {
     private async _handleFormSubmit(data: TransactionCreateRequest, root: HTMLElement): Promise<void> {
         if (!this._transactionId) return;
 
-        const errorBlock = root.querySelector<HTMLElement>("#error-message");
+        const errorBlock = root.querySelector<HTMLElement>("#error_message");
         
         try {
             if (errorBlock) errorBlock.classList.add("hidden");
