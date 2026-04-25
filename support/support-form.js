@@ -1,6 +1,5 @@
 let url_params = new URLSearchParams(window.location.search);
 let SERVER_URL = url_params.get("server_url");
-console.log("SERVER_URL", SERVER_URL);
 
 function getCookie(name) {
     return document.cookie
