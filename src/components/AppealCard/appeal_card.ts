@@ -1,22 +1,28 @@
-import { BaseComponent } from "../base_component.ts"; // Проверь правильность пути
+import { BaseComponent } from "../base_component.ts";
 import template from "./appeal_card.hbs?raw";
 import "./appeal_card.scss";
-import type { AppealCardProps } from "../../types/interfaces.ts"; // Импорт интерфейса
+import type { AppealCardProps } from "../../types/interfaces.ts";
+import { router } from "../../router/router_instance.ts"; // ДОБАВЬ ИМПОРТ РОУТЕРА
 
 export class AppealCard extends BaseComponent {
     constructor(props: AppealCardProps) {
-        // Передаем шаблон и пропсы родителю, он сам скомпилирует и сохранит
         super(template, props);
     }
 
-    // Если в карточке понадобятся клики (например, открыть детали тикета), 
-    // раскомментируй этот блок:
-    /*
-    protected _addEventListeners(): void {
-        this._delegate("click", ".appeal-card", (e, target) => {
+    // Добавляем логику клика
+    protected override _addEventListeners(): void {
+        // Добавляем курсор-указатель (pointer) через стили JS или добавь в SCSS: cursor: pointer;
+        const el = this.getElement();
+        if (el) {
+            el.style.cursor = "pointer";
+        }
+
+        // Слушаем клик по всей карточке
+        this._delegate("click", ".appeal-card", (e) => {
+            e.preventDefault();
             const id = this._props.id;
-            console.log("Клик по карточке:", id);
+            // Переходим на детальную страницу!
+            router.navigate(`/my_appeals/${id}`);
         });
     }
-    */
 }

@@ -6,6 +6,7 @@
 
 import { router } from "./router/router_instance.ts";
 import { AppealPage } from "./pages/Appeal/appeal.ts";
+import { AppealDetailPage } from "./pages/AppealDetail/appeal_detail.ts";
 import { LoginPage } from "./pages/Login/login.ts";
 import { SignupPage } from "./pages/Signup/signup.ts";
 import { BudgetPage } from "./pages/Budget/budget.ts";
@@ -32,6 +33,7 @@ import { TransactionEditPage } from "./pages/TransactionsEdit/transactions_edit.
 router
     .addRoute("/", () => new LandingPage())
     .addRoute("/my_appeals", () => new AppealPage())
+    .addRoute("/my_appeals/:id", (params) => new AppealDetailPage(params))
     .addRoute("/login", () => new LoginPage())
     .addRoute("/signup", () => new SignupPage())
     .addRoute("/profile", () => new ProfilePage())
