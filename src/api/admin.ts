@@ -65,8 +65,8 @@ export const get_admin_appeal_by_id = async (id: string | number): Promise<Appea
         method: "GET",
         credentials: "include",
     });
-    const data = await response.json() as SupportDetailResponse;
 
+    const data = await response.json() as SupportDetailResponse;
     if (!data?.id) return null;
 
     const info = mapStatus(data.status);

@@ -1,32 +1,40 @@
-<div class="page">
-    <main class="page__content appeal-detail">
-        <div class="appeal-detail__header">
-            <button class="appeal-detail__back js--appeal-detail-back" type="button">
-                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                    <path d="m15 18-6-6 6-6"/>
-                </svg>
-                К списку обращений
-            </button>
-            
-            <div class="appeal-detail__meta">
-                <span class="appeal-detail__status appeal-detail__status--{{statusType}}">{{status}}</span>
-                <span class="appeal-detail__id">#{{id}}</span>
-                <span class="appeal-detail__date">{{date}}</span>
-            </div>
+<main class="appeal-detail">
+    <div class="appeal-detail__header">
+        <button class="appeal-detail__back js--appeal-detail-back" type="button">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="m15 18-6-6 6-6"/>
+            </svg>
+            К списку обращений
+        </button>
+
+        <div class="appeal-detail__meta">
+            <span class="appeal-detail__status appeal-detail__status--{{statusType}}">{{status}}</span>
+            <span class="appeal-detail__id">#{{id}}</span>
+            <span class="appeal-detail__date">{{date}}</span>
+        </div>
+    </div>
+
+    <h1 class="appeal-detail__title">{{category}}</h1>
+
+    <div class="appeal-detail__content">
+        <div class="appeal-detail__box">
+            <div class="appeal-detail__box-label">Твоё сообщение:</div>
+            <p class="appeal-detail__message-text">{{message}}</p>
         </div>
 
-        <h1 class="appeal-detail__title">{{category}}</h1>
-        
-        <div class="appeal-detail__content">
-            <div class="appeal-detail__message-box">
-                <div class="appeal-detail__message-header">Твоё сообщение:</div>
-                <p class="appeal-detail__message-text">{{message}}</p>
+        {{#if isStaff}}
+        <div class="appeal-detail__box">
+            <div class="appeal-detail__box-label">Изменить статус:</div>
+            <div class="appeal-detail__status-form">
+                <select class="appeal-detail__select js--status-select">
+                    <option value="OPEN">Новое</option>
+                    <option value="IN_WORK">В работе</option>
+                    <option value="CLOSED">Решено</option>
+                </select>
+                <button class="appeal-detail__save-btn js--save-status" type="button">Сохранить</button>
             </div>
-            <! тут должен быть ответ поддержки но щас тут хардкод>
-            <div class="appeal-detail__reply-box">
-                <div class="appeal-detail__message-header appeal-detail__message-header--support">Ответ поддержки:</div>
-                <p class="appeal-detail__message-text">Здравствуйте! Ваше обращение принято в работу. Мы изучаем логи вашей сессии. Ожидайте ответа в ближайшее время.</p>
-            </div>
+            <span class="appeal-detail__save-msg js--save-msg"></span>
         </div>
-    </main>
-</div>
+        {{/if}}
+    </div>
+</main>

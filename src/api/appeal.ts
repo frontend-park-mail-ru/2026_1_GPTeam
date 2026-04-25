@@ -42,17 +42,19 @@ export const get_appeal_by_id = async (id: string | number): Promise<AppealCardP
         method: "GET",
         credentials: "include",
     });
-    const data = await response.json() as { appeal: SupportDetailResponse };
-    if (!data?.appeal) return null;
+    // бэк возвращает SupportDetailResponse напрямую, без обёртки { appeal: ... }
+    const data = await response.json() as SupportDetailResponse;
+    if (!data?.id) return null;
 
-    const info = mapStatus(data.appeal.status);
+    const info = mapStatus(data.status);
     return {
-        id: data.appeal.id,
-        category: data.appeal.category,
-        message: data.appeal.message,
+        id: data.id,
+        category: data.category,
+        message: data.message,
         status: info.text,
         statusType: info.type,
-        date: formatDate(data.appeal.created_at)
+        rawStatus: data.status,
+        date: formatDate(data.created_at)
     };
 };
 
