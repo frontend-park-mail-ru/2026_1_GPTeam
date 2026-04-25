@@ -1,3 +1,6 @@
+let url_params = new URLSearchParams(window.location.search);
+let SERVER_URL = url_params.get("server_url");
+
 function getCookie(name) {
     return document.cookie
         .split("; ")
@@ -7,7 +10,6 @@ function getCookie(name) {
 
 document.querySelector("form").addEventListener("submit", async (e) => {
     e.preventDefault();
-
     const category = document.getElementById("category_input").value;
     const message = document.getElementById("description_input").value;
 
@@ -35,8 +37,7 @@ document.querySelector("form").addEventListener("submit", async (e) => {
     }
 
     try {
-        let back_url = import.meta.env.VITE_SERVER_URL;
-        const res = await fetch(back_url + "/support/create_appeal", {
+        const res = await fetch(SERVER_URL + "/support/create_appeal", {
             method: "POST",
             credentials: "include",
             headers: {

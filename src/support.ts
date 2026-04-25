@@ -1,11 +1,9 @@
-import template from "./support.hbs?raw";
-import { BaseComponent } from "../src/components/base_component.ts";
-import "./support.scss";
-import {router} from "../src/router/router_instance.ts";
+import template from "../support/support.hbs?raw";
+import { BaseComponent } from "./components/base_component.ts";
+import "../support/support.scss";
+import {router} from "./router/router_instance.ts";
 
-const IFRAME_SRC_ENV = (import.meta.env.VITE_SUPPORT_IFRAME_URL as string | undefined)?.trim();
-const IFRAME_FALLBACK = "/support/support-form.html";
-const SUPPORT_IFRAME_URL = IFRAME_SRC_ENV && IFRAME_SRC_ENV.length > 0 ? IFRAME_SRC_ENV : IFRAME_FALLBACK;
+const SUPPORT_IFRAME_URL = "/support/support-form.html";
 
 
 /**
@@ -35,7 +33,6 @@ export class SupportWidget extends BaseComponent {
         if (d?.source !== "support-form.html" || d?.kind !== "appeal-submit-json" || typeof d.body !== "string") {
             return;
         }
-        console.log("[support.ts]", d.body);
     }
 
     protected override _addEventListeners(): void {
@@ -118,10 +115,9 @@ export class SupportWidget extends BaseComponent {
     ): void {
         const iframe = root.querySelector<HTMLIFrameElement>("[data-support-iframe]");
         if (iframe && !this._iframeSrcSet) {
-            iframe.src = SUPPORT_IFRAME_URL;
+            iframe.src = SUPPORT_IFRAME_URL + `?server_url=${encodeURIComponent(import.meta.env.VITE_SERVER_URL)}`;
             this._iframeSrcSet = true;
         }
-
 
         this._menuOpen = false;
         menu.hidden = true;
