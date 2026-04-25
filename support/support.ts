@@ -4,7 +4,7 @@ import "./support.scss";
 import {router} from "../src/router/router_instance.ts";
 
 const IFRAME_SRC_ENV = (import.meta.env.VITE_SUPPORT_IFRAME_URL as string | undefined)?.trim();
-const IFRAME_FALLBACK = "/support-form.html";
+const IFRAME_FALLBACK = "/support/support-form.html";
 const SUPPORT_IFRAME_URL = IFRAME_SRC_ENV && IFRAME_SRC_ENV.length > 0 ? IFRAME_SRC_ENV : IFRAME_FALLBACK;
 
 
