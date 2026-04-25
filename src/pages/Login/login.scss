@@ -25,3 +25,30 @@
     color: rgb(255 255 255 / 90%);
     transform: translateX(-2px);
 }
+
+@media (max-width: 768px) {
+    .back-btn {
+        top: 20px;
+        left: 24px;
+        padding: 8px 14px;
+        font-size: 13px;
+    }
+}
+
+@media (max-width: 480px) {
+    .back-btn {
+        top: 16px;
+        left: 16px;
+        padding: 6px 12px;
+        font-size: 12px;
+    }
+}
+
+@media (max-width: 320px) {
+    .back-btn {
+        top: 14px;
+        left: 12px;
+        padding: 6px 10px;
+        font-size: 11px;
+    }
+}

@@ -54,8 +54,8 @@ $color-budget-create-shadow-hover: rgb(72 79 255 / 70%);
   border: 1px solid $color-budget-card-border;
   border-radius: 16px;
   padding: 24px;
-  width: 732px;
-  max-width: 100%;
+  width: 100%;
+  max-width: 732px;
   box-sizing: border-box;
   font-family: Manrope, sans-serif;
   position: relative;
@@ -235,5 +235,156 @@ $color-budget-create-shadow-hover: rgb(72 79 255 / 70%);
   &:hover {
     box-shadow: 0 0 36px $color-budget-create-shadow-hover;
     transform: translateY(-1px);
+  }
+}
+
+@media (max-width: 1024px) {
+  .budget {
+    padding: 32px 24px;
+    gap: 32px;
+  }
+
+  .budget__title {
+    font-size: 26px;
+  }
+
+  .budget__list {
+    gap: 20px;
+  }
+}
+
+@media (max-width: 768px) {
+  .budget {
+    padding: 24px 16px;
+    gap: 24px;
+  }
+
+  .budget__header {
+    max-width: 100%;
+  }
+
+  .budget__title {
+    font-size: 24px;
+  }
+
+  .budget__list {
+    max-width: 100%;
+    gap: 16px;
+  }
+
+  .budget-card {
+    padding: 20px;
+  }
+
+  .budget-card__header {
+    margin-top: 16px;
+    gap: 12px;
+  }
+
+  .budget-card__amount {
+    font-size: 28px;
+  }
+
+  .budget-card__currency {
+    font-size: 16px;
+  }
+}
+
+@media (max-width: 480px) {
+  .budget {
+    padding: 20px 12px;
+    gap: 20px;
+  }
+
+  .budget__title {
+    font-size: 22px;
+  }
+
+  .budget-card {
+    padding: 16px;
+  }
+
+  .budget-card__header {
+    margin-top: 12px;
+    gap: 10px;
+  }
+
+  .budget-card__amount {
+    font-size: 24px;
+  }
+
+  .budget-card__currency {
+    font-size: 14px;
+  }
+
+  .budget-card__delete-btn {
+    width: 28px;
+    height: 28px;
+    font-size: 16px;
+  }
+
+  .budget__create {
+    padding: 12px 24px;
+    font-size: 15px;
+  }
+}
+
+@media (max-width: 320px) {
+  .budget {
+    padding: 16px 10px;
+    gap: 16px;
+  }
+
+  .budget__title {
+    font-size: 20px;
+  }
+
+  .budget-card {
+    padding: 14px;
+  }
+
+  .budget-card__header {
+    margin-top: 10px;
+    gap: 8px;
+  }
+
+  .budget-card__amount {
+    font-size: 20px;
+  }
+
+  .budget-card__currency {
+    font-size: 12px;
+  }
+
+  .budget-card__label {
+    font-size: 10px;
+  }
+
+  .budget-card__date {
+    font-size: 11px;
+  }
+
+  .budget-card__desc {
+    font-size: 12px;
+  }
+
+  .budget-card__progress-label,
+  .budget-card__progress-percent {
+    font-size: 12px;
+  }
+
+  .budget-card__progress-row {
+    margin-top: 16px;
+  }
+
+  .budget-card__delete-btn {
+    width: 26px;
+    height: 26px;
+    font-size: 14px;
+  }
+
+  .budget__create {
+    padding: 10px 20px;
+    font-size: 14px;
   }
 }

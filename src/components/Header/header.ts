@@ -48,6 +48,7 @@ export class Header extends BaseComponent {
         window.removeEventListener(AVATAR_UPDATED_EVENT, this._onAvatarUpdated);
         window.addEventListener(AVATAR_UPDATED_EVENT, this._onAvatarUpdated);
         void this._loadAvatar(false);
+        this._initBurgerMenu();
     }
 
     updateActiveLink(path: string): void {
@@ -110,5 +111,24 @@ export class Header extends BaseComponent {
             img.src = avatarUrl;
         } catch {
         }
+    }
+
+    private _initBurgerMenu(): void {
+        const burger = this._element?.querySelector<HTMLButtonElement>(".header__burger");
+        const nav = this._element?.querySelector<HTMLElement>(".header__nav");
+        if (!burger || !nav) return;
+
+        this._on(burger, "click", () => {
+            burger.classList.toggle("header__burger--active");
+            nav.classList.toggle("header__nav--open");
+        });
+
+        this._on(nav, "click", (e) => {
+            const target = e.target as HTMLElement;
+            if (target.closest("a")) {
+                burger.classList.remove("header__burger--active");
+                nav.classList.remove("header__nav--open");
+            }
+        });
     }
 }

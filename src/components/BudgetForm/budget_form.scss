@@ -4,6 +4,7 @@
     padding: 0;
     font-family: Manrope, sans-serif;
     width: 510px;
+    margin: 0 auto;
 }
 
 .budget-form label span {
@@ -361,4 +362,94 @@
     display: flex;
     justify-content: center;
     width: 100%;
+}
+
+@media (max-width: 1024px) {
+    .budget-form {
+        width: 100%;
+        padding: 0 20px;
+        box-sizing: border-box;
+    }
+
+    .budget-form__title {
+        font-size: 26px;
+        margin-bottom: 28px;
+    }
+}
+
+@media (max-width: 768px) {
+    .budget-form {
+        width: 100%;
+        padding: 0 16px;
+        box-sizing: border-box;
+    }
+
+    .budget-form__title {
+        font-size: 24px;
+        margin-bottom: 24px;
+    }
+
+    .budget-form__input {
+        padding: 12px 18px;
+        font-size: 15px;
+    }
+
+    .budget-form__btn {
+        padding: 14px;
+        font-size: 15px;
+    }
+}
+
+@media (max-width: 480px) {
+    .budget-form {
+        padding: 0 12px;
+    }
+
+    .budget-form__title {
+        font-size: 22px;
+    }
+
+    .budget-form__input {
+        padding: 10px 16px;
+        font-size: 14px;
+    }
+
+    .budget-form__btn {
+        padding: 12px;
+        font-size: 14px;
+    }
+}
+
+@media (max-width: 320px) {
+    .budget-form {
+        padding: 0 10px;
+    }
+
+    .budget-form__title {
+        font-size: 20px;
+        margin-bottom: 20px;
+    }
+
+    .budget-form label {
+        font-size: 13px;
+    }
+
+    .budget-form__input {
+        padding: 10px 14px;
+        font-size: 13px;
+    }
+
+    .budget-form__btn {
+        padding: 10px;
+        font-size: 13px;
+    }
+
+    .custom-calendar__day {
+        line-height: 28px;
+        font-size: 12px;
+    }
+
+    .custom-calendar__days {
+        grid-template-rows: repeat(6, 28px);
+    }
 }
