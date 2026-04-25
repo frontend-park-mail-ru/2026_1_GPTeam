@@ -32,6 +32,12 @@ export class AdminAppealDetailPage extends BasePage {
             }
 
             const compiledTemplate = Handlebars.compile(template);
+            const profile = data.user;
+            data.avatar = profile?.avatar_url && profile.avatar_url !== "img/default.png"
+                ? (profile.avatar_url.startsWith("http")
+                    ? profile.avatar_url
+                    : `${import.meta.env.VITE_SERVER_URL}/img/${profile.avatar_url}`)
+                : "";
             root.innerHTML = compiledTemplate(data);
 
             // Кнопка назад
