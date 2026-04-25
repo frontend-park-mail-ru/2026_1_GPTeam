@@ -117,30 +117,20 @@ export class Header extends BaseComponent {
 
     private async _checkAdminStatus(): Promise<void> {
         try {
-            const data = await get_profile() as ProfileApiResponse;
-            if (data.code !== 200 || !data.user) return;
-
-            // Извлекаем ID (даже если он undefined, будет 0)
-            const userId = data.user.id || 0;
-            
-            // ЗАКОММЕНТИРУЙ ЭТУ СТРОЧКУ НА ВРЕМЯ ТЕСТОВ
-            // if (userId === 0) return; 
-
-            // Передаем 0 в нашу заглушку, которая всё равно всегда возвращает true
-            const staffData = await check_is_staff(userId);
+            const staffData = await check_is_staff();
+            console.log(staffData);
             const adminLink = this._element?.querySelector<HTMLAnchorElement>(".js--admin-link");
+            
             if (!adminLink) return;
 
-            if (staffData.is_staff) {
-                adminLink.style.display = ""; // Показываем иконку
+            if (staffData.code === 200 && staffData.is_staff) {
+                adminLink.style.display = ""; 
             } else {
                 adminLink.style.display = "none";
             }
         } catch {
             const adminLink = this._element?.querySelector<HTMLAnchorElement>(".js--admin-link");
-            if (adminLink) {
-                adminLink.style.display = "none";
-            }
+            if (adminLink) adminLink.style.display = "none";
         }
     }
 }

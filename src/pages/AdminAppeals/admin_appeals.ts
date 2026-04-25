@@ -1,8 +1,7 @@
 import { BasePage } from "../base_page.ts";
 import template from "./admin_appeals.hbs?raw";
 import Handlebars from "handlebars";
-import { router } from "../../router/router_instance.ts";
-import { AppealCard } from "../../components/AppealCard/appeal_card.ts";
+import { AdminAppealCard } from "../../components/AdminAppealCard/admin_appeal_card.ts";
 import { get_all_appeals } from "../../api/admin.ts";
 import "./admin_appeals.scss";
 
@@ -38,7 +37,7 @@ export class AdminAppealsPage extends BasePage {
                     listContainer.style.display = "flex";
 
                     appeals.forEach(appealData => {
-                        const card = new AppealCard(appealData);
+                        const card = new AdminAppealCard(appealData);
                         card.render(listContainer);
                         this._components.push(card);
                     });
@@ -50,3 +49,4 @@ export class AdminAppealsPage extends BasePage {
         }
     }
 }
+

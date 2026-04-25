@@ -1,55 +1,58 @@
 import { client } from "./client.ts";
-import type { SimpleResponse, AppealCardProps, IsStaffResponse } from "../types/interfaces.ts";
+import type { SimpleResponse, IsStaffResponse, SupportsListResponse, SupportDetailResponse, AppealCardProps } from "../types/interfaces.ts";
 
-/**
- * Проверяет, является ли пользователь администратором.
- *
- * @async
- * @function check_is_staff
- * @param {number} id - ID пользователя
- * @returns {Promise<IsStaffResponse>}
- */
-/* export const check_is_staff = async (id: number): Promise<IsStaffResponse> => {
-    const response = await client(`/api/is_staff/${id}`, {
+const formatDate = (isoDate: string): string => {
+    if (!isoDate) return "";
+    const date = new Date(isoDate);
+    return date.toLocaleDateString("ru-RU", { 
+        day: "numeric", 
+        month: "long", 
+        year: "numeric" 
+    });
+};
+
+const mapStatus = (status: string): { text: string, type: "new" | "in_progress" | "resolved" } => {
+    switch (status) {
+        case "CLOSED": return { text: "Решено", type: "resolved" };
+        case "IN_WORK": return { text: "В работе", type: "in_progress" };
+        case "OPEN":
+        default: return { text: "Новое", type: "new" };
+    }
+};
+
+export const check_is_staff = async (): Promise<IsStaffResponse> => {
+    const response = await client("/api/is_staff", {
         method: "GET",
         credentials: "include",
     });
     return await response.json();
-}; */
+};
 
-export const check_is_staff = async (id: number): Promise<IsStaffResponse> => {
-    // Возвращаем объект с нужным полем, как это сделал бы реальный бэкенд
-    return { code: 200, is_staff: true }; 
-}
-
-/**
- * Получает список всех обращений (для администраторов).
- *
- * @async
- * @function get_all_appeals
- * @returns {Promise<AppealCardProps[]>}
- */
 export const get_all_appeals = async (): Promise<AppealCardProps[]> => {
     const response = await client("/support/get_all_appeals", {
         method: "GET",
         credentials: "include",
     });
-    const data = await response.json();
-    return data.appeals || [];
+    const data = await response.json() as SupportsListResponse;
+    
+    if (data.code !== 200 || !data.supports) return [];
+
+    return data.supports.map(s => {
+        const info = mapStatus(s.status);
+        return {
+            id: s.id,
+            category: s.category,
+            message: s.message,
+            status: info.text,
+            statusType: info.type,
+            date: formatDate(s.created_at)
+        };
+    });
 };
 
-/**
- * Обновляет статус обращения (для администраторов).
- *
- * @async
- * @function update_appeal_status
- * @param {number} id - ID обращения
- * @param {string} status - Новый статус
- * @returns {Promise<SimpleResponse>}
- */
-export const update_appeal_status = async (id: number, status: string): Promise<SimpleResponse> => {
+export const update_appeal_status = async (id: number, status: 'OPEN' | 'IN_WORK' | 'CLOSED'): Promise<SimpleResponse> => {
     const response = await client(`/support/update/${id}`, {
-        method: "POST",
+        method: "PUT",
         credentials: "include",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ status }),
@@ -57,19 +60,24 @@ export const update_appeal_status = async (id: number, status: string): Promise<
     return await response.json();
 };
 
-/**
- * Получает детальную информацию об обращении (для администраторов).
- *
- * @async
- * @function get_appeal_detail_admin
- * @param {number} id - ID обращения
- * @returns {Promise<AppealCardProps | null>}
- */
-export const get_appeal_detail_admin = async (id: number): Promise<AppealCardProps | null> => {
+export const get_admin_appeal_by_id = async (id: string | number): Promise<AppealCardProps | null> => {
     const response = await client(`/support/get_appeal/${id}`, {
         method: "GET",
         credentials: "include",
     });
-    const data = await response.json();
-    return data.appeal || null;
+    const data = await response.json() as SupportDetailResponse;
+
+    if (!data?.id) return null;
+
+    const info = mapStatus(data.status);
+    return {
+        id: data.id,
+        category: data.category,
+        message: data.message,
+        status: info.text,
+        statusType: info.type,
+        rawStatus: data.status,
+        date: formatDate(data.created_at),
+        user: data.user,
+    };
 };
