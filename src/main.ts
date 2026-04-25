@@ -21,6 +21,7 @@ import { TransactionDetailPage } from "./pages/TransactionsDetail/transactions_d
 import { load_categories, load_currencies, load_transaction_types } from "./api/currency.ts";
 import { set_currencies, set_categories, set_transaction_types } from "./store/store.ts";
 import { Header } from "./components/Header/header.ts";
+import { initSupportWidget } from "../support/support.ts";
 import { TransactionEditPage } from "./pages/TransactionsEdit/transactions_edit.ts";
 
 /**
@@ -110,6 +111,11 @@ async function init(): Promise<void> {
     });
 
     router.start();
+
+    const appSupport = document.getElementById("app_support");
+    if (appSupport) {
+        initSupportWidget(appSupport);
+    }
 
     /**
      * Регистрация Service Worker для офлайн-режима.
