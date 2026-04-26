@@ -119,10 +119,11 @@ async function init(): Promise<void> {
     });
 
     router.start();
-
-    const appSupport = document.getElementById("app_support");
-    if (appSupport) {
-        initSupportWidget(appSupport);
+    if (import.meta.env.VITE_ENABLE_SUPPORT === "true") {
+        const appSupport: HTMLElement | null = document.getElementById("app_support");
+        if (appSupport) {
+            initSupportWidget(appSupport);
+        }
     }
 
     /**
