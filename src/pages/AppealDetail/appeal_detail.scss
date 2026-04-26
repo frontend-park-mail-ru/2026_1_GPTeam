@@ -1,0 +1,106 @@
+.appeal-detail {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 32px 24px;
+    font-family: Manrope, sans-serif;
+    color: #fff;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+
+    &__header {
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+        margin-bottom: 24px;
+        width: 100%;
+    }
+
+    &__back {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        background: #1a1a1a;
+        border: 1px solid rgb(255 255 255 / 10%);
+        border-radius: 999px;
+        color: #999;
+        font-size: 14px;
+        font-weight: 500;
+        cursor: pointer;
+        padding: 8px 16px 8px 12px;
+        margin-bottom: 24px;
+        transition: all 0.2s ease;
+        font-family: inherit;
+
+        svg { transition: color 0.2s ease; }
+        &:hover {
+            color: #fff;
+            background: #2a2a2a;
+            border-color: rgb(255 255 255 / 20%);
+        }
+    }
+
+    &__meta {
+        display: flex;
+        align-items: center;
+        gap: 16px;
+        font-size: 14px;
+        color: #666;
+    }
+
+    &__status {
+        font-size: 12px;
+        font-weight: 600;
+        padding: 4px 10px;
+        border-radius: 999px;
+        
+        &--new { color: #fff; background: rgb(255 255 255 / 10%); }
+        &--in_progress { color: #ff9900; background: rgb(255 153 0 / 10%); }
+        &--resolved { color: #4bb34b; background: rgb(75 179 75 / 10%); }
+    }
+
+    &__title {
+        margin: 0 0 32px 0;
+        font-size: 28px;
+        font-weight: 700;
+        line-height: 1.2;
+    }
+
+    &__content {
+        display: flex;
+        flex-direction: column;
+        gap: 24px;
+    }
+
+    &__message-box, &__reply-box {
+        background: #0d0d0d;
+        border: 1px solid rgb(255 255 255 / 12%);
+        border-radius: 12px;
+        padding: 24px;
+    }
+
+    &__reply-box {
+        border-color: #484fff;
+        background: rgb(72 79 255 / 5%);
+    }
+
+    &__message-header {
+        font-size: 13px;
+        font-weight: 600;
+        color: #999;
+        margin-bottom: 12px;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+
+        &--support {
+            color: #484fff;
+        }
+    }
+
+    &__message-text {
+        margin: 0;
+        font-size: 15px;
+        line-height: 1.6;
+        color: #e0e0e0;
+    }
+}

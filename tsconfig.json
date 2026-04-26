@@ -20,6 +20,6 @@
     "allowJs": true,
     "types": ["vite/client", "@types/serviceworker"]
   },
-  "include": ["src"],
+  "include": ["src", "support"],
   "exclude": ["node_modules"]
 }

@@ -1,21 +1,8 @@
 import { client } from "./client.ts";
 import { is_login } from "./auth.ts";
-import type { SimpleResponse } from "../types/interfaces.ts";
+import type { ProfileResponse } from "../types/interfaces.ts";
 
-/**
- * Ответ сервера с данными профиля.
- */
-interface ProfileResponse extends SimpleResponse {
-    username?: string;
-    email?: string;
-    created_at?: string;
-    avatar_url?: string;
-}
-
-/**
- * Тело запроса на обновление профиля.
- */
-interface UpdateProfileRequest {
+export interface UpdateProfileRequest {
     username?: string;
     email?: string;
     password?: string;
@@ -23,14 +10,6 @@ interface UpdateProfileRequest {
     avatar_url?: string;
 }
 
-/**
- * Получает данные профиля пользователя с сервера.
- * При получении кода 401 автоматически пытается обновить токен и повторить запрос.
- *
- * @async
- * @function get_profile
- * @returns {Promise<ProfileResponse>}
- */
 export const get_profile = async (): Promise<ProfileResponse> => {
     const response = await client("/api/profile", {
         method: "GET",
@@ -50,16 +29,6 @@ export const get_profile = async (): Promise<ProfileResponse> => {
     return data;
 };
 
-/**
- * Обновляет профиль пользователя.
- * Передаёт только заполненные поля — пустые игнорируются сервером.
- * При 401 пытается обновить токен и повторить запрос.
- *
- * @async
- * @function update_profile
- * @param {UpdateProfileRequest} body - Поля для обновления.
- * @returns {Promise<ProfileResponse>}
- */
 export const update_profile = async (body: UpdateProfileRequest): Promise<ProfileResponse> => {
     const response = await client("/api/profile", {
         method: "PATCH",
