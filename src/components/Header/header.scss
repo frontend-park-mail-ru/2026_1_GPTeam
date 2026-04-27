@@ -39,5 +39,12 @@
             background-color: #1c1a1a;
             border-radius: 30px;
         }
+
+        &--admin {
+            img {
+                width: 32px;
+                height: 32px;
+            }
+        }
     }
 }
