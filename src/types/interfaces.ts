@@ -81,6 +81,36 @@ export interface BudgetResponse extends RequestWithErrors {}
 
 export interface DeleteResponse extends SimpleResponse {}
 
+
+export interface Account {
+    id: number;
+    name: string;
+    balance: number;
+    currency: string;
+    created_at: string;
+    updated_at: string;
+}
+
+export interface AccountCreateRequest {
+    name: string;
+    balance?: number;
+    currency: string;
+}
+
+export interface AccountUpdateRequest {
+    name?: string;
+    balance?: number;
+    currency?: string;
+}
+
+export interface AccountListResponse extends SimpleResponse {
+    accounts: Account[];
+}
+
+export interface AccountResponse extends RequestWithErrors {
+    account?: Account;
+}
+
 export interface Transaction {
     id: number;
     user_id: number;
