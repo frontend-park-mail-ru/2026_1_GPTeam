@@ -143,7 +143,6 @@ export interface TransactionCreateRequest {
     value: number;
     type: string;
     category: string;
-    currency: string;
     title: string;
     description: string;
     transaction_date: string;
@@ -166,4 +165,14 @@ export interface TransactionDraft {
 
 export interface VoiceTransactionDraftResponse extends SimpleResponse {
     draft: TransactionDraft;
+}
+
+export interface ShortAccount {
+    id: number;
+    name: string;
+    balance: number;
+}
+
+export interface ShortAccountResponse extends SimpleResponse {
+    accounts: ShortAccount[];
 }

@@ -1,15 +1,15 @@
 import { BaseComponent } from "../base_component";
 import { createTransaction } from "../../api/transactions";
-import { fetchAccountId } from "../../api/accounts";
+import {get_short_accounts} from "../../api/accounts";
 // @ts-ignore
 import template from "./transactions_form.hbs?raw";
 import "./transactions_form.scss";
 import { router } from "../../router/router_instance";
 import { CustomCalendar } from "../CustomCalendar/custom_calendar";
 import { CustomSelect } from "../CustomSelect/custom_select";
-import { get_categories, get_currencies } from "../../store/store";
+import { get_categories } from "../../store/store";
 import { validate_transaction_value, validate_transaction_date } from "../../utils/validation";
-import type { TransactionCreateRequest } from "../../types/interfaces";
+import type {ShortAccount, ShortAccountResponse, TransactionCreateRequest} from "../../types/interfaces";
 import {clean_data} from "../../utils/xss.ts";
 
 /**
@@ -21,7 +21,6 @@ interface TransactionFormData {
     value: number;
     type: string;
     category: string;
-    currency: string;
     title: string;
     description: string;
     transaction_date: string;
@@ -34,7 +33,7 @@ interface TransactionFormData {
 interface TransactionFormFields {
     title: HTMLInputElement | null;
     value: HTMLInputElement | null;
-    currency: HTMLInputElement | null;
+    account: HTMLInputElement | null;
     type: HTMLInputElement | null;
     category: HTMLInputElement | null;
     transaction_date: HTMLInputElement | null;
@@ -50,7 +49,7 @@ export class TransactionForm extends BaseComponent {
     private _dateCal: CustomCalendar | null = null;
     private _typeSelect: CustomSelect | null = null;
     private _categorySelect: CustomSelect | null = null;
-    private _currencySelect: CustomSelect | null = null;
+    private _accountSelect: CustomSelect | null = null;
     private _initialData: TransactionFormData | null = null;
     private _onSubmitCallback: ((data: TransactionCreateRequest) => Promise<void>) | null = null;
 
@@ -87,21 +86,12 @@ export class TransactionForm extends BaseComponent {
         if (!form) return;
 
         this._populateCategories(form);
-        this._populateCurrencies(form);
+        await this._populateAccounts(form);
         this._initSelects(form);
         this._initCalendar(form);
 
-        // Если это создание новой транзакции (нет initialData), ставим RUB по умолчанию
-        if (!this._initialData) {
-            const currencyInput = form.querySelector<HTMLInputElement>("#currency_input");
-            const currencyDisplay = form.querySelector<HTMLElement>("#currency_display");
-            if (currencyInput && currencyDisplay) {
-                currencyInput.value = "RUB";
-                currencyDisplay.innerText = "RUB";
-            }
-        } else {
+        if (this._initialData)
             this._fillFormData(this._initialData);
-        }
     }
 
     /**
@@ -119,7 +109,7 @@ export class TransactionForm extends BaseComponent {
             this._dateCal?.close();
             this._typeSelect?.close();
             this._categorySelect?.close();
-            this._currencySelect?.close();
+            this._accountSelect?.close();
         });
 
         form.querySelectorAll<HTMLInputElement | HTMLTextAreaElement>("input:not([type='hidden']), textarea").forEach(input => {
@@ -138,7 +128,6 @@ export class TransactionForm extends BaseComponent {
      * @private
      * @param {TransactionFormData} data - Данные транзакции
      */
-    
     private _fillFormData(data: TransactionFormData): void {
         const form = this.getElement();
         if (!form) return;
@@ -163,11 +152,11 @@ export class TransactionForm extends BaseComponent {
             categoryDisplay.innerText = data.category;
         }
 
-        const currencyInput = form.querySelector<HTMLInputElement>("#currency_input");
-        const currencyDisplay = form.querySelector<HTMLElement>("#currency_display");
-        if (currencyInput && currencyDisplay) {
-            currencyInput.value = data.currency;
-            currencyDisplay.innerText = data.currency;
+        const accountInput = form.querySelector<HTMLInputElement>("#account_input");
+        const accountDisplay = form.querySelector<HTMLElement>("#account_display");
+        if (accountInput && accountDisplay) {
+            accountInput.value = data.account_id.toString();
+            accountDisplay.innerText = data.account_id.toString();
         }
 
         const dateInput = form.querySelector<HTMLInputElement>("#transaction_date_input");
@@ -221,19 +210,19 @@ export class TransactionForm extends BaseComponent {
     }
 
     /**
-     * Заполняет дропдаун валют из store.
+     * Заполняет дропдаун аккаунтов из store.
      * @private
      * @param {Element} form - Элемент формы
      */
-    private _populateCurrencies(form: Element): void {
-        const dropdown = form.querySelector<HTMLElement>("#currency_dropdown")!;
-        const currencies = get_currencies();
-        if (currencies.length === 0) {
+    private async _populateAccounts(form: Element): Promise<void> {
+        const dropdown: HTMLElement = form.querySelector<HTMLElement>("#account_dropdown")!;
+        const accounts: ShortAccountResponse = await get_short_accounts();
+        if (accounts.accounts.length === 0) {
             dropdown.innerHTML = `<div class="custom-select__option" style="opacity:0.4;cursor:default">Валюты не загружены</div>`;
             return;
         }
-        dropdown.innerHTML = currencies
-            .map(c => `<div class="custom-select__option" data-value="${c}">${c}</div>`)
+        dropdown.innerHTML = accounts.accounts
+            .map((acc: ShortAccount) => `<div class="custom-select__option" data-value="${acc.id}">${acc.name}</div>`)
             .join("");
     }
 
@@ -257,13 +246,11 @@ export class TransactionForm extends BaseComponent {
             );
         }
 
-        if (get_currencies().length > 0) {
-            this._currencySelect = new CustomSelect(
-                form.querySelector<HTMLElement>("#currency_display")!,
-                form.querySelector<HTMLInputElement>("#currency_input")!,
-                form.querySelector<HTMLElement>("#currency_dropdown")!,
-            );
-        }
+        this._accountSelect = new CustomSelect(
+            form.querySelector<HTMLElement>("#account_display")!,
+            form.querySelector<HTMLInputElement>("#account_input")!,
+            form.querySelector<HTMLElement>("#account_dropdown")!,
+        );
     }
 
     /**
@@ -292,7 +279,7 @@ export class TransactionForm extends BaseComponent {
             e.stopPropagation();
             this._typeSelect?.close();
             this._categorySelect?.close();
-            this._currencySelect?.close();
+            this._accountSelect?.close();
             this._dateCal?.toggle();
         };
         
@@ -313,7 +300,7 @@ export class TransactionForm extends BaseComponent {
             if (field)
                 field.value = clean_data(field.value);
         }
-        const { title, value, currency, category, transaction_date, description } = fields;
+        const { title, value, account, category, transaction_date, description } = fields;
         let errors = false;
         let errorText = "";
 
@@ -326,11 +313,11 @@ export class TransactionForm extends BaseComponent {
         
         if (description) description.style.borderColor = "rgba(72, 79, 255, 0.5)";
         
-        const currencyDisplay = form.querySelector<HTMLElement>("#currency_display");
+        const accountDisplay = form.querySelector<HTMLElement>("#account_display");
         const categoryDisplay = form.querySelector<HTMLElement>("#category_display");
         const dateDisplay = form.querySelector<HTMLInputElement>("#transaction_date_display");
         
-        currencyDisplay?.classList.remove("transactions-form__input--invalid");
+        accountDisplay?.classList.remove("transactions-form__input--invalid");
         categoryDisplay?.classList.remove("transactions-form__input--invalid");
         if (dateDisplay) dateDisplay.style.borderColor = "rgba(72, 79, 255, 0.5)";
 
@@ -357,9 +344,9 @@ export class TransactionForm extends BaseComponent {
             }
         }
 
-        if (!currency || !currency.value) {
+        if (!account || !account.value) {
             errors = true;
-            currencyDisplay?.classList.add("transactions-form__input--invalid");
+            accountDisplay?.classList.add("transactions-form__input--invalid");
             if (!errorText) errorText = "Выберите валюту";
         }
 
@@ -407,13 +394,13 @@ export class TransactionForm extends BaseComponent {
             "title": "#title_input",
             "value": "#value_input",
             "type": "#type_input",
-            "currency": "#currency_input",
+            "account": "#account_input",
             "category": "#category_input",
             "transaction_date": "#transaction_date_input",
             "description": "#description_input",
         };
 
-        errors.forEach((err) => {
+        errors.forEach((err: {field: string, message: string}) => {
             const selector = fieldMap[err.field];
             if (selector) {
                 const input = form.querySelector<HTMLInputElement | HTMLTextAreaElement>(selector);
@@ -446,9 +433,9 @@ export class TransactionForm extends BaseComponent {
         });
 
         const categoryDisplay = form.querySelector<HTMLElement>("#category_display");
-        const currencyDisplay = form.querySelector<HTMLElement>("#currency_display");
+        const accountDisplay = form.querySelector<HTMLElement>("#account_display");
         categoryDisplay?.classList.remove("transactions-form__input--invalid");
-        currencyDisplay?.classList.remove("transactions-form__input--invalid");
+        accountDisplay?.classList.remove("transactions-form__input--invalid");
     }
 
     /**
@@ -466,7 +453,7 @@ export class TransactionForm extends BaseComponent {
         const fields: TransactionFormFields = {
             title: form.querySelector("#title_input"),
             value: form.querySelector("#value_input"),
-            currency: form.querySelector("#currency_input"),
+            account: form.querySelector("#account_input"),
             type: form.querySelector("#type_input"),
             category: form.querySelector("#category_input"),
             transaction_date: form.querySelector("#transaction_date_input"),
@@ -481,14 +468,11 @@ export class TransactionForm extends BaseComponent {
         if (submitBtn) submitBtn.disabled = true;
 
         try {
-            const accountId = await fetchAccountId();
-
             const payload: TransactionCreateRequest = {
-                account_id: accountId,
+                account_id: Number(fields.account!.value),
                 value: parseFloat(fields.value!.value),
                 type: fields.type!.value,
                 category: fields.category!.value,
-                currency: fields.currency!.value,
                 title: fields.title!.value.trim(),
                 description: fields.description!.value.trim(),
                 transaction_date: new Date(fields.transaction_date!.value).toISOString(),
