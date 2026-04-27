@@ -481,11 +481,18 @@ export class TransactionForm extends BaseComponent {
             if (this._onSubmitCallback) {
                 await this._onSubmitCallback(payload);
             } else {
-                const id = await createTransaction(payload);
-                if (id !== null) {
+                const response = await createTransaction(payload);
+                if (response && response.success) {
                     router.navigate("/operations");
                 } else {
-                    error_message.innerText = "Не удалось создать транзакцию";
+                    if (response && response.errors && response.errors.length > 0) {
+                        this.markFieldsInvalid(response.errors);
+                        // Показываем первую ошибку, привязанную к конкретному полю
+                        const specificError = response.errors.find(err => err.field !== "");
+                        error_message.innerText = specificError ? specificError.message : response.errors[0].message;
+                    } else {
+                        error_message.innerText = "Не удалось создать транзакцию";
+                    }
                 }
             }
         } catch {
