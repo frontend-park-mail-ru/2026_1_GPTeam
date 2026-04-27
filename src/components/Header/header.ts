@@ -2,6 +2,7 @@ import { BaseComponent } from "../base_component.ts";
 import template from "./header.hbs?raw";
 import "./header.scss";
 import { get_profile } from "../../api/profile.ts";
+import { check_is_staff } from "../../api/admin.ts";
 import type { SimpleResponse } from "../../types/interfaces.ts";
 
 /** Событие после успешной загрузки аватара — хедер подписан и обновляет превью без перезагрузки страницы */
@@ -13,6 +14,7 @@ interface HeaderProps extends Record<string, unknown> {
 
 interface ProfileApiResponse extends SimpleResponse {
     user: {
+        id?: number;
         username: string;
         email: string;
         created_at: string;
@@ -50,6 +52,7 @@ export class Header extends BaseComponent {
         window.addEventListener(AVATAR_UPDATED_EVENT, this._onAvatarUpdated);
         void this._loadAvatar(false);
         this._initBurgerMenu();
+        void this._checkAdminStatus();
     }
 
     updateActiveLink(path: string): void {
@@ -179,6 +182,25 @@ export class Header extends BaseComponent {
             img.src = avatarUrl;
         } catch {
             // аватар недоступен — оставляем дефолтную иконку
+        }
+    }
+
+    private async _checkAdminStatus(): Promise<void> {
+        try {
+            const staffData = await check_is_staff();
+            console.log(staffData);
+            const adminLink = this._element?.querySelector<HTMLAnchorElement>(".js--admin-link");
+            
+            if (!adminLink) return;
+
+            if (staffData.code === 200 && staffData.is_staff) {
+                adminLink.style.display = ""; 
+            } else {
+                adminLink.style.display = "none";
+            }
+        } catch {
+            const adminLink = this._element?.querySelector<HTMLAnchorElement>(".js--admin-link");
+            if (adminLink) adminLink.style.display = "none";
         }
     }
 }

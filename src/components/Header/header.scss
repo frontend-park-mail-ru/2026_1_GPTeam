@@ -70,6 +70,12 @@
     background-color: transparent;
 }
 
+/* Стиль иконки админки из ветки dev */
+.header__link--admin img {
+    width: 32px;
+    height: 32px;
+}
+
 .header__burger {
     display: none;
 }
