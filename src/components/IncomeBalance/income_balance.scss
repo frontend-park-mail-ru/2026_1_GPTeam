@@ -6,6 +6,8 @@
     border: 1px solid rgb(72 79 255 / 30%);
     max-width: 50%;
     overflow: hidden;
+    display: flex;
+    flex-direction: column;
 }
 
 .income-balance__label {
@@ -41,4 +43,54 @@
 .income-balance__icon {
     width: 20px;
     height: 20px;
+}
+
+@media (max-width: 1024px) {
+    .income-balance {
+        max-width: 100%;
+        padding: 20px;
+    }
+
+    .income-balance__amount {
+        font-size: 30px;
+    }
+}
+
+@media (max-width: 768px) {
+    .income-balance {
+        max-width: 100%;
+        padding: 18px;
+    }
+
+    .income-balance__amount {
+        font-size: 28px;
+    }
+}
+
+@media (max-width: 480px) {
+    .income-balance {
+        padding: 16px;
+    }
+
+    .income-balance__amount {
+        font-size: 24px;
+    }
+
+    .income-balance__currency {
+        font-size: 16px;
+    }
+}
+
+@media (max-width: 320px) {
+    .income-balance {
+        padding: 14px;
+    }
+
+    .income-balance__amount {
+        font-size: 20px;
+    }
+
+    .income-balance__currency {
+        font-size: 14px;
+    }
 }

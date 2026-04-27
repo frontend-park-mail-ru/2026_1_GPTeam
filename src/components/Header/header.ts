@@ -40,6 +40,7 @@ export class Header extends BaseComponent {
 
     destroy(): void {
         window.removeEventListener(AVATAR_UPDATED_EVENT, this._onAvatarUpdated);
+        this._closeMenu(); // закрываем меню при уничтожении компонента
         super.destroy();
     }
 
@@ -48,6 +49,7 @@ export class Header extends BaseComponent {
         window.removeEventListener(AVATAR_UPDATED_EVENT, this._onAvatarUpdated);
         window.addEventListener(AVATAR_UPDATED_EVENT, this._onAvatarUpdated);
         void this._loadAvatar(false);
+        this._initBurgerMenu();
     }
 
     updateActiveLink(path: string): void {
@@ -81,6 +83,73 @@ export class Header extends BaseComponent {
         }
     }
 
+    // ─── Приватные хелперы управления меню ───────────────────────────────────
+
+    private _openMenu(): void {
+        const burger  = this._element?.querySelector<HTMLButtonElement>(".header__burger");
+        const nav     = this._element?.querySelector<HTMLElement>(".header__nav");
+        const overlay = this._element?.querySelector<HTMLElement>(".header__overlay");
+
+        burger?.classList.add("header__burger--active");
+        nav?.classList.add("header__nav--open");
+        overlay?.classList.add("header__overlay--visible");
+        document.body.style.overflow = "hidden";
+    }
+
+    private _closeMenu(): void {
+        const burger  = this._element?.querySelector<HTMLButtonElement>(".header__burger");
+        const nav     = this._element?.querySelector<HTMLElement>(".header__nav");
+        const overlay = this._element?.querySelector<HTMLElement>(".header__overlay");
+
+        burger?.classList.remove("header__burger--active");
+        nav?.classList.remove("header__nav--open");
+        overlay?.classList.remove("header__overlay--visible");
+        document.body.style.overflow = "";
+    }
+
+    private _isMenuOpen(): boolean {
+        return this._element
+            ?.querySelector(".header__nav")
+            ?.classList.contains("header__nav--open") ?? false;
+    }
+
+    // ─── Инициализация бургер-меню ───────────────────────────────────────────
+
+    private _initBurgerMenu(): void {
+        const burger  = this._element?.querySelector<HTMLButtonElement>(".header__burger");
+        const nav     = this._element?.querySelector<HTMLElement>(".header__nav");
+        const overlay = this._element?.querySelector<HTMLElement>(".header__overlay");
+
+        if (!burger || !nav || !overlay) return;
+
+        // Открытие / закрытие по клику на бургер
+        this._on(burger, "click", () => {
+            this._isMenuOpen() ? this._closeMenu() : this._openMenu();
+        });
+
+        // Закрытие по клику на оверлей
+        this._on(overlay, "click", () => {
+            this._closeMenu();
+        });
+
+        // Закрытие при переходе по ссылке внутри nav
+        this._on(nav, "click", (e) => {
+            const target = e.target as HTMLElement;
+            if (target.closest("a")) {
+                this._closeMenu();
+            }
+        });
+
+        // Закрытие по Escape
+        this._on(document as unknown as HTMLElement, "keydown", (e) => {
+            if ((e as KeyboardEvent).key === "Escape" && this._isMenuOpen()) {
+                this._closeMenu();
+            }
+        });
+    }
+
+    // ─── Загрузка аватара ────────────────────────────────────────────────────
+
     private async _loadAvatar(cacheBust: boolean): Promise<void> {
         try {
             const data = await get_profile() as ProfileApiResponse;
@@ -109,6 +178,7 @@ export class Header extends BaseComponent {
             };
             img.src = avatarUrl;
         } catch {
+            // аватар недоступен — оставляем дефолтную иконку
         }
     }
 }

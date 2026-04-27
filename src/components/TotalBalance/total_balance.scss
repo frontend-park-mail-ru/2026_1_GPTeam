@@ -6,6 +6,8 @@
     border: 1px solid rgb(72 79 255 / 50%);
     max-width: 100%;
     overflow: hidden;
+    display: flex;
+    flex-direction: column;
 }
 
 .total-balance__label {
@@ -36,4 +38,60 @@
 .total-balance__value {
     max-width: 84%;
     overflow-wrap: break-word;
+}
+
+@media (max-width: 1024px) {
+    .total-balance {
+        padding: 20px;
+    }
+
+    .total-balance__amount {
+        font-size: 36px;
+    }
+
+    .total-balance__currency {
+        font-size: 20px;
+    }
+}
+
+@media (max-width: 768px) {
+    .total-balance {
+        padding: 18px;
+    }
+
+    .total-balance__amount {
+        font-size: 32px;
+    }
+
+    .total-balance__currency {
+        font-size: 18px;
+    }
+}
+
+@media (max-width: 480px) {
+    .total-balance {
+        padding: 16px;
+    }
+
+    .total-balance__amount {
+        font-size: 28px;
+    }
+
+    .total-balance__currency {
+        font-size: 16px;
+    }
+}
+
+@media (max-width: 320px) {
+    .total-balance {
+        padding: 14px;
+    }
+
+    .total-balance__amount {
+        font-size: 24px;
+    }
+
+    .total-balance__currency {
+        font-size: 14px;
+    }
 }

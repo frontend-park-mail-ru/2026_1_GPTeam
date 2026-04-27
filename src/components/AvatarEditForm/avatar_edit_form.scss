@@ -4,6 +4,8 @@
     align-items: center;
     gap: 16px;
     width: 100%;
+    padding: 0 16px;
+    box-sizing: border-box;
 }
 
 .avatar-edit__preview {
@@ -133,4 +135,32 @@
 
 .avatar-edit__btn-cancel:hover {
     background: rgb(255 255 255 / 10%);
+}
+
+@media (max-width: 480px) {
+    .avatar-edit__preview {
+        width: 88px;
+        height: 88px;
+    }
+
+    .avatar-edit__circle {
+        width: 88px;
+        height: 88px;
+        font-size: 28px;
+    }
+
+    .avatar-edit__initials {
+        font-size: 28px;
+    }
+
+    .avatar-edit__upload-btn {
+        padding: 8px 20px;
+        font-size: 13px;
+    }
+
+    .avatar-edit__btn-save,
+    .avatar-edit__btn-cancel {
+        padding: 10px;
+        font-size: 14px;
+    }
 }

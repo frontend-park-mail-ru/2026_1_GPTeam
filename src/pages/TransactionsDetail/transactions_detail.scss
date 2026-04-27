@@ -169,3 +169,147 @@
 }
 
 .transactions-detail__error { color: #ff9dad; }
+
+@media (max-width: 1024px) {
+  .transactions-detail-page {
+    padding: 36px 16px;
+  }
+
+  .transactions-detail__card {
+    padding: 28px;
+  }
+
+  .transactions-detail__icon {
+    width: 56px;
+    height: 56px;
+    font-size: 26px;
+  }
+
+  .transactions-detail__title {
+    font-size: 20px;
+  }
+
+  .transactions-detail__amount {
+    font-size: 28px;
+  }
+}
+
+@media (max-width: 768px) {
+  .transactions-detail-page {
+    padding: 32px 16px;
+  }
+
+  .transactions-detail__card {
+    padding: 24px;
+  }
+
+  .transactions-detail__icon {
+    width: 52px;
+    height: 52px;
+    font-size: 24px;
+  }
+
+  .transactions-detail__title {
+    font-size: 18px;
+  }
+
+  .transactions-detail__amount {
+    font-size: 26px;
+  }
+
+  .transactions-detail__row {
+    padding: 12px 14px;
+  }
+
+  .transactions-detail__key {
+    font-size: 12px;
+  }
+
+  .transactions-detail__val {
+    font-size: 13px;
+  }
+}
+
+@media (max-width: 480px) {
+  .transactions-detail-page {
+    padding: 24px 12px;
+  }
+
+  .transactions-detail__card {
+    padding: 20px;
+    gap: 12px;
+  }
+
+  .transactions-detail__icon {
+    width: 48px;
+    height: 48px;
+    font-size: 22px;
+  }
+
+  .transactions-detail__title {
+    font-size: 16px;
+  }
+
+  .transactions-detail__amount {
+    font-size: 24px;
+  }
+
+  .transactions-detail__row {
+    padding: 10px 12px;
+  }
+
+  .transactions-detail__key {
+    font-size: 11px;
+  }
+
+  .transactions-detail__val {
+    font-size: 12px;
+  }
+
+  .transactions-detail__btn--danger {
+    padding: 12px;
+    font-size: 14px;
+  }
+}
+
+@media (max-width: 320px) {
+  .transactions-detail-page {
+    padding: 20px 10px;
+  }
+
+  .transactions-detail__card {
+    padding: 16px;
+    gap: 10px;
+  }
+
+  .transactions-detail__icon {
+    width: 44px;
+    height: 44px;
+    font-size: 20px;
+  }
+
+  .transactions-detail__title {
+    font-size: 15px;
+  }
+
+  .transactions-detail__amount {
+    font-size: 20px;
+  }
+
+  .transactions-detail__row {
+    padding: 8px 10px;
+  }
+
+  .transactions-detail__key {
+    font-size: 10px;
+  }
+
+  .transactions-detail__val {
+    font-size: 11px;
+  }
+
+  .transactions-detail__btn--danger {
+    padding: 10px;
+    font-size: 13px;
+  }
+}

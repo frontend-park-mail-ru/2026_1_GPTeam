@@ -943,7 +943,7 @@ footer {
     }
 }
 
-@media (width <= 768px) {
+@media (max-width: 768px) {
   .landing__nav-links { display: none; }
   .landing__features-grid, .landing__steps, .landing__reviews-grid { grid-template-columns: 1fr; }
   .landing__feature-card.landing__feature-card--featured { grid-column: span 1; }
@@ -952,4 +952,41 @@ footer {
   .landing__stat-item { border-right: none; border-bottom: 1px solid var(--border); }
   .landing__auth-indicator { font-size: 11px; padding: 6px 10px 6px 8px; gap: 6px; }
   .landing__auth-label { display: none; }
+}
+
+@media (max-width: 480px) {
+  .landing__hero { padding: 120px 16px 80px; }
+  .landing__site-logo { padding: 16px 20px; font-size: 24px; }
+  .landing__hero-badge { margin-bottom: 24px; }
+  .landing__hero-sub { font-size: 15px; }
+  .landing__hero-cta { flex-direction: column; align-items: center; margin-top: 32px; }
+  .landing__cta-primary, .landing__cta-secondary { width: 100%; max-width: 300px; }
+  .landing__cta-primary { height: 60px; padding: 20px 32px; font-size: 14px; }
+  .landing__cta-secondary { font-size: 14px; }
+  .landing__hero-mockup { margin-top: 48px; }
+  .landing__stat-item { padding: 24px 16px; }
+  .landing__stat-num { font-size: 32px; }
+  .landing__features { padding: 60px 16px; }
+  .landing__feature-card, .landing__step, .landing__review-card { padding: 20px; }
+  .landing__features-grid, .landing__steps, .landing__reviews-grid { gap: 12px; }
+  .landing__cta-glow-btn { padding: 16px 36px; font-size: 15px; }
+}
+
+@media (max-width: 320px) {
+  .landing__hero { padding: 100px 12px 60px; }
+  .landing__site-logo { padding: 12px 16px; font-size: 20px; }
+  .landing__hero-badge { font-size: 12px; padding: 4px 12px; margin-bottom: 20px; }
+  .landing__hero-sub { font-size: 14px; line-height: 1.6; }
+  .landing__cta-primary { height: 54px; padding: 18px 24px; font-size: 14px; }
+  .landing__cta-secondary { padding: 12px 24px; font-size: 14px; }
+  .landing__mock-card { padding: 16px; }
+  .landing__mock-value { font-size: 20px; }
+  .landing__stat-item { padding: 20px 12px; }
+  .landing__stat-num { font-size: 26px; }
+  .landing__stat-desc { font-size: 12px; }
+  .landing__feature-title, .landing__step-title { font-size: 15px; }
+  .landing__feature-text, .landing__step-text { font-size: 13px; }
+  .landing__review-text { font-size: 13px; }
+  .landing__cta-glow-btn { padding: 14px 28px; font-size: 14px; }
+  nav { padding: 12px 16px; }
 }
