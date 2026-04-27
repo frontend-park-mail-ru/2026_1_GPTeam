@@ -188,26 +188,6 @@ export class Header extends BaseComponent {
     private async _checkAdminStatus(): Promise<void> {
         try {
             const staffData = await check_is_staff();
-            console.log(staffData);
-            const adminLink = this._element?.querySelector<HTMLAnchorElement>(".js--admin-link");
-            
-            if (!adminLink) return;
-
-            if (staffData.code === 200 && staffData.is_staff) {
-                adminLink.style.display = ""; 
-            } else {
-                adminLink.style.display = "none";
-            }
-        } catch {
-            const adminLink = this._element?.querySelector<HTMLAnchorElement>(".js--admin-link");
-            if (adminLink) adminLink.style.display = "none";
-        }
-    }
-
-    private async _checkAdminStatus(): Promise<void> {
-        try {
-            const staffData = await check_is_staff();
-            console.log(staffData);
             const adminLink = this._element?.querySelector<HTMLAnchorElement>(".js--admin-link");
             
             if (!adminLink) return;
