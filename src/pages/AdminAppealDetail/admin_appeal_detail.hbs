@@ -1,0 +1,51 @@
+<main class="admin-appeal-detail">
+    <div class="admin-appeal-detail__header">
+        <button class="admin-appeal-detail__back js--admin-appeal-detail-back" type="button">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="m15 18-6-6 6-6"/>
+            </svg>
+            К списку обращений
+        </button>
+
+        <div class="admin-appeal-detail__meta">
+            <span class="admin-appeal-detail__status admin-appeal-detail__status--{{statusType}}">{{status}}</span>
+            <span class="admin-appeal-detail__id">#{{id}}</span>
+            <span class="admin-appeal-detail__date">{{date}}</span>
+        </div>
+    </div>
+
+    <h1 class="admin-appeal-detail__title">{{category}}</h1>
+
+    <div class="admin-appeal-detail__content">
+        <div class="admin-appeal-detail__box">
+            <div class="admin-appeal-detail__box-label">Сообщение пользователя:</div>
+            <p class="admin-appeal-detail__message-text">{{message}}</p>
+        </div>
+
+        {{#if user}}
+        <div class="admin-appeal-detail__box">
+            <div class="admin-appeal-detail__box-label">Автор обращения:</div>
+            <div class="admin-appeal-detail__user">
+                <img class="admin-appeal-detail__avatar" src="{{avatar}}" alt="avatar"/>
+                <div class="admin-appeal-detail__user-info">
+                    <span class="admin-appeal-detail__username">{{user.username}}</span>
+                    <span class="admin-appeal-detail__email">{{user.email}}</span>
+                </div>
+            </div>
+        </div>
+        {{/if}}
+
+        <div class="admin-appeal-detail__box">
+            <div class="admin-appeal-detail__box-label">Изменить статус:</div>
+            <div class="admin-appeal-detail__status-form">
+                <select class="admin-appeal-detail__select js--status-select">
+                    <option value="OPEN">Новое</option>
+                    <option value="IN_WORK">В работе</option>
+                    <option value="CLOSED">Решено</option>
+                </select>
+                <button class="admin-appeal-detail__save-btn js--save-status" type="button">Сохранить</button>
+            </div>
+            <span class="admin-appeal-detail__save-msg js--save-msg"></span>
+        </div>
+    </div>
+</main>
