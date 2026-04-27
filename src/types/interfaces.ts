@@ -90,9 +90,9 @@ export interface Transaction {
     value: number;
     type: string;
     category: string;
-    currency: string;
     title: string;
     description: string;
+    currency: string;
     created_at: string;
     transaction_date: string;
 }
@@ -125,7 +125,6 @@ export interface TransactionDraft {
     value: number;
     type: string;
     category: string;
-    currency: string;
     title: string;
     description: string;
     recorded_at: string;
