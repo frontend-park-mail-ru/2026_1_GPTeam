@@ -82,3 +82,61 @@ $color-profile-logout-hover-text: #f87171;
         }
     }
 }
+
+@media (max-width: 1024px) {
+  .profile {
+    width: 60%;
+    padding: 50px 32px;
+    gap: 32px;
+  }
+
+  .profile__title {
+    font-size: 26px;
+  }
+}
+
+@media (max-width: 768px) {
+  .profile {
+    width: 80%;
+    padding: 40px 24px;
+    gap: 24px;
+  }
+
+  .profile__title {
+    font-size: 24px;
+  }
+}
+
+@media (max-width: 480px) {
+  .profile {
+    width: 95%;
+    padding: 32px 16px;
+    gap: 20px;
+  }
+
+  .profile__title {
+    font-size: 22px;
+  }
+
+  .profile__btn {
+    padding: 14px;
+    font-size: 14px;
+  }
+}
+
+@media (max-width: 320px) {
+  .profile {
+    width: 98%;
+    padding: 24px 12px;
+    gap: 16px;
+  }
+
+  .profile__title {
+    font-size: 20px;
+  }
+
+  .profile__btn {
+    padding: 12px;
+    font-size: 13px;
+  }
+}

@@ -221,3 +221,43 @@ input:-webkit-autofill {
     box-shadow: 0 0 0 30px #191919 inset !important;
     -webkit-text-fill-color: #fff !important;
 }
+
+@media (max-width: 1024px) {
+    .profile-edit__input {
+        padding: 10px 18px;
+        font-size: 13px;
+    }
+}
+
+@media (max-width: 768px) {
+    .profile-edit__input {
+        padding: 10px 16px;
+        font-size: 13px;
+    }
+}
+
+@media (max-width: 480px) {
+    .profile-edit__input {
+        padding: 8px 16px;
+        font-size: 13px;
+    }
+
+    .profile-edit__btn-save,
+    .profile-edit__btn-cancel {
+        padding: 10px;
+        font-size: 13px;
+    }
+}
+
+@media (max-width: 320px) {
+    .profile-edit__input {
+        padding: 8px 12px;
+        font-size: 12px;
+    }
+
+    .profile-edit__btn-save,
+    .profile-edit__btn-cancel {
+        padding: 8px;
+        font-size: 12px;
+    }
+}

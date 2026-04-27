@@ -52,22 +52,40 @@ export const deleteTransaction = async (id: number): Promise<[boolean, string]> 
 };
 
 /**
- * Создает новую транзакцию.
+ * Создает новую транзакцию. Возвращает объект с успехом и массивом ошибок, если они есть.
  * @endpoint POST /transactions
  * @param {TransactionCreateRequest} transactionData - Данные транзакции
- * @returns {Promise<number | null>} ID созданной транзакции или null
  */
-export const createTransaction = async (transactionData: TransactionCreateRequest): Promise<number | null> => {
+export const createTransaction = async (
+    transactionData: TransactionCreateRequest
+): Promise<{ success: boolean; id?: number; errors?: Array<{ field: string; message: string }> }> => {
+    const payload = {
+        ...transactionData,
+        transaction_date: new Date(transactionData.transaction_date).toISOString(),
+    };
+
     const response = await client("/api/transactions", {
         method: "POST",
-        body: JSON.stringify(transactionData),
+        body: JSON.stringify(payload),
     });
-    const data: TransactionActionResponse = await response.json();
+    
+    const data: TransactionActionResponse | RequestWithErrors = await response.json();
     
     if (data.code === 200 || data.code === 201) {
-        return data.transaction_id;
+        return { success: true, id: (data as TransactionActionResponse).transaction_id };
     }
-    return null;
+
+    if ("errors" in data && data.errors) {
+        let errors: Array<{ field: string; message: string }> = data.errors;
+        let server_message = data.message ? data.message : "Ошибка сервера";
+        if (server_message === "constraint error") {
+            server_message = "Невозможно выполнить такую транзакцию";
+        }
+        errors.push({field: "", message: server_message});
+        return { success: false, errors: errors };
+    }
+
+    return { success: false, errors: [{ field: "", message: data.message || "Неизвестная ошибка" }] };
 };
 
 /**
@@ -75,17 +93,22 @@ export const createTransaction = async (transactionData: TransactionCreateReques
  * @endpoint PUT /transactions/{id}
  * @param {number} id - ID транзакции для обновления
  * @param {TransactionCreateRequest} transactionData - Новые данные транзакции
- * @returns {Promise<{ success: boolean; errors?: Array<{ field: string; message: string }> }>} Результат обновления
  */
 export const updateTransaction = async (
     id: number, 
     transactionData: TransactionCreateRequest
 ): Promise<{ success: boolean; errors?: Array<{ field: string; message: string }> }> => {
+    const payload = {
+        ...transactionData,
+        transaction_date: new Date(transactionData.transaction_date).toISOString(),
+    };
+
     const response = await client(`/api/transactions/${id}`, {
         method: "PUT",
-        body: JSON.stringify(transactionData),
+        body: JSON.stringify(payload),
     });
     const data: SimpleResponse | RequestWithErrors = await response.json();
+    
     if (data.code === 200) {
         return { success: true };
     }
@@ -93,9 +116,10 @@ export const updateTransaction = async (
     if ("errors" in data && data.errors) {
         let errors: Array<{ field: string; message: string }> = data.errors;
         let server_message = data.message ? data.message : "Ошибка сервера";
-        if (server_message === "constraint error")
-            server_message = "Невозможно выполнить такую транзакцию"
-        errors.push({field: "", message: server_message})
+        if (server_message === "constraint error") {
+            server_message = "Невозможно выполнить такую транзакцию";
+        }
+        errors.push({field: "", message: server_message});
         return { success: false, errors: errors };
     }
     return { success: false, errors: [] };
