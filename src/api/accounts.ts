@@ -74,3 +74,27 @@ export const updateAccount = async (id: number, payload: AccountUpdateRequest): 
 export const deleteAccount = async (id: number): Promise<SimpleResponse> => {
     return requestWithRefresh<SimpleResponse>(`/api/accounts/${id}`, { method: "DELETE" });
 };
+
+export interface ShortAccount {
+    id: number;
+    account_id: number;
+    name: string;
+    balance: number;
+    currency: string;
+}
+
+export const get_short_accounts = async (): Promise<ShortAccount[]> => {
+    const data = await fetchAccounts();
+
+    if (data.code !== 200 || !Array.isArray(data.accounts)) {
+        return [];
+    }
+
+    return data.accounts.map(account => ({
+        id: account.id,
+        account_id: account.id,
+        name: account.name,
+        balance: account.balance,
+        currency: account.currency,
+    }));
+};
