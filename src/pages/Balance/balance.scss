@@ -7,7 +7,7 @@ $color-balance-filter-accent: #5d5fef;
   display: flex;
   flex-direction: column;
   gap: 24px;
-  padding: 10px 40px 40px;
+  padding: 10px 32px 32px;
   width: 100%;
   max-width: 732px;
   font-family: Manrope, sans-serif;
@@ -106,7 +106,7 @@ $color-balance-filter-accent: #5d5fef;
 
 @media (max-width: 1024px) {
   .balance {
-    padding: 10px 32px 32px;
+    padding: 10px 24px 28px;
   }
 
   .balance__title {

@@ -3,7 +3,7 @@
     justify-content: center;
     align-items: center;
     min-height: calc(100vh - 100px);
-    padding: 40px 20px;
+    padding: 32px 20px;
     width: 100%;
     box-sizing: border-box;
 
@@ -176,7 +176,7 @@
 
 @media (max-width: 1024px) {
   .transactions-create {
-    padding: 36px 16px;
+    padding: 28px 16px;
   }
 
   .transactions-create__voice {
@@ -190,7 +190,7 @@
 
 @media (max-width: 768px) {
   .transactions-create {
-    padding: 32px 16px;
+    padding: 24px 16px;
   }
 
   .transactions-create__voice {
@@ -212,7 +212,7 @@
 
 @media (max-width: 480px) {
   .transactions-create {
-    padding: 24px 12px;
+    padding: 20px 12px;
   }
 
   .transactions-create__voice {
@@ -239,7 +239,7 @@
 
 @media (max-width: 320px) {
   .transactions-create {
-    padding: 20px 10px;
+    padding: 16px 10px;
   }
 
   .transactions-create__voice {

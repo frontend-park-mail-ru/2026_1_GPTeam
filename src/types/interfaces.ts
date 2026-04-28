@@ -120,6 +120,18 @@ export interface TransactionCreateRequest {
     transaction_date: string;
 }
 
+export interface TransactionSearchFilters {
+    start_date?: string;
+    end_date?: string;
+    category?: string;
+    account_id?: number;
+    q?: string;
+}
+
+export interface TransactionSearchResponse extends SimpleResponse {
+    transactions: Transaction[];
+}
+
 export interface TransactionDraft {
     raw_text: string;
     value: number;

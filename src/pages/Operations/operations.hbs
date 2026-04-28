@@ -7,6 +7,54 @@
         <button class="operations-page__add-btn" type="button">+ Новая операция</button>
     </div>
 
+    <div class="operations-page__search">
+        <div class="operations-search">
+            <div class="operations-search__input-wrapper">
+                <input type="text" class="operations-search__input" id="search_input" placeholder="Поиск по названию или описанию..." autocomplete="off">
+                <div class="operations-search__autocomplete" id="search_autocomplete"></div>
+            </div>
+            <div class="operations-search__filters">
+                <div class="operations-search__filter">
+                    <label class="operations-search__label">С:</label>
+                    <div class="operations-search__date-wrapper">
+                        <input type="text" class="operations-search__date-display" id="search_start_date_display" placeholder="ДД.ММ.ГГГГ" maxlength="10" autocomplete="off">
+                        <input type="hidden" id="search_start_date_input">
+                        <img class="operations-search__calendar-icon" id="search_start_date_calendar_btn" src="/icons/calendar.png" alt="Календарь">
+                        <div class="custom-calendar__popup" id="search_start_date_calendar"></div>
+                    </div>
+                </div>
+                <div class="operations-search__filter">
+                    <label class="operations-search__label">По:</label>
+                    <div class="operations-search__date-wrapper">
+                        <input type="text" class="operations-search__date-display" id="search_end_date_display" placeholder="ДД.ММ.ГГГГ" maxlength="10" autocomplete="off">
+                        <input type="hidden" id="search_end_date_input">
+                        <img class="operations-search__calendar-icon" id="search_end_date_calendar_btn" src="/icons/calendar.png" alt="Календарь">
+                        <div class="custom-calendar__popup" id="search_end_date_calendar"></div>
+                    </div>
+                </div>
+                <div class="operations-search__filter">
+                    <label class="operations-search__label">Категория:</label>
+                    <div class="operations-search__select-wrapper">
+                        <div class="operations-search__select-display" id="search_category_display"></div>
+                        <input type="hidden" id="search_category_input">
+                        <span class="custom-select__arrow">▾</span>
+                        <div class="custom-select__dropdown" id="search_category_dropdown"></div>
+                    </div>
+                </div>
+                <div class="operations-search__filter">
+                    <label class="operations-search__label">Счёт:</label>
+                    <div class="operations-search__select-wrapper">
+                        <div class="operations-search__select-display" id="search_account_display"></div>
+                        <input type="hidden" id="search_account_input">
+                        <span class="custom-select__arrow">▾</span>
+                        <div class="custom-select__dropdown" id="search_account_dropdown"></div>
+                    </div>
+                </div>
+                <button class="operations-search__reset" id="search_reset" type="button">Сбросить</button>
+            </div>
+        </div>
+    </div>
+
     <div class="operations-page__toolbar">
         <button class="operations-page__filter operations-page__filter--active" type="button">Все</button>
         <button class="operations-page__filter" type="button">Доходы</button>
