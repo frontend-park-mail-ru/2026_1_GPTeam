@@ -1,5 +1,5 @@
 type ValidationResult = [boolean, string];
-import { get_currencies } from "../store/store.ts";
+import {get_categories, get_currencies} from "../store/store.ts";
 
 /**
  * Проверка логина на использование только разрешённых символов.
@@ -180,5 +180,22 @@ export function validate_transaction_date(date_str: string): ValidationResult {
     if (date.getTime() - now.getTime() > fiveYears)
         return [false, "Дата не может быть позже 5 лет вперёд"];
 
+    return [true, ""];
+}
+
+/**
+ * Проверка категорий: массив категорий не должен быть пустым, каждая категория должна быть из списка доступных категорий.
+ * @function validate_categories
+ * @param {string[]} categories - Выбранные категории.
+ * @returns {ValidationResult}
+ */
+export function validate_categories(categories: string[]): ValidationResult {
+    if (categories.length === 0)
+        return [false, "Список выбранных категорий не может быть пустым"];
+    for (let category of categories) {
+        category = category.trim().toUpperCase();
+        if (!get_categories().includes(category))
+            return [false, "Категория не поддерживается"];
+    }
     return [true, ""];
 }
