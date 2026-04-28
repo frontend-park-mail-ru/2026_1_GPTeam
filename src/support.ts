@@ -1,7 +1,8 @@
-import template from "../support/support.hbs?raw";
+import template from "./support/support.hbs?raw";
 import { BaseComponent } from "./components/base_component.ts";
-import "../support/support.scss";
+import "./support/support.scss";
 import {router} from "./router/router_instance.ts";
+import { ToastContainer } from "./components/Toast/toast.ts";
 
 const SUPPORT_IFRAME_URL = "/support/support-form.html";
 
@@ -29,10 +30,36 @@ export class SupportWidget extends BaseComponent {
 
     private _onIframePostMessage(ev: MessageEvent): void {
         if (ev.origin !== window.location.origin) return;
-        const d = ev.data as { source?: string; kind?: string; body?: string };
-        if (d?.source !== "support-form.html" || d?.kind !== "appeal-submit-json" || typeof d.body !== "string") {
+        const d = ev.data as { source?: string; kind?: string; body?: string; status?: number; error?: string };
+        if (d?.source !== "support-form.html") {
             return;
         }
+
+        switch (d.kind) {
+            case "appeal-submit-success":
+                ToastContainer.success("Ваше обращение отправлено");
+                this._closePanelAfterDelay();
+                break;
+            case "appeal-submit-error":
+                const errorMsg = d.error || "Ошибка отправки обращения";
+                const statusMsg = d.status ? ` (${d.status})` : "";
+                ToastContainer.error(`${errorMsg}${statusMsg}`);
+                break;
+            case "appeal-submit-start":
+                // Можно показать индикатор загрузки, если нужно
+                break;
+        }
+    }
+
+    private _closePanelAfterDelay(): void {
+        setTimeout(() => {
+            const el = this.getElement();
+            if (!el) return;
+            const panel = el.querySelector<HTMLElement>("[data-support-panel]");
+            if (panel) {
+                this._closePanel(el, panel);
+            }
+        }, 1500);
     }
 
     protected override _addEventListeners(): void {

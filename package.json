@@ -4,8 +4,9 @@
   "version": "0.0.0",
   "type": "module",
   "scripts": {
-    "dev": "vite",
-    "build": "vite build",
+    "dev": "npm run copy-support && vite",
+    "build": "npm run copy-support && vite build",
+    "copy-support": "mkdir -p public/support && cp src/support/support-form.html public/support/ && cp src/support/support-form.js public/support/",
     "preview": "vite preview",
     "lint:css": "stylelint \"**/*.css\"",
     "lint:js": "eslint .",
