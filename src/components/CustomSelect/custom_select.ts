@@ -7,6 +7,8 @@ export class CustomSelect {
     private _input: HTMLInputElement;
     private _dropdown: HTMLElement;
     private _onChange?: (value: string) => void;
+    private _initialValue: string = "";
+    private _initialLabel: string = "";
 
     /**
      * @param {HTMLElement} display
@@ -50,14 +52,28 @@ export class CustomSelect {
         const first = this._dropdown.querySelector<HTMLElement>(".custom-select__option");
         if (first) {
             first.classList.add("selected");
-            this._input.value = first.dataset.value ?? "";
-            this._display.textContent = first.textContent?.trim() ?? (first.dataset.value ?? "");
+            this._initialValue = first.dataset.value ?? "";
+            this._initialLabel = first.textContent?.trim() ?? (first.dataset.value ?? "");
+            this._input.value = this._initialValue;
+            this._display.textContent = this._initialLabel;
         }
     }
 
     /** Закрывает дропдаун. */
     close(): void {
         this._dropdown.classList.remove("open");
+    }
+
+    /** Сбрасывает выбор на начальное значение. */
+    reset(): void {
+        this._input.value = this._initialValue;
+        this._display.textContent = this._initialLabel;
+        this._dropdown.querySelectorAll(".custom-select__option").forEach(o => o.classList.remove("selected"));
+        const first = this._dropdown.querySelector<HTMLElement>(".custom-select__option");
+        if (first) {
+            first.classList.add("selected");
+        }
+        this._onChange?.(this._initialValue);
     }
 
     /** @returns {string} */

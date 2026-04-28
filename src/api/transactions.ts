@@ -1,12 +1,14 @@
 import { client } from "./client";
-import { 
-    Transaction, 
-    TransactionListResponse, 
-    TransactionGetResponse, 
+import {
+    Transaction,
+    TransactionListResponse,
+    TransactionGetResponse,
     TransactionActionResponse,
     SimpleResponse,
     TransactionCreateRequest,
-    RequestWithErrors
+    RequestWithErrors,
+    TransactionSearchResponse,
+    TransactionSearchFilters
 } from "../types/interfaces";
 
 /**
@@ -95,7 +97,7 @@ export const createTransaction = async (
  * @param {TransactionCreateRequest} transactionData - Новые данные транзакции
  */
 export const updateTransaction = async (
-    id: number, 
+    id: number,
     transactionData: TransactionCreateRequest
 ): Promise<{ success: boolean; errors?: Array<{ field: string; message: string }> }> => {
     const payload = {
@@ -108,7 +110,7 @@ export const updateTransaction = async (
         body: JSON.stringify(payload),
     });
     const data: SimpleResponse | RequestWithErrors = await response.json();
-    
+
     if (data.code === 200) {
         return { success: true };
     }
@@ -123,4 +125,65 @@ export const updateTransaction = async (
         return { success: false, errors: errors };
     }
     return { success: false, errors: [] };
+};
+
+/**
+ * Ищет транзакции с фильтрами.
+ * @endpoint GET /transactions/search
+ * @param {TransactionSearchFilters} filters - Фильтры поиска
+ * @returns {Promise<Transaction[]>} Массив транзакций
+ */
+export const searchTransactions = async (
+    filters: TransactionSearchFilters
+): Promise<Transaction[]> => {
+    const params = new URLSearchParams();
+
+    if (filters.start_date) {
+        params.append("start_date", new Date(filters.start_date).toISOString());
+    }
+    if (filters.end_date) {
+        params.append("end_date", new Date(filters.end_date).toISOString());
+    }
+    if (filters.category) {
+        params.append("category", filters.category);
+    }
+    if (filters.account_id) {
+        params.append("account_id", String(filters.account_id));
+    }
+    if (filters.q) {
+        params.append("q", filters.q);
+    }
+
+    const response = await client(`/api/transactions/search?${params.toString()}`, { method: "GET" });
+    const data: TransactionSearchResponse = await response.json();
+
+    if (data.code === 200) {
+        return data.transactions;
+    }
+    return [];
+};
+
+/**
+ * Получает автокомплит по названиям транзакций.
+ * @endpoint GET /transactions/search
+ * @param {string} query - Строка поиска
+ * @returns {Promise<string[]>} Массив названий транзакций
+ */
+export const getTransactionTitlesAutocomplete = async (query: string): Promise<string[]> => {
+    const params = new URLSearchParams();
+    params.append("q", query);
+
+    const response = await client(`/api/transactions/search?${params.toString()}`, { method: "GET" });
+    const data: TransactionSearchResponse = await response.json();
+
+    if (data.code === 200) {
+        const titles = new Set<string>();
+        data.transactions.forEach(t => {
+            if (t.title) {
+                titles.add(t.title);
+            }
+        });
+        return Array.from(titles);
+    }
+    return [];
 };

@@ -18,14 +18,22 @@ $color-budget-create-shadow-hover: rgb(72 79 255 / 70%);
   display: flex;
   flex-direction: column;
   align-items: center;
-  gap: 40px;
-  padding: 40px;
+  gap: 32px;
+  padding: 32px;
   min-height: 90vh;
+  width: 100%;
+  max-width: 1400px;
+  margin: 0 auto;
+  box-sizing: border-box;
 }
 
 .budget__header {
   width: 100%;
-  max-width: 732px;
+  max-width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
 }
 
 .budget__title {
@@ -44,9 +52,10 @@ $color-budget-create-shadow-hover: rgb(72 79 255 / 70%);
 .budget__list {
   display: flex;
   flex-direction: column;
+  align-items: center;
   gap: 24px;
   width: 100%;
-  max-width: 732px;
+  max-width: 100%;
 }
 
 .budget-card {
@@ -240,8 +249,8 @@ $color-budget-create-shadow-hover: rgb(72 79 255 / 70%);
 
 @media (max-width: 1024px) {
   .budget {
-    padding: 32px 24px;
-    gap: 32px;
+    padding: 24px 20px;
+    gap: 24px;
   }
 
   .budget__title {
@@ -255,7 +264,7 @@ $color-budget-create-shadow-hover: rgb(72 79 255 / 70%);
 
 @media (max-width: 768px) {
   .budget {
-    padding: 24px 16px;
+    padding: 20px 16px;
     gap: 24px;
   }
 
@@ -292,7 +301,7 @@ $color-budget-create-shadow-hover: rgb(72 79 255 / 70%);
 
 @media (max-width: 480px) {
   .budget {
-    padding: 20px 12px;
+    padding: 16px 12px;
     gap: 20px;
   }
 
@@ -331,7 +340,7 @@ $color-budget-create-shadow-hover: rgb(72 79 255 / 70%);
 
 @media (max-width: 320px) {
   .budget {
-    padding: 16px 10px;
+    padding: 12px 10px;
     gap: 16px;
   }
 

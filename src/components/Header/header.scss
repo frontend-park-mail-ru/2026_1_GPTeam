@@ -7,7 +7,7 @@
     width: 100%;
     max-width: 1200px;
     min-height: 64px;
-    margin: 20px auto 40px auto;
+    margin: 16px auto 24px auto;
     padding: 12px 24px;
     box-sizing: border-box;
     background-color: #0a0a0a;
@@ -87,7 +87,7 @@
 @media (max-width: 768px) {
     .header {
         width: calc(100% - 200px);
-        margin: 16px auto 32px auto;
+        margin: 12px auto 20px auto;
         padding: 12px 16px;
     }
 
@@ -192,6 +192,6 @@
 @media (max-width: 480px) {
     .header {
         width: calc(100% - 24px);
-        margin: 12px auto 24px auto;
+        margin: 10px auto 16px auto;
     }
 }
