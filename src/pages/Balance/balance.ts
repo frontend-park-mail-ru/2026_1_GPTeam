@@ -22,6 +22,8 @@ import type {
 } from "../../types/interfaces.ts";
 import "./balance.scss";
 
+const SUMMARY_CURRENCIES = ["RUB", "EUR", "USD"] as const;
+
 /**
  * Страница баланса: сводка по валютам + CRUD счетов.
  */
@@ -47,7 +49,7 @@ export class BalancePage extends BasePage {
             this._showBalanceError(root, "Нет связи с backend. Запусти сервер на 8081 или проверь VITE_SERVER_URL.");
         }
 
-        this._renderBalanceSections(root, balanceData.balances);
+        this._renderBalanceSections(root, this._normalizeBalances(balanceData.balances));
         this._initFilters(root);
         this._initAccountControls(root);
         await this._loadAccounts(root);
@@ -73,10 +75,6 @@ export class BalancePage extends BasePage {
         if (!balanceContent) return;
 
         balanceContent.innerHTML = "";
-        if (balances.length === 0) {
-            balanceContent.innerHTML = "<div class='balance-empty'>Баланс пока не загружен</div>";
-            return;
-        }
 
         balances.forEach((item) => {
             const section = document.createElement("div");
@@ -111,6 +109,37 @@ export class BalancePage extends BasePage {
             expenses.render(section.querySelector<HTMLElement>(".balance__metrics-row")!);
             this._components.push(expenses);
         });
+    }
+
+
+    private _normalizeBalances(balances: CurrencyBalance[]): CurrencyBalance[] {
+        const result = new Map<string, CurrencyBalance>();
+
+        SUMMARY_CURRENCIES.forEach((currency) => {
+            result.set(currency, {
+                currency,
+                balance: 0,
+                income: 0,
+                expenses: 0,
+            });
+        });
+
+        balances.forEach((item) => {
+            const currency = String(item.currency ?? "").toUpperCase();
+            const summary = result.get(currency);
+            if (!summary) return;
+
+            summary.balance += this._toMoneyNumber(item.balance);
+            summary.income += this._toMoneyNumber(item.income);
+            summary.expenses += this._toMoneyNumber(item.expenses);
+        });
+
+        return SUMMARY_CURRENCIES.map((currency) => result.get(currency)!);
+    }
+
+    private _toMoneyNumber(value: unknown): number {
+        const numberValue = Number(value);
+        return Number.isFinite(numberValue) ? numberValue : 0;
     }
 
     private _initFilters(root: HTMLElement): void {
