@@ -48,7 +48,9 @@ export class ProfileEditPage extends BasePage {
         const compiledTemplate = Handlebars.compile(template);
         root.innerHTML = `
             <div class="page">
-                <main class="page__content">${compiledTemplate({}).trim()}</main>
+                <main class="page__content">
+                    ${compiledTemplate({}).trim()}
+                </main>
             </div>
         `;
 
@@ -89,5 +91,12 @@ export class ProfileEditPage extends BasePage {
         });
         form.render(root.querySelector<HTMLElement>(".profile-edit__form-container")!);
         this._components.push(form);
+
+        const changePasswordBtn = root.querySelector<HTMLElement>("#change-password-btn");
+        if (changePasswordBtn) {
+            changePasswordBtn.addEventListener("click", () => {
+                router.navigate("/profile/change-password");
+            });
+        }
     }
 }
