@@ -193,9 +193,9 @@ export function validate_categories(categories: string[]): ValidationResult {
     if (categories.length === 0)
         return [false, "Список выбранных категорий не может быть пустым"];
     for (let category of categories) {
-        category = category.trim().toUpperCase();
+        category = category.trim();
         if (!get_categories().includes(category))
-            return [false, "Категория не поддерживается"];
+            return [false, `Категория ${category} не поддерживается`];
     }
     return [true, ""];
 }
