@@ -5,8 +5,6 @@ import {
     is_empty,
     validate_username,
     validate_email,
-    validate_password,
-    are_password_equal,
 } from "../../utils/validation.ts";
 import { router } from "../../router/router_instance.ts";
 import { update_profile } from "../../api/profile.ts";
@@ -21,7 +19,7 @@ interface ProfileEditFormProps extends Record<string, unknown> {
 
 /**
  * Компонент формы редактирования профиля.
- * Валидирует логин, email и смену пароля.
+ * Валидирует логин и email.
  * Вызывает onSuccess/onError колбэки после отправки.
  *
  * @class ProfileEditForm
@@ -50,37 +48,14 @@ export class ProfileEditForm extends BaseComponent {
             this._on(cancelBtn, "click", () => router.navigate("/profile"));
         }
 
-        this._bindEye(form, "#edit-password-current", "#eye-current");
-        this._bindEye(form, "#edit-password-new", "#eye-new");
-        this._bindEye(form, "#edit-password-confirm", "#eye-confirm");
-
         this._on(form, "submit", (e) => this.submit(e as SubmitEvent));
-    }
-
-    /**
-     * Привязывает кнопку-глазок к полю пароля.
-     *
-     * @private
-     * @param {Element} form - Корневой элемент формы.
-     * @param {string} inputId - Селектор поля пароля.
-     * @param {string} eyeId - Селектор кнопки-глазка.
-     */
-    private _bindEye(form: Element, inputId: string, eyeId: string): void {
-        const input = form.querySelector<HTMLInputElement>(inputId);
-        const eye = form.querySelector<HTMLImageElement>(eyeId);
-        if (!input || !eye) return;
-        this._on(eye, "click", () => {
-            const isVisible = input.type === "text";
-            input.type = isVisible ? "password" : "text";
-            eye.src = isVisible ? "/icons/closed_eye.svg" : "/icons/opened_eye.svg";
-        });
     }
 
     /**
      * Валидирует поля формы редактирования профиля.
      *
      * @private
-     * @param {{ username: HTMLInputElement; email: HTMLInputElement; currentPassword: HTMLInputElement; newPassword: HTMLInputElement; confirmPassword: HTMLInputElement }} fields
+     * @param {{ username: HTMLInputElement; email: HTMLInputElement }} fields
      * @param {HTMLElement} errorEl
      * @returns {boolean} true если есть ошибки
      */
@@ -88,9 +63,6 @@ export class ProfileEditForm extends BaseComponent {
         fields: {
             username: HTMLInputElement;
             email: HTMLInputElement;
-            currentPassword: HTMLInputElement;
-            newPassword: HTMLInputElement;
-            confirmPassword: HTMLInputElement;
         },
         errorEl: HTMLElement
     ): boolean {
@@ -99,7 +71,7 @@ export class ProfileEditForm extends BaseComponent {
                 value.value = clean_data(value.value);
             }
         });
-        const { username, email, currentPassword, newPassword, confirmPassword } = fields;
+        const { username, email } = fields;
         let hasErrors = false;
         errorEl.innerText = "";
 
@@ -114,45 +86,25 @@ export class ProfileEditForm extends BaseComponent {
             input.classList.remove("invalid");
         };
 
-        [username, email, currentPassword, newPassword, confirmPassword].forEach(markValid);
+        [username, email].forEach(markValid);
 
-        const anyFilled = [username, email, currentPassword, newPassword, confirmPassword]
-            .some(f => f.value.trim());
+        const anyFilled = [username, email].some(f => f.value.trim() && f.value.trim() !== this._initialUsername && f.value.trim() !== this._initialEmail);
 
         if (!anyFilled) {
             errorEl.innerText = "Заполните хотя бы одно поле";
             return true;
         }
 
-        if (username.value.trim()) {
+        if (username.value.trim() && username.value.trim() !== this._initialUsername) {
             const [ok, err] = validate_username(username.value);
             if (!ok) markInvalid(username, err);
             else markValid(username);
         }
 
-        if (email.value.trim()) {
+        if (email.value.trim() && email.value.trim() !== this._initialEmail) {
             const [ok, err] = validate_email(email.value);
             if (!ok) markInvalid(email, err);
             else markValid(email);
-        }
-
-        const anyPassword = currentPassword.value || newPassword.value || confirmPassword.value;
-        if (anyPassword) {
-            const [okCurrent] = is_empty(currentPassword.value, "Текущий пароль");
-            if (!okCurrent) {
-                markInvalid(currentPassword, "Введите текущий пароль");
-            } else {
-                const [okNew, errNew] = validate_password(newPassword.value);
-                if (!okNew) {
-                    markInvalid(newPassword, errNew);
-                } else {
-                    const [okConfirm, errConfirm] = are_password_equal(
-                        newPassword.value,
-                        confirmPassword.value
-                    );
-                    if (!okConfirm) markInvalid(confirmPassword, errConfirm);
-                }
-            }
         }
 
         return hasErrors;
@@ -173,9 +125,6 @@ export class ProfileEditForm extends BaseComponent {
 
         const usernameInput = form.querySelector<HTMLInputElement>("#edit-username")!;
         const emailInput = form.querySelector<HTMLInputElement>("#edit-email")!;
-        const currentPasswordInput = form.querySelector<HTMLInputElement>("#edit-password-current")!;
-        const newPasswordInput = form.querySelector<HTMLInputElement>("#edit-password-new")!;
-        const confirmPasswordInput = form.querySelector<HTMLInputElement>("#edit-password-confirm")!;
         const errorEl = form.querySelector<HTMLElement>("#edit-error")!;
         const saveBtn = form.querySelector<HTMLButtonElement>(".profile-edit__btn-save")!;
 
@@ -183,9 +132,6 @@ export class ProfileEditForm extends BaseComponent {
             {
                 username: usernameInput,
                 email: emailInput,
-                currentPassword: currentPasswordInput,
-                newPassword: newPasswordInput,
-                confirmPassword: confirmPasswordInput,
             },
             errorEl
         );
@@ -196,11 +142,17 @@ export class ProfileEditForm extends BaseComponent {
 
         try {
             const body: Record<string, string> = {};
-            body.username = usernameInput.value.trim() || this._initialUsername;
-            body.email = emailInput.value.trim() || this._initialEmail;
-            if (newPasswordInput.value) {
-                body.password = newPasswordInput.value;
-                body.current_password = currentPasswordInput.value;
+            if (usernameInput.value.trim() && usernameInput.value.trim() !== this._initialUsername) {
+                body.username = usernameInput.value.trim();
+            }
+            if (emailInput.value.trim() && emailInput.value.trim() !== this._initialEmail) {
+                body.email = emailInput.value.trim();
+            }
+
+            if (Object.keys(body).length === 0) {
+                errorEl.innerText = "Заполните хотя бы одно поле";
+                this._onError?.();
+                return;
             }
 
             const result = await update_profile(body);
