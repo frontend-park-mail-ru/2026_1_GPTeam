@@ -6,6 +6,9 @@ on:
 jobs:
   deploy:
     runs-on: ubuntu-latest
+    concurrency:
+      group: ${{ github.workflow }}-${{ github.ref }}
+      cancel-in-progress: false
     steps:
       - name: Deploy
         uses: appleboy/ssh-action@v1
@@ -24,6 +27,5 @@ jobs:
             cp front/docker-compose.yaml docker-compose.yaml
             cp front/nginx.conf nginx/nginx.conf
             docker compose down
-            docker compose up -d
-            sleep 10
+            docker compose up -d --wait
             docker compose ps
