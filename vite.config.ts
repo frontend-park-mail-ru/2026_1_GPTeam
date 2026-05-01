@@ -12,19 +12,22 @@ dotenv.config()
 let DEBUG: boolean = process.env.DEBUG === "true";
 let port: number = Number(process.env.PORT)
 
+const adUrl = process.env.VITE_ADVERTISEMENT_URL || "";
+const frameSrc = adUrl ? `'self' ${adUrl}` : "'self'";
+
 let server: any = {
     host: true,
     port: port,
     strictPort: true,
-    hmr: {
-        host: "localhost",
-        protocol: "ws"
-    },
+    hmr: true,
     allowedHosts: [
         "money-first.ru",
         "www.money-first.ru",
         "localhost",
-    ]
+    ],
+    headers: {
+        "Content-Security-Policy": `frame-src ${frameSrc};`
+    }
 };
 
 if (!DEBUG) {

@@ -25,3 +25,35 @@
         transform: translateY(0);
     }
 }
+
+@media (max-width: 1024px) {
+  .transactions-edit {
+    padding: 36px 16px;
+  }
+
+  .transactions-edit .transactions-edit__container {
+    max-width: 100%;
+  }
+}
+
+@media (max-width: 768px) {
+  .transactions-edit {
+    padding: 32px 16px;
+  }
+
+  .transactions-edit .transactions-edit__container {
+    max-width: 100%;
+  }
+}
+
+@media (max-width: 480px) {
+  .transactions-edit {
+    padding: 24px 12px;
+  }
+}
+
+@media (max-width: 320px) {
+  .transactions-edit {
+    padding: 20px 10px;
+  }
+}

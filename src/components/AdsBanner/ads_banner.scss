@@ -1,0 +1,87 @@
+.ads-banner-container {
+    pointer-events: none;
+
+    &--left,
+    &--right {
+        position: fixed;
+        top: calc(var(--header-height, 80px) + 20px);
+        bottom: 20px;
+        width: 300px;
+        z-index: 1;
+        pointer-events: none;
+
+        @media (min-width: 1600px) {
+            width: 350px;
+        }
+
+        @media (max-width: 1400px) {
+            width: 250px;
+        }
+
+        @media (max-width: 1199px) {
+            display: none;
+        }
+    }
+
+    &--left {
+        left: 20px;
+
+        @media (min-width: 1600px) {
+            left: 40px;
+        }
+    }
+
+    &--right {
+        right: 20px;
+
+        @media (min-width: 1600px) {
+            right: 40px;
+        }
+    }
+
+    &--top {
+        position: relative;
+        margin-bottom: 20px;
+        pointer-events: auto;
+
+        @media (min-width: 1200px) {
+            display: none;
+        }
+    }
+
+    &--bottom {
+        position: relative;
+        margin-top: 20px;
+        pointer-events: auto;
+
+        @media (min-width: 1200px) {
+            display: none;
+        }
+    }
+
+    .ads-banner__iframe {
+        width: 100%;
+        border: none;
+        border-radius: 8px;
+        background: #2e2e2e;
+        pointer-events: auto;
+    }
+
+    &--left .ads-banner__iframe,
+    &--right .ads-banner__iframe {
+        height: 100%;
+
+        // Необязательно — просто чтобы iframe выглядел
+        // как отдельный блок, а не сливался с фоном страницы
+        box-shadow: 0 0 20px rgb(0 0 0 / 50%);
+    }
+
+    &--top .ads-banner__iframe,
+    &--bottom .ads-banner__iframe {
+        height: 90px;
+
+        @media (max-width: 768px) {
+            height: 50px;
+        }
+    }
+}
