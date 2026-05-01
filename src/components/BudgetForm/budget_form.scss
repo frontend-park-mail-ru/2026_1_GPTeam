@@ -233,7 +233,7 @@
     pointer-events: none;
 }
 
-.custom-select__dropdown {
+.custom-checkbox__dropdown {
     display: none;
     position: absolute;
     top: calc(100% - 10px);
@@ -242,12 +242,13 @@
     background: rgb(10 10 20 / 98%);
     border: 1px solid rgb(72 79 255 / 40%);
     border-radius: 16px;
-    overflow: hidden;
     z-index: 100;
     box-shadow: 0 8px 32px rgb(72 79 255 / 20%);
+    max-height: 200px;
+    overflow-y: auto;
 }
 
-.custom-select__dropdown.open {
+.custom-checkbox__dropdown.open {
     display: block;
 }
 
