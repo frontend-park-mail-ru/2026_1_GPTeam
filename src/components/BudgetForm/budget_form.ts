@@ -2,22 +2,22 @@ import { BaseComponent } from "../base_component.ts";
 import template from "./budget_form.hbs?raw";
 import "./budget_form.scss";
 import { client } from "../../api/client.ts";
-import { get_currencies } from "../../store/store.ts";
+import {get_categories} from "../../store/store.ts";
 import { router } from "../../router/router_instance.ts";
 import { CustomCalendar } from "../CustomCalendar/custom_calendar.ts";
-import { CustomSelect } from "../CustomSelect/custom_select.ts";
 import {
-    is_empty,
+    is_empty, validate_categories,
     validate_end_date,
     validate_start_date,
 } from "../../utils/validation.ts";
 import {clean_data} from "../../utils/xss.ts";
+import {CustomCheckBox} from "../CustomCheckBox/custom_check_box.ts";
 
 interface BudgetFormFields {
     title: HTMLInputElement | null;
     description: HTMLInputElement | null;
     target: HTMLInputElement | null;
-    currency: HTMLInputElement | null;
+    category: HTMLInputElement[];
     start_at: HTMLInputElement | null;
     end_at: HTMLInputElement | null;
 }
@@ -31,7 +31,7 @@ export class BudgetForm extends BaseComponent {
     private serverTime: Date | null = null;
     private _startCal: CustomCalendar | null = null;
     private _endCal: CustomCalendar | null = null;
-    private _currencySelect: CustomSelect | null = null;
+    private _categorySelect: CustomCheckBox | null = null;
 
     constructor(props: Record<string, unknown>) {
         super(template, props);
@@ -59,7 +59,6 @@ export class BudgetForm extends BaseComponent {
         const form = this.getElement();
         if (!form) return;
 
-        this._populateCurrencies(form);
         this._initSelect(form);
         this._initCalendars(form);
 
@@ -68,37 +67,19 @@ export class BudgetForm extends BaseComponent {
         document.addEventListener("click", () => {
             this._startCal?.close();
             this._endCal?.close();
-            this._currencySelect?.close();
+            this._categorySelect?.close();
         });
     }
 
     /**
-     * Заполняет дропдаун валют из store программно.
-     * @private
-     * @param {Element} form
-     */
-    private _populateCurrencies(form: Element): void {
-        const dropdown = form.querySelector<HTMLElement>("#currency_dropdown")!;
-        const currencies = get_currencies();
-        if (currencies.length === 0) {
-            dropdown.innerHTML = `<div class="custom-select__option" style="opacity:0.4;cursor:default">Валюты не загружены</div>`;
-            return;
-        }
-        dropdown.innerHTML = currencies
-            .map(c => `<div class="custom-select__option" data-value="${c}">${c}</div>`)
-            .join("");
-    }
-
-    /**
-     * Инициализирует выпадающий список выбора валюты.
+     * Инициализирует выпадающий список выбора категории.
      * @private
      */
     private _initSelect(form: Element): void {
-        const display = form.querySelector<HTMLElement>("#currency_display");
-        const input = form.querySelector<HTMLInputElement>("#currency_input");
-        const dropdown = form.querySelector<HTMLElement>("#currency_dropdown");
-        if (display && input && dropdown && get_currencies().length > 0) {
-            this._currencySelect = new CustomSelect(display, input, dropdown);
+        const display = form.querySelector<HTMLElement>("#category_display");
+        const dropdown = form.querySelector<HTMLElement>("#category_dropdown");
+        if (display && dropdown && get_categories().length > 0) {
+            this._categorySelect = new CustomCheckBox(display, dropdown, "category", get_categories(), get_categories());
         }
     }
 
@@ -142,7 +123,7 @@ export class BudgetForm extends BaseComponent {
         const toggleStart = (e: Event) => {
             e.stopPropagation();
             this._endCal?.close();
-            this._currencySelect?.close();
+            this._categorySelect?.close();
             this._startCal?.toggle();
         };
         this._on(startBtn, "click", toggleStart);
@@ -155,7 +136,7 @@ export class BudgetForm extends BaseComponent {
             this._endCal?.setMinDate(minForEnd);
             if (startVal) this._endCal?.setView(startVal);
             this._startCal?.close();
-            this._currencySelect?.close();
+            this._categorySelect?.close();
             this._endCal?.toggle();
         };
         this._on(endBtn, "click", toggleEnd);
@@ -170,17 +151,16 @@ export class BudgetForm extends BaseComponent {
      */
     validate(fields: BudgetFormFields, error_message: HTMLElement): boolean {
         for (let elem in fields) {
-            let field: HTMLInputElement | null = fields[elem as keyof BudgetFormFields];
-            if (field) {
+            let field: HTMLInputElement | HTMLInputElement[] | null = fields[elem as keyof BudgetFormFields];
+            if (field && !(field instanceof Array)) {
                 field.value = clean_data(field.value);
             }
-            console.log(elem, ":", field?.value)
         }
-        const { title, description, target, currency, start_at, end_at } = fields;
+        const { title, description, target, category, start_at, end_at } = fields;
         let errors = false;
         let errorText = "";
 
-        [title, description, target, currency, start_at, end_at]
+        [title, description, target, start_at, end_at]
             .filter((f): f is HTMLInputElement => f !== null)
             .forEach(f => f.style.borderColor = "rgba(72, 79, 255, 0.5)");
 
@@ -188,9 +168,14 @@ export class BudgetForm extends BaseComponent {
             [title!, "Название"],
             [description!, "Описание"],
             [target!, "Планируемый бюджет"],
-            [currency!, "Валюта"],
             [start_at!, "Дата начала"],
         ];
+
+        let [ok, err] = validate_categories(category.map((elem: HTMLInputElement) => elem.value));
+        if (!ok) {
+            errors = true;
+            if (!errorText) errorText = err;
+        }
 
         for (const [field, name] of required) {
             const [ok, err] = is_empty(field.value, name);
@@ -230,7 +215,7 @@ export class BudgetForm extends BaseComponent {
             title: form.querySelector("#title_input"),
             description: form.querySelector("#description_input"),
             target: form.querySelector("#target_input"),
-            currency: form.querySelector("#currency_input"),
+            category: Array.from(form.querySelectorAll<HTMLInputElement>(".custom-checkbox__input")).filter((elem: HTMLInputElement): boolean => elem.checked),
             start_at: form.querySelector("#start_at_input"),
             end_at: form.querySelector("#end_at_input"),
         };
@@ -238,11 +223,21 @@ export class BudgetForm extends BaseComponent {
 
         if (this.validate(fields, error_message)) return;
 
+        let selected_categories: string[] = [];
+        if (fields.category) {
+            fields.category.forEach((checkbox: HTMLInputElement) => {
+                if (checkbox.checked && checkbox.value) {
+                    selected_categories.push(checkbox.value);
+                }
+            });
+        }
+
         const payload = {
             title: fields.title!.value,
             description: fields.description!.value,
             target: parseInt(fields.target!.value, 10),
-            currency: fields.currency!.value,
+            currency: "RUB",
+            category: selected_categories,
             start_at: fields.start_at!.value ? new Date(fields.start_at!.value).toISOString() : null,
             end_at: fields.end_at!.value ? new Date(fields.end_at!.value).toISOString() : null,
         };
