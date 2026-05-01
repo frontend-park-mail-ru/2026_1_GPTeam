@@ -19,10 +19,7 @@ let server: any = {
     host: true,
     port: port,
     strictPort: true,
-    hmr: {
-        host: "localhost",
-        protocol: "ws"
-    },
+    hmr: true,
     allowedHosts: [
         "money-first.ru",
         "www.money-first.ru",
