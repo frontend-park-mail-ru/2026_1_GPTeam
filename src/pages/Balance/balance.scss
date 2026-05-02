@@ -17,7 +17,11 @@
   align-items: flex-end;
   justify-content: space-between;
   gap: 24px;
-  margin-bottom: 24px;
+  padding: 10px 32px 32px;
+  width: 100%;
+  max-width: 732px;
+  font-family: Manrope, sans-serif;
+  margin: 0 auto;
 }
 
 .balance-hero__eyebrow {
@@ -102,13 +106,10 @@
 }
 
 .balance__filters {
-  display: inline-flex;
-  flex-shrink: 0;
-  gap: 4px;
-  padding: 5px;
-  border: 1px solid rgb(255 255 255 / 8%);
-  border-radius: 999px;
-  background: rgb(0 0 0 / 22%);
+  display: flex;
+  gap: 12px;
+  margin: 24px 0 32px 0;
+  flex-wrap: wrap;
 }
 
 .balance__filter {
@@ -426,33 +427,86 @@
   }
 }
 
-@media (width <= 860px) {
+@media (max-width: 1024px) {
   .balance {
-    width: min(100% - 28px, 1120px);
-    padding-top: 26px;
+    padding: 10px 24px 28px;
   }
 
-  .balance-hero,
-  .balance-panel__head,
-  .accounts-panel__head {
-    flex-direction: column;
-    align-items: stretch;
+  .balance__title {
+    font-size: 26px;
+  }
+
+  .balance__metrics-row {
+    flex-direction: row;
+    gap: 16px;
+  }
+}
+
+@media (max-width: 768px) {
+  .balance {
+    padding: 10px 24px 30px;
+    max-width: 100%;
+  }
+
+  .balance__title {
+    font-size: 24px;
   }
 
   .balance__filters {
-    width: 100%;
-    overflow-x: auto;
+    gap: 8px;
   }
 
-  .account-form {
-    grid-template-columns: 1fr;
+  .balance__filter {
+    padding: 8px 16px;
+    font-size: 13px;
   }
 
-  .account-form__actions {
-    justify-content: stretch;
+  .balance__metrics-row {
+    flex-direction: column;
+    gap: 12px;
   }
 
-  .account-form__actions button {
-    flex: 1;
+  .income-balance,
+  .expenses-balance {
+    min-width: auto;
+  }
+}
+
+@media (max-width: 480px) {
+  .balance {
+    padding: 10px 16px 24px;
+  }
+
+  .balance__title {
+    font-size: 22px;
+  }
+
+  .balance__currency-label {
+    font-size: 20px;
+    margin: 30px 0 16px;
+  }
+
+  .balance__filter {
+    padding: 8px 14px;
+    font-size: 12px;
+  }
+}
+
+@media (max-width: 320px) {
+  .balance {
+    padding: 10px 12px 20px;
+  }
+
+  .balance__title {
+    font-size: 20px;
+  }
+
+  .balance__filters {
+    gap: 6px;
+  }
+
+  .balance__filter {
+    padding: 6px 12px;
+    font-size: 12px;
   }
 }

@@ -84,22 +84,39 @@ export class BudgetPage extends BasePage {
     private async _loadBudgetCards(root: HTMLElement, ids: number[]): Promise<void> {
         const list = root.querySelector<HTMLElement>(".js--budget-list");
         if (!list) return;
+
+        const budgets: Array<{ id: number; budget: Budget }> = [];
+
         for (const id of ids) {
             try {
                 const response = await client(`/api/get_budget/${id}`, { method: "GET", credentials: "include" });
                 const data: BudgetGetResponse = await response.json();
                 if (data.code === 200 && data.budget) {
-                    const card = new BudgetCard({
-                        budget: data.budget as Budget,
+                    budgets.push({
                         id,
-                        onDelete: (id, title) => this._handleDelete(id, title),
+                        budget: data.budget as Budget,
                     });
-                    card.render(list);
-                    this._components.push(card);
                 }
             } catch (err) {
                 console.error("Ошибка загрузки бюджета", id, err);
             }
+        }
+
+        // Сортировка по дате начала (сверху более поздние)
+        budgets.sort((a, b) => {
+            const dateA = new Date(a.budget.start_at);
+            const dateB = new Date(b.budget.start_at);
+            return dateB.getTime() - dateA.getTime();
+        });
+
+        for (const { id, budget } of budgets) {
+            const card = new BudgetCard({
+                budget: budget as Budget,
+                id,
+                onDelete: (id, title) => this._handleDelete(id, title),
+            });
+            card.render(list);
+            this._components.push(card);
         }
     }
 

@@ -1,12 +1,14 @@
 import { client } from "./client";
-import { 
-    Transaction, 
-    TransactionListResponse, 
-    TransactionGetResponse, 
+import {
+    Transaction,
+    TransactionListResponse,
+    TransactionGetResponse,
     TransactionActionResponse,
     SimpleResponse,
     TransactionCreateRequest,
-    RequestWithErrors
+    RequestWithErrors,
+    TransactionSearchResponse,
+    TransactionSearchFilters
 } from "../types/interfaces";
 
 /**
@@ -52,22 +54,40 @@ export const deleteTransaction = async (id: number): Promise<[boolean, string]> 
 };
 
 /**
- * Создает новую транзакцию.
+ * Создает новую транзакцию. Возвращает объект с успехом и массивом ошибок, если они есть.
  * @endpoint POST /transactions
  * @param {TransactionCreateRequest} transactionData - Данные транзакции
- * @returns {Promise<number | null>} ID созданной транзакции или null
  */
-export const createTransaction = async (transactionData: TransactionCreateRequest): Promise<number | null> => {
+export const createTransaction = async (
+    transactionData: TransactionCreateRequest
+): Promise<{ success: boolean; id?: number; errors?: Array<{ field: string; message: string }> }> => {
+    const payload = {
+        ...transactionData,
+        transaction_date: new Date(transactionData.transaction_date).toISOString(),
+    };
+
     const response = await client("/api/transactions", {
         method: "POST",
-        body: JSON.stringify(transactionData),
+        body: JSON.stringify(payload),
     });
-    const data: TransactionActionResponse = await response.json();
+    
+    const data: TransactionActionResponse | RequestWithErrors = await response.json();
     
     if (data.code === 200 || data.code === 201) {
-        return data.transaction_id;
+        return { success: true, id: (data as TransactionActionResponse).transaction_id };
     }
-    return null;
+
+    if ("errors" in data && data.errors) {
+        let errors: Array<{ field: string; message: string }> = data.errors;
+        let server_message = data.message ? data.message : "Ошибка сервера";
+        if (server_message === "constraint error") {
+            server_message = "Невозможно выполнить такую транзакцию";
+        }
+        errors.push({field: "", message: server_message});
+        return { success: false, errors: errors };
+    }
+
+    return { success: false, errors: [{ field: "", message: data.message || "Неизвестная ошибка" }] };
 };
 
 /**
@@ -75,17 +95,22 @@ export const createTransaction = async (transactionData: TransactionCreateReques
  * @endpoint PUT /transactions/{id}
  * @param {number} id - ID транзакции для обновления
  * @param {TransactionCreateRequest} transactionData - Новые данные транзакции
- * @returns {Promise<{ success: boolean; errors?: Array<{ field: string; message: string }> }>} Результат обновления
  */
 export const updateTransaction = async (
-    id: number, 
+    id: number,
     transactionData: TransactionCreateRequest
 ): Promise<{ success: boolean; errors?: Array<{ field: string; message: string }> }> => {
+    const payload = {
+        ...transactionData,
+        transaction_date: new Date(transactionData.transaction_date).toISOString(),
+    };
+
     const response = await client(`/api/transactions/${id}`, {
         method: "PUT",
-        body: JSON.stringify(transactionData),
+        body: JSON.stringify(payload),
     });
     const data: SimpleResponse | RequestWithErrors = await response.json();
+
     if (data.code === 200) {
         return { success: true };
     }
@@ -93,10 +118,72 @@ export const updateTransaction = async (
     if ("errors" in data && data.errors) {
         let errors: Array<{ field: string; message: string }> = data.errors;
         let server_message = data.message ? data.message : "Ошибка сервера";
-        if (server_message === "constraint error")
-            server_message = "Невозможно выполнить такую транзакцию"
-        errors.push({field: "", message: server_message})
+        if (server_message === "constraint error") {
+            server_message = "Невозможно выполнить такую транзакцию";
+        }
+        errors.push({field: "", message: server_message});
         return { success: false, errors: errors };
     }
     return { success: false, errors: [] };
+};
+
+/**
+ * Ищет транзакции с фильтрами.
+ * @endpoint GET /transactions/search
+ * @param {TransactionSearchFilters} filters - Фильтры поиска
+ * @returns {Promise<Transaction[]>} Массив транзакций
+ */
+export const searchTransactions = async (
+    filters: TransactionSearchFilters
+): Promise<Transaction[]> => {
+    const params = new URLSearchParams();
+
+    if (filters.start_date) {
+        params.append("start_date", new Date(filters.start_date).toISOString());
+    }
+    if (filters.end_date) {
+        params.append("end_date", new Date(filters.end_date).toISOString());
+    }
+    if (filters.category) {
+        params.append("category", filters.category);
+    }
+    if (filters.account_id) {
+        params.append("account_id", String(filters.account_id));
+    }
+    if (filters.q) {
+        params.append("q", filters.q);
+    }
+
+    const response = await client(`/api/transactions/search?${params.toString()}`, { method: "GET" });
+    const data: TransactionSearchResponse = await response.json();
+
+    if (data.code === 200) {
+        return data.transactions;
+    }
+    return [];
+};
+
+/**
+ * Получает автокомплит по названиям транзакций.
+ * @endpoint GET /transactions/search
+ * @param {string} query - Строка поиска
+ * @returns {Promise<string[]>} Массив названий транзакций
+ */
+export const getTransactionTitlesAutocomplete = async (query: string): Promise<string[]> => {
+    const params = new URLSearchParams();
+    params.append("q", query);
+
+    const response = await client(`/api/transactions/search?${params.toString()}`, { method: "GET" });
+    const data: TransactionSearchResponse = await response.json();
+
+    if (data.code === 200) {
+        const titles = new Set<string>();
+        data.transactions.forEach(t => {
+            if (t.title) {
+                titles.add(t.title);
+            }
+        });
+        return Array.from(titles);
+    }
+    return [];
 };

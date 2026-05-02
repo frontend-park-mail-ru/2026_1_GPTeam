@@ -2,12 +2,12 @@
     display: flex;
     flex-direction: column;
     align-items: center;
-    padding: 40px 48px;
-    gap: 16px;
-    font-family: Manrope, sans-serif;
-    width: 35%;
+    gap: 24px;
+    width: 100%;
+    max-width: 732px;
     margin: 0 auto;
-    position: relative;
+    padding: 10px 32px 32px;
+    font-family: Manrope, sans-serif;
 }
 
 .profile-edit__toast {
@@ -31,12 +31,12 @@
 
 .profile-edit__title {
     font-size: 28px;
-    font-weight: 800;
+    font-weight: 700;
     color: #fff;
     letter-spacing: -1px;
     text-align: center;
     font-family: Manrope, sans-serif;
-    margin: 25px;
+    margin: 25px 0;
 }
 
 .profile-edit__toast--success {
@@ -75,4 +75,67 @@
 
 .profile-edit__form-container {
     width: 100%;
+}
+
+@media (max-width: 1024px) {
+    .profile-edit-page {
+        padding: 10px 24px 28px;
+    }
+
+    .profile-edit__title {
+        font-size: 26px;
+        margin: 20px 0;
+    }
+}
+
+@media (max-width: 768px) {
+    .profile-edit-page {
+        padding: 10px 24px 30px;
+        max-width: 100%;
+    }
+
+    .profile-edit__title {
+        font-size: 24px;
+        margin: 16px 0;
+    }
+
+    .profile-edit__toast {
+        top: 90px;
+        padding: 8px 16px;
+        font-size: 12px;
+    }
+}
+
+@media (max-width: 480px) {
+    .profile-edit-page {
+        padding: 10px 16px 24px;
+    }
+
+    .profile-edit__title {
+        font-size: 22px;
+        margin: 16px 0;
+    }
+
+    .profile-edit__toast {
+        top: 80px;
+        padding: 6px 14px;
+        font-size: 12px;
+    }
+}
+
+@media (max-width: 320px) {
+    .profile-edit-page {
+        padding: 10px 12px 20px;
+    }
+
+    .profile-edit__title {
+        font-size: 20px;
+        margin: 12px 0;
+    }
+
+    .profile-edit__toast {
+        top: 70px;
+        padding: 6px 12px;
+        font-size: 11px;
+    }
 }

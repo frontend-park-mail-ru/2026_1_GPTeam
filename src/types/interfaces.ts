@@ -12,7 +12,9 @@ export interface RequestWithErrors extends SimpleResponse {
     errors?: FieldError[];
 }
 
+// ДОБАВЛЕН id: number, чтобы работала проверка на админа и профиль
 export interface User {
+    id: number; 
     username: string;
     email: string;
     created_at: string;
@@ -118,9 +120,9 @@ export interface Transaction {
     value: number;
     type: string;
     category: string;
-    currency: string;
     title: string;
     description: string;
+    currency: string;
     created_at: string;
     transaction_date: string;
 }
@@ -148,15 +150,23 @@ export interface TransactionCreateRequest {
     transaction_date: string;
 }
 
+export interface TransactionSearchFilters {
+    start_date?: string;
+    end_date?: string;
+    category?: string;
+    account_id?: number;
+    q?: string;
+}
+
+export interface TransactionSearchResponse extends SimpleResponse {
+    transactions: Transaction[];
+}
+
 export interface TransactionDraft {
     raw_text: string;
     value: number;
-    /** DB enum: "expense" | "income" */
     type: string;
-    /** DB enum: category_type */
     category: string;
-    /** DB enum: "RUB" | "USD" | "EUR" */
-    currency: string;
     title: string;
     description: string;
     recorded_at: string;
@@ -175,4 +185,51 @@ export interface ShortAccount {
 
 export interface ShortAccountResponse extends SimpleResponse {
     accounts: ShortAccount[];
+}
+
+// ---------------------------------------------------------
+// ИНТЕРФЕЙСЫ ПОДДЕРЖКИ (SUPPORT)
+// ---------------------------------------------------------
+export interface ProfileResponse extends SimpleResponse {
+    user?: User;
+}
+
+export interface IsStaffResponse extends SimpleResponse {
+    is_staff: boolean;
+}
+
+export interface ShortSupport {
+    id: number;
+    category: string;
+    message: string;
+    status: 'OPEN' | 'IN_WORK' | 'CLOSED';
+    created_at: string;
+}
+
+export interface SupportsListResponse extends SimpleResponse {
+    supports: ShortSupport[];
+}
+
+export interface SupportDetailResponse extends SimpleResponse {
+    id: number;
+    category: string;
+    message: string;
+    status: 'OPEN' | 'IN_WORK' | 'CLOSED';
+    created_at: string;
+    user: User;
+}
+
+export interface AppealCardProps extends Record<string, unknown> {
+    id: number;
+    category: string;
+    message: string;
+    status: string;
+    statusType: "new" | "in_progress" | "resolved";
+    date: string;
+    rawStatus?: string;
+    user?: {
+        username: string;
+        email: string;
+        avatar_url: string;
+    };
 }
