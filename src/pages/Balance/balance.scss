@@ -143,16 +143,37 @@
 
 .balance__currencies {
   display: flex;
-  flex-wrap: wrap;
+  flex-wrap: nowrap;
   gap: 18px;
   align-items: flex-start;
+  width: 100%;
+  overflow-x: auto;
+  overflow-y: hidden;
+  padding: 2px 2px 16px;
+  scroll-snap-type: x proximity;
+  scrollbar-width: thin;
+}
+
+.balance__currencies::-webkit-scrollbar {
+  height: 10px;
+}
+
+.balance__currencies::-webkit-scrollbar-track {
+  border-radius: 999px;
+  background: rgb(255 255 255 / 6%);
+}
+
+.balance__currencies::-webkit-scrollbar-thumb {
+  border-radius: 999px;
+  background: rgb(72 79 255 / 55%);
 }
 
 .balance__currency-section {
-  flex: 0 1 320px;
-  min-width: 260px;
+  flex: 0 0 320px;
+  width: 320px;
   max-width: 320px;
   animation: balance-fade-in 0.3s ease;
+  scroll-snap-align: start;
 }
 
 .balance__currency-section[hidden] {
@@ -209,9 +230,11 @@
 
 .account-form {
   display: grid;
-  grid-template-columns: minmax(220px, 1.2fr) minmax(150px, 0.8fr) minmax(140px, 0.6fr) auto;
+  grid-template-columns: minmax(0, 1.3fr) minmax(130px, 0.7fr) minmax(108px, 0.45fr);
   gap: 14px;
   align-items: end;
+  width: 100%;
+  min-width: 0;
   border: 1px solid rgb(72 79 255 / 28%);
   border-radius: 24px;
   background: rgb(0 0 0 / 24%);
@@ -226,6 +249,7 @@
 .account-form__field {
   display: grid;
   gap: 8px;
+  min-width: 0;
   color: rgb(255 255 255 / 56%);
   font-size: 13px;
   font-weight: 800;
@@ -255,13 +279,26 @@
 
 .account-form__actions {
   display: flex;
+  grid-column: 1 / -1;
   gap: 10px;
   align-items: center;
+  justify-content: flex-end;
+  min-width: 0;
+  flex-wrap: wrap;
 }
 
 .account-form__submit {
   padding: 13px 18px;
   white-space: nowrap;
+}
+
+.account-form__submit,
+.account-form__cancel {
+  max-width: 100%;
+}
+
+.account-form__actions > button {
+  flex: 0 1 auto;
 }
 
 .account-form__submit:disabled {
@@ -452,6 +489,10 @@
   .account-form {
     grid-template-columns: 1fr;
   }
+
+  .account-form__actions {
+    justify-content: flex-start;
+  }
 }
 
 @media (max-width: 1024px) {
@@ -493,6 +534,10 @@
     grid-template-columns: 1fr;
   }
 
+  .account-form__actions {
+    justify-content: flex-start;
+  }
+
   .balance__title {
     font-size: 24px;
   }
@@ -529,9 +574,9 @@
   }
 
   .balance__currency-section {
-    flex-basis: 100%;
-    min-width: 0;
-    max-width: 100%;
+    flex-basis: min(320px, calc(100vw - 64px));
+    width: min(320px, calc(100vw - 64px));
+    max-width: min(320px, calc(100vw - 64px));
   }
 
   .balance__title {
@@ -546,6 +591,10 @@
   .balance__filter {
     padding: 8px 14px;
     font-size: 12px;
+  }
+
+  .account-form__actions > button {
+    flex: 1 1 150px;
   }
 }
 
