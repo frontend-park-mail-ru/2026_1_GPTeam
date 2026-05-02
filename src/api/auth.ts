@@ -17,12 +17,16 @@ import type { SimpleResponse } from "../types/interfaces.ts";
  * }
  */
 export const is_login = async (): Promise<boolean> => {
-  const response = await client("/auth/refresh", {
-    method: "POST",
-    credentials: "include",
-  });
-  const data: SimpleResponse = await response.json();
-  return data.code === 200;
+  try {
+    const response = await client("/auth/refresh", {
+      method: "POST",
+      credentials: "include",
+    });
+    const data: SimpleResponse = await response.json();
+    return data.code === 200;
+  } catch {
+    return false;
+  }
 };
 
 /**
@@ -41,10 +45,14 @@ export const is_login = async (): Promise<boolean> => {
  * }
  */
 export const logout = async (): Promise<boolean> => {
-  const response = await client("/auth/logout", {
-    method: "POST",
-    credentials: "include",
-  });
-  const data: SimpleResponse = await response.json();
-  return data.code === 200;
+  try {
+    const response = await client("/auth/logout", {
+      method: "POST",
+      credentials: "include",
+    });
+    const data: SimpleResponse = await response.json();
+    return data.code === 200;
+  } catch {
+    return false;
+  }
 };
