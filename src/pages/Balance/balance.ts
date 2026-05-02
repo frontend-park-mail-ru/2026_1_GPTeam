@@ -30,6 +30,7 @@ const SUMMARY_CURRENCIES = ["RUB", "EUR", "USD"] as const;
 export class BalancePage extends BasePage {
     private _accounts: Account[] = [];
     private _editingAccountId: number | null = null;
+    private _selectedCurrency = "all";
 
     async render(root: HTMLElement): Promise<void> {
         const balanceData = await this._loadBalance();
@@ -148,7 +149,8 @@ export class BalancePage extends BasePage {
 
         filterButtons.forEach((btn) => {
             btn.addEventListener("click", () => {
-                const selectedCurrency = btn.getAttribute("data-currency");
+                const selectedCurrency = btn.getAttribute("data-currency") ?? "all";
+                this._selectedCurrency = selectedCurrency;
 
                 root.querySelector(".balance__filter--active")?.classList.remove("balance__filter--active");
                 btn.classList.add("balance__filter--active");
@@ -157,6 +159,8 @@ export class BalancePage extends BasePage {
                     const currency = section.getAttribute("data-currency");
                     section.hidden = !(selectedCurrency === "all" || currency === selectedCurrency);
                 });
+
+                this._renderAccounts(root);
             });
         });
     }
@@ -223,18 +227,21 @@ export class BalancePage extends BasePage {
         const list = root.querySelector<HTMLElement>(".js--accounts-list");
         if (!list) return;
 
-        if (this._accounts.length === 0) {
+        const accounts = this._getVisibleAccounts();
+
+        if (accounts.length === 0) {
+            const isCurrencyFilterActive = this._selectedCurrency !== "all";
             list.innerHTML = `
                 <article class="account-card account-card--empty">
-                    <span class="account-card__label">Пусто</span>
-                    <h4 class="account-card__name">Счетов пока нет</h4>
-                    <p class="account-card__meta">Нажми «Новый счёт», чтобы добавить первый источник денег.</p>
+                    <span class="account-card__label">${isCurrencyFilterActive ? this._escape(this._selectedCurrency) : "Пусто"}</span>
+                    <h4 class="account-card__name">${isCurrencyFilterActive ? "Нет счетов в этой валюте" : "Счетов пока нет"}</h4>
+                    <p class="account-card__meta">${isCurrencyFilterActive ? "Выбери другую валюту или добавь новый счёт." : "Нажми «Новый счёт», чтобы добавить первый источник денег."}</p>
                 </article>
             `;
             return;
         }
 
-        list.innerHTML = this._accounts.map((account) => `
+        list.innerHTML = accounts.map((account) => `
             <article class="account-card">
                 <div class="account-card__topline">
                     <span class="account-card__label">${this._escape(account.currency)}</span>
@@ -249,6 +256,14 @@ export class BalancePage extends BasePage {
                 </div>
             </article>
         `).join("");
+    }
+
+    private _getVisibleAccounts(): Account[] {
+        if (this._selectedCurrency === "all") {
+            return this._accounts;
+        }
+
+        return this._accounts.filter((account) => account.currency.toUpperCase() === this._selectedCurrency);
     }
 
     private _openAccountForm(root: HTMLElement, accountId?: number): void {
