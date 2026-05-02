@@ -83,18 +83,32 @@ export interface ShortAccount {
     currency: string;
 }
 
-export const get_short_accounts = async (): Promise<ShortAccount[]> => {
+export interface ShortAccountResponse {
+    code: number;
+    message?: string;
+    accounts: ShortAccount[];
+}
+
+export const get_short_accounts = async (): Promise<ShortAccountResponse> => {
     const data = await fetchAccounts();
 
     if (data.code !== 200 || !Array.isArray(data.accounts)) {
-        return [];
+        return {
+            code: data.code,
+            message: data.message,
+            accounts: [],
+        };
     }
 
-    return data.accounts.map(account => ({
-        id: account.id,
-        account_id: account.id,
-        name: account.name,
-        balance: account.balance,
-        currency: account.currency,
-    }));
+    return {
+        code: data.code,
+        message: data.message,
+        accounts: data.accounts.map((account) => ({
+            id: account.id,
+            account_id: account.id,
+            name: account.name,
+            balance: account.balance,
+            currency: account.currency,
+        })),
+    };
 };
