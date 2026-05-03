@@ -6,10 +6,17 @@
 }
 
 .balance {
-  width: min(1120px, calc(100vw - 64px));
+  box-sizing: border-box;
+  width: min(760px, calc(100vw - 64px));
   margin: 0 auto;
   padding: 42px 0 72px;
   font-family: Manrope, sans-serif;
+}
+
+.balance *,
+.balance *::before,
+.balance *::after {
+  box-sizing: border-box;
 }
 
 .balance-hero {
@@ -135,14 +142,38 @@
 }
 
 .balance__currencies {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  display: flex;
+  flex-wrap: nowrap;
   gap: 18px;
+  align-items: flex-start;
+  width: 100%;
+  overflow-x: auto;
+  overflow-y: hidden;
+  padding: 2px 2px 16px;
+  scroll-snap-type: x proximity;
+  scrollbar-width: thin;
+}
+
+.balance__currencies::-webkit-scrollbar {
+  height: 10px;
+}
+
+.balance__currencies::-webkit-scrollbar-track {
+  border-radius: 999px;
+  background: rgb(255 255 255 / 6%);
+}
+
+.balance__currencies::-webkit-scrollbar-thumb {
+  border-radius: 999px;
+  background: rgb(72 79 255 / 55%);
 }
 
 .balance__currency-section {
-  min-width: 0;
+  flex: 0 0 320px;
+  width: 320px;
+  max-width: 320px;
   animation: balance-fade-in 0.3s ease;
+  scroll-snap-align: start;
 }
 
 .balance__currency-section[hidden] {
@@ -165,7 +196,7 @@
 .balance__metrics-row {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 14px;
+  gap: 10px;
   margin-top: 14px;
 }
 
@@ -176,6 +207,10 @@
   background: rgb(0 0 0 / 18%);
   color: rgb(255 255 255 / 55%);
   padding: 20px;
+}
+
+.balance-empty {
+  flex: 1 0 100%;
 }
 
 .balance__notice {
@@ -199,9 +234,11 @@
 
 .account-form {
   display: grid;
-  grid-template-columns: minmax(220px, 1.2fr) minmax(150px, 0.8fr) minmax(140px, 0.6fr) auto;
+  grid-template-columns: minmax(0, 1.3fr) minmax(130px, 0.7fr) minmax(108px, 0.45fr);
   gap: 14px;
   align-items: end;
+  width: 100%;
+  min-width: 0;
   border: 1px solid rgb(72 79 255 / 28%);
   border-radius: 24px;
   background: rgb(0 0 0 / 24%);
@@ -216,6 +253,7 @@
 .account-form__field {
   display: grid;
   gap: 8px;
+  min-width: 0;
   color: rgb(255 255 255 / 56%);
   font-size: 13px;
   font-weight: 800;
@@ -245,13 +283,26 @@
 
 .account-form__actions {
   display: flex;
+  grid-column: 1 / -1;
   gap: 10px;
   align-items: center;
+  justify-content: flex-end;
+  min-width: 0;
+  flex-wrap: wrap;
 }
 
 .account-form__submit {
   padding: 13px 18px;
   white-space: nowrap;
+}
+
+.account-form__submit,
+.account-form__cancel {
+  max-width: 100%;
+}
+
+.account-form__actions > button {
+  flex: 0 1 auto;
 }
 
 .account-form__submit:disabled {
@@ -275,6 +326,7 @@
   margin-bottom: 16px;
   font-size: 14px;
   font-weight: 700;
+  transition: opacity 0.2s ease;
 }
 
 .accounts-panel__status--success {
@@ -427,6 +479,27 @@
   }
 }
 
+@media (min-width: 1200px) and (max-width: 1400px) {
+  .balance {
+    width: min(760px, calc(100vw - 600px));
+  }
+
+  .balance-hero,
+  .balance-panel__head,
+  .accounts-panel__head {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .account-form {
+    grid-template-columns: 1fr;
+  }
+
+  .account-form__actions {
+    justify-content: flex-start;
+  }
+}
+
 @media (max-width: 1024px) {
   .balance {
     padding: 10px 24px 28px;
@@ -437,15 +510,37 @@
   }
 
   .balance__metrics-row {
-    flex-direction: row;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
     gap: 16px;
   }
 }
 
 @media (max-width: 768px) {
   .balance {
-    padding: 10px 24px 30px;
+    width: calc(100vw - 32px);
+    padding: 10px 0 30px;
     max-width: 100%;
+  }
+
+  .balance-hero,
+  .balance-panel,
+  .accounts-panel {
+    border-radius: 24px;
+  }
+
+  .balance-hero,
+  .balance-panel__head,
+  .accounts-panel__head {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .account-form {
+    grid-template-columns: 1fr;
+  }
+
+  .account-form__actions {
+    justify-content: flex-start;
   }
 
   .balance__title {
@@ -462,7 +557,7 @@
   }
 
   .balance__metrics-row {
-    flex-direction: column;
+    grid-template-columns: 1fr;
     gap: 12px;
   }
 
@@ -474,7 +569,19 @@
 
 @media (max-width: 480px) {
   .balance {
-    padding: 10px 16px 24px;
+    width: calc(100vw - 24px);
+    padding: 10px 0 24px;
+  }
+
+  .balance-panel,
+  .accounts-panel {
+    padding: 18px;
+  }
+
+  .balance__currency-section {
+    flex-basis: min(320px, calc(100vw - 64px));
+    width: min(320px, calc(100vw - 64px));
+    max-width: min(320px, calc(100vw - 64px));
   }
 
   .balance__title {
@@ -490,11 +597,16 @@
     padding: 8px 14px;
     font-size: 12px;
   }
+
+  .account-form__actions > button {
+    flex: 1 1 150px;
+  }
 }
 
 @media (max-width: 320px) {
   .balance {
-    padding: 10px 12px 20px;
+    width: calc(100vw - 16px);
+    padding: 10px 0 20px;
   }
 
   .balance__title {
