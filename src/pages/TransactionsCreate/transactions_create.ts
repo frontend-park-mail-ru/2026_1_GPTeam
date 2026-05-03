@@ -182,7 +182,7 @@ export class TransactionCreatePage extends BasePage {
         setValue("description_input", draft.description || "");
         setCustomSelect("category", draft.category || "");
         setCustomSelect("type", draft.type || "");
-        setCustomSelect("currency", draft.currency || "");
+        // setCustomSelect("currency", draft.currency || "");
 
         const dateInput = root.querySelector<HTMLInputElement>("#transaction_date_input");
         const dateDisplay = root.querySelector<HTMLInputElement>("#transaction_date_display");

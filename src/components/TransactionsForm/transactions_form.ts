@@ -1,6 +1,6 @@
 import { BaseComponent } from "../base_component";
 import { createTransaction } from "../../api/transactions";
-import {get_short_accounts} from "../../api/accounts";
+import {fetchAccount, get_short_accounts} from "../../api/accounts";
 // @ts-ignore
 import template from "./transactions_form.hbs?raw";
 import "./transactions_form.scss";
@@ -9,7 +9,12 @@ import { CustomCalendar } from "../CustomCalendar/custom_calendar";
 import { CustomSelect } from "../CustomSelect/custom_select";
 import { get_categories } from "../../store/store";
 import { validate_transaction_value, validate_transaction_date } from "../../utils/validation";
-import type {ShortAccount, ShortAccountResponse, TransactionCreateRequest} from "../../types/interfaces";
+import type {
+    AccountResponse,
+    ShortAccount,
+    ShortAccountResponse,
+    TransactionCreateRequest
+} from "../../types/interfaces";
 import {clean_data} from "../../utils/xss.ts";
 
 /**
@@ -128,7 +133,7 @@ export class TransactionForm extends BaseComponent {
      * @private
      * @param {TransactionFormData} data - Данные транзакции
      */
-    private _fillFormData(data: TransactionFormData): void {
+    private async _fillFormData(data: TransactionFormData): Promise<void> {
         const form = this.getElement();
         if (!form) return;
 
@@ -156,7 +161,11 @@ export class TransactionForm extends BaseComponent {
         const accountDisplay = form.querySelector<HTMLElement>("#account_display");
         if (accountInput && accountDisplay) {
             accountInput.value = data.account_id.toString();
-            accountDisplay.innerText = data.account_id.toString();
+            let current_account: AccountResponse = await fetchAccount(data.account_id);
+            if (current_account.code === 200 && current_account.account)
+                accountDisplay.innerText = current_account.account.name;
+            else
+                accountDisplay.innerText = data.account_id.toString();
         }
 
         const dateInput = form.querySelector<HTMLInputElement>("#transaction_date_input");

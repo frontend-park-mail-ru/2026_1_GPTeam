@@ -2,9 +2,10 @@
     background: linear-gradient(135deg, rgb(72 79 255 / 15%), rgb(72 79 255 / 5%));
     border-radius: 16px;
     width: 100%;
-    padding: 24px;
+    min-width: 0;
+    padding: 16px;
     border: 1px solid rgb(72 79 255 / 30%);
-    max-width: 50%;
+    max-width: 100%;
     overflow: hidden;
     display: flex;
     flex-direction: column;
@@ -21,49 +22,53 @@
 
 .income-balance__amount {
     color: #fff;
-    font-size: 32px;
+    font-size: clamp(20px, 2vw, 26px);
     font-weight: 700;
     margin: 0;
-    display: flex;
-    align-items: baseline;
-    gap: 6px;
+    display: grid;
+    grid-template-columns: auto 1fr;
+    align-items: center;
+    column-gap: 6px;
+    row-gap: 4px;
+    min-width: 0;
 }
 
 .income-balance__currency {
     color: rgb(255 255 255 / 60%);
-    font-size: 18px;
+    font-size: 14px;
     font-weight: 600;
+    min-width: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
 }
 
 .income-balance__value {
-    max-width: 84%;
-    overflow-wrap: break-word;
+    grid-column: 1 / -1;
+    max-width: 100%;
+    min-width: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    font-variant-numeric: tabular-nums;
 }
 
 .income-balance__icon {
-    width: 20px;
-    height: 20px;
+    width: 18px;
+    height: 18px;
 }
 
 @media (max-width: 1024px) {
     .income-balance {
         max-width: 100%;
-        padding: 20px;
-    }
-
-    .income-balance__amount {
-        font-size: 30px;
+        padding: 16px;
     }
 }
 
 @media (max-width: 768px) {
     .income-balance {
         max-width: 100%;
-        padding: 18px;
-    }
-
-    .income-balance__amount {
-        font-size: 28px;
+        padding: 16px;
     }
 }
 
@@ -72,12 +77,8 @@
         padding: 16px;
     }
 
-    .income-balance__amount {
-        font-size: 24px;
-    }
-
     .income-balance__currency {
-        font-size: 16px;
+        font-size: 13px;
     }
 }
 
@@ -86,11 +87,7 @@
         padding: 14px;
     }
 
-    .income-balance__amount {
-        font-size: 20px;
-    }
-
     .income-balance__currency {
-        font-size: 14px;
+        font-size: 12px;
     }
 }

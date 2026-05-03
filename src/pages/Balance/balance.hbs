@@ -1,13 +1,63 @@
 <div class="balance">
-    <h2 class="balance__title js--inner-header">Баланс</h2>
-    <p class="balance__date">{{date}}</p>
+    <section class="balance-hero">
+        <div>
+            <h2 class="balance-hero__title js--inner-header">Баланс</h2>
+            <p class="balance-hero__subtitle">Сводка по валютам и управление счетами в одном рабочем пространстве.</p>
+        </div>
+        <button type="button" class="balance-hero__action js--account-open">+ Новый счёт</button>
+    </section>
 
-    <div class="balance__filters">
-        <button type="button" class="balance__filter balance__filter--active js--balance-filter" data-currency="all">Все</button>
-        <button type="button" class="balance__filter js--balance-filter" data-currency="RUB">RUB</button>
-        <button type="button" class="balance__filter js--balance-filter" data-currency="USD">USD</button>
-        <button type="button" class="balance__filter js--balance-filter" data-currency="EUR">EUR</button>
-    </div>
+    <section class="balance-panel balance-panel--summary">
+        <div class="balance-panel__head">
+            <div>
+                <h3 class="balance-panel__title">Баланс</h3>
+                <p class="balance-panel__caption js--balance-date">{{date}}</p>
+            </div>
+            <div class="balance__filters" aria-label="Фильтр валют">
+                <button type="button" class="balance__filter balance__filter--active js--balance-filter" data-currency="all">Все</button>
+                <button type="button" class="balance__filter js--balance-filter" data-currency="RUB">RUB</button>
+                <button type="button" class="balance__filter js--balance-filter" data-currency="USD">USD</button>
+                <button type="button" class="balance__filter js--balance-filter" data-currency="EUR">EUR</button>
+            </div>
+        </div>
+        <div class="balance__notice balance__notice--error js--balance-error" hidden></div>
+        <div class="balance__currencies js--balance-currencies"></div>
+    </section>
 
-    <div class="balance__currencies js--balance-currencies"></div>
+    <section class="accounts-panel">
+        <div class="accounts-panel__head">
+            <div>
+                <h3 class="accounts-panel__title">Мои счета</h3>
+                <p class="accounts-panel__caption">Карточки прокручиваются по горизонтали. Каждый счёт можно создать, открыть, изменить или удалить.</p>
+            </div>
+            <button type="button" class="accounts-panel__add js--account-open">Добавить</button>
+        </div>
+
+        <form class="account-form js--account-form" hidden>
+            <input type="hidden" class="js--account-id" value="">
+            <label class="account-form__field">
+                <span>Название</span>
+                <input class="account-form__input js--account-name" type="text" maxlength="80" placeholder="Например: Основной счёт" required>
+            </label>
+            <label class="account-form__field">
+                <span>Баланс</span>
+                <input class="account-form__input js--account-balance" type="number" step="0.01" min="0" placeholder="0.00">
+            </label>
+            <label class="account-form__field">
+                <span>Валюта</span>
+                <select class="account-form__input js--account-currency" required>
+                    <option value="RUB">RUB</option>
+                    <option value="USD">USD</option>
+                    <option value="EUR">EUR</option>
+                </select>
+            </label>
+            <div class="account-form__actions">
+                <button type="submit" class="account-form__submit js--account-submit">Создать счёт</button>
+                <button type="button" class="account-form__cancel js--account-cancel">Отмена</button>
+            </div>
+        </form>
+
+        <div class="accounts-panel__status js--account-status" hidden></div>
+        <div class="accounts-rail js--accounts-list" aria-live="polite"></div>
+    </section>
 </div>

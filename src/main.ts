@@ -29,6 +29,7 @@ import { set_currencies, set_categories, set_transaction_types } from "./store/s
 import { Header } from "./components/Header/header.ts";
 import { initSupportWidget } from "./support.ts";
 import { TransactionEditPage } from "./pages/TransactionsEdit/transactions_edit.ts";
+import {BudgetEditPage} from "./pages/BudgetEdit/budget_edit.ts";
 
 /**
  * Конфигурация маршрутизатора.
@@ -44,6 +45,7 @@ router
     .addRoute("/profile", () => new ProfilePage())
     .addRoute("/balance", () => new BalancePage())
     .addRoute("/budget", () => new BudgetPage())
+    .addRoute("/budget/edit/:id", (params) => new BudgetEditPage(Number(params.id)))
     .addRoute("/profile/edit", () => new ProfileEditPage())
     .addRoute("/profile/change-password", () => new ChangePasswordPage())
     .addRoute("/operations", () => new OperationsPage())

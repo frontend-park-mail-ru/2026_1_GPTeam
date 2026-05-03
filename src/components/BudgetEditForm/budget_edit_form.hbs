@@ -1,0 +1,30 @@
+<div class="budget-edit-form">
+    <h3 class="budget-edit-form__header">Редактирование бюджета</h3>
+    <form id="budget-edit-form__form">
+        <label for="title_input">Название</label>
+        <div class="budget-edit-form__input-wrapper">
+            <input class="budget-edit-form__input" id="title_input" type="text" name="title" maxlength="255" autocomplete="off">
+        </div>
+
+        <label for="description_input">Описание</label>
+        <div class="budget-edit-form__input-wrapper">
+            <input class="budget-edit-form__input" id="description_input" type="text" name="description" autocomplete="off">
+        </div>
+
+        <label for="target_input">Планируемый бюджет</label>
+        <div class="budget-edit-form__input-wrapper">
+            <input class="budget-edit-form__input" id="target_input" type="number" name="target" autocomplete="off">
+            <div class="budget-edit-form__help-wrap">
+                <img class="budget-edit-form__help" src="/icons/question.svg" alt="Справка">
+                <div class="budget-edit-form__tooltip">Положительное число, не более 1 000 000 000</div>
+            </div>
+        </div>
+
+        <p class="budget-edit-form__error" id="error_message"></p>
+
+        <div class="budget-edit-form__actions">
+            <button type="button" class="budget-edit-form__btn budget-edit-form__btn--secondary" id="cancel_btn">Отмена</button>
+            <button class="budget-edit-form__btn" type="submit">Сохранить</button>
+        </div>
+    </form>
+</div>
