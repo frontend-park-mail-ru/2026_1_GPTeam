@@ -16,6 +16,7 @@ interface BudgetCardProps extends Record<string, unknown> {
     id: number;
     onDelete: (id: number, title: string) => void;
     budget: Budget;
+    onUpdate: (id: number) => void;
 }
 
 /**
@@ -29,6 +30,7 @@ interface BudgetCardProps extends Record<string, unknown> {
 export class BudgetCard extends BaseComponent {
     private _id: number;
     private _onDelete: (id: number, title: string) => void;
+    private _onUpdate: (id: number) => void;
 
     /**
      * Создает экземпляр карточки бюджета.
@@ -64,6 +66,7 @@ export class BudgetCard extends BaseComponent {
 
         this._id = props.id;
         this._onDelete = props.onDelete;
+        this._onUpdate = props.onUpdate;
     }
 
     /**
@@ -75,6 +78,10 @@ export class BudgetCard extends BaseComponent {
         const deleteBtn = this._element?.querySelector<HTMLElement>(".budget-card__delete-btn");
         if (deleteBtn) {
             this._on(deleteBtn, "click", () => this._onDelete(this._id, this._props.title as string));
+        }
+        let update_btn = this._element?.querySelector<HTMLElement>(".budget-card__update-btn");
+        if (update_btn) {
+            this._on(update_btn, "click", () => this._onUpdate(this._id));
         }
     }
 }

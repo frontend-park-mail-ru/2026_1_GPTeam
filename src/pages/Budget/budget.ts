@@ -114,6 +114,7 @@ export class BudgetPage extends BasePage {
                 budget: budget as Budget,
                 id,
                 onDelete: (id, title) => this._handleDelete(id, title),
+                onUpdate: (id) => router.navigate(`/budget/edit/${id}`),
             });
             card.render(list);
             this._components.push(card);

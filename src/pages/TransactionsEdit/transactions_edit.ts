@@ -17,7 +17,7 @@ export class TransactionEditPage extends BasePage {
     private _formComponent: TransactionForm | null = null;
 
     /**
-     * @param {Record<string, string>} params
+     * @param {Record<string, string>} _params
      */
     constructor(private _params: Record<string, string>) {
         super();

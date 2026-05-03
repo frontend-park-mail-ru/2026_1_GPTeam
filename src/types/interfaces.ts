@@ -81,6 +81,12 @@ export interface BudgetGetResponse extends SimpleResponse {
 
 export interface BudgetResponse extends RequestWithErrors {}
 
+export interface BudgetUpdateRequest {
+    title: string;
+    description: string;
+    target: number;
+}
+
 export interface DeleteResponse extends SimpleResponse {}
 
 
