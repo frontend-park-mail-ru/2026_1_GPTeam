@@ -90,6 +90,26 @@ $color-budget-create-shadow-hover: rgb(72 79 255 / 70%);
     z-index: 20;
   }
 
+  &__update-btn {
+    position: absolute;
+    top: 12px;
+    right: 12px * 5;
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    background: transparent;
+    border: 1px solid $color-budget-meta-text;
+    color: $color-budget-label-text;
+    font-size: 14px;
+    font-weight: 700;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s;
+    z-index: 20;
+  }
+
   &__delete-btn:hover {
     background: $color-budget-delete-hover-bg;
     border-color: $color-budget-delete-text;
