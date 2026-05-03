@@ -50,10 +50,10 @@ export class BalancePage extends BasePage {
         `;
 
         if (balanceData.loadError) {
-            this._showBalanceError(root, "Нет связи с backend. Запусти сервер на 8081 или проверь VITE_SERVER_URL.");
+            this._showBalanceError(root, "Нет связи с сервером");
         }
-
-        this._balances = this._normalizeBalances(balanceData.balances);
+        if (balanceData.balances)
+            this._balances = this._normalizeBalances(balanceData.balances);
         this._initAccountControls(root);
         await this._loadAccounts(root);
         this._syncCurrencyFilters(root);
@@ -484,7 +484,8 @@ export class BalancePage extends BasePage {
 
     private async _refreshBalanceSummary(root: HTMLElement): Promise<void> {
         const balanceData = await this._loadBalance();
-        this._balances = this._normalizeBalances(balanceData.balances);
+        if (balanceData.balances)
+            this._balances = this._normalizeBalances(balanceData.balances);
 
         if (balanceData.loadError) {
             this._showBalanceError(root, "Нет связи с backend. Запусти сервер на 8081 или проверь VITE_SERVER_URL.");
