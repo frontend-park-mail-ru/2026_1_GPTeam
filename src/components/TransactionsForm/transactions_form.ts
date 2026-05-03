@@ -227,7 +227,7 @@ export class TransactionForm extends BaseComponent {
         const dropdown: HTMLElement = form.querySelector<HTMLElement>("#account_dropdown")!;
         const accounts: ShortAccountResponse = await get_short_accounts();
         if (accounts.accounts.length === 0) {
-            dropdown.innerHTML = `<div class="custom-select__option" style="opacity:0.4;cursor:default">Валюты не загружены</div>`;
+            dropdown.innerHTML = `<div class="custom-select__option" style="opacity:0.4;cursor:default">Нет счетов</div>`;
             return;
         }
         dropdown.innerHTML = accounts.accounts
