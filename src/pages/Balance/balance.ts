@@ -11,6 +11,7 @@ import {
 import { TotalBalance } from "../../components/TotalBalance/total_balance.ts";
 import { IncomeBalance } from "../../components/IncomeBalance/income_balance.ts";
 import { ExpensesBalance } from "../../components/ExpensesBalance/expenses_balance.ts";
+import { Modal } from "../../components/Modal/modal.ts";
 import { router } from "../../router/router_instance.ts";
 import Handlebars from "handlebars";
 import type {
@@ -29,8 +30,10 @@ const SUMMARY_CURRENCIES = ["RUB", "EUR", "USD"] as const;
  */
 export class BalancePage extends BasePage {
     private _accounts: Account[] = [];
+    private _balances: CurrencyBalance[] = [];
     private _editingAccountId: number | null = null;
     private _selectedCurrency = "all";
+    private _accountStatusTimer: number | null = null;
 
     async render(root: HTMLElement): Promise<void> {
         const balanceData = await this._loadBalance();
@@ -50,10 +53,13 @@ export class BalancePage extends BasePage {
             this._showBalanceError(root, "Нет связи с backend. Запусти сервер на 8081 или проверь VITE_SERVER_URL.");
         }
 
-        this._renderBalanceSections(root, this._normalizeBalances(balanceData.balances));
-        this._initFilters(root);
+        this._balances = this._normalizeBalances(balanceData.balances);
         this._initAccountControls(root);
         await this._loadAccounts(root);
+        this._syncCurrencyFilters(root);
+        this._renderBalanceSections(root, this._getBalancesForAvailableCurrencies());
+        this._initFilters(root);
+        this._applyCurrencyFilter(root);
     }
 
     private async _loadBalance(): Promise<BalanceResponseType & { loadError: boolean }> {
@@ -76,6 +82,15 @@ export class BalancePage extends BasePage {
         if (!balanceContent) return;
 
         balanceContent.innerHTML = "";
+
+        if (balances.length === 0) {
+            balanceContent.innerHTML = `
+                <div class="balance-empty">
+                    Баланс появится после добавления счёта.
+                </div>
+            `;
+            return;
+        }
 
         balances.forEach((item) => {
             const section = document.createElement("div");
@@ -116,26 +131,65 @@ export class BalancePage extends BasePage {
     private _normalizeBalances(balances: CurrencyBalance[]): CurrencyBalance[] {
         const result = new Map<string, CurrencyBalance>();
 
-        SUMMARY_CURRENCIES.forEach((currency) => {
-            result.set(currency, {
-                currency,
-                balance: 0,
-                income: 0,
-                expenses: 0,
-            });
-        });
-
         balances.forEach((item) => {
             const currency = String(item.currency ?? "").toUpperCase();
-            const summary = result.get(currency);
-            if (!summary) return;
+            if (!currency) return;
 
+            if (!result.has(currency)) {
+                result.set(currency, {
+                    currency,
+                    balance: 0,
+                    income: 0,
+                    expenses: 0,
+                });
+            }
+
+            const summary = result.get(currency)!;
             summary.balance += this._toMoneyNumber(item.balance);
             summary.income += this._toMoneyNumber(item.income);
             summary.expenses += this._toMoneyNumber(item.expenses);
         });
 
-        return SUMMARY_CURRENCIES.map((currency) => result.get(currency)!);
+        return this._sortCurrencies([...result.values()]);
+    }
+
+    private _getBalancesForAvailableCurrencies(): CurrencyBalance[] {
+        const balancesByCurrency = new Map(this._balances.map((item) => [item.currency.toUpperCase(), item]));
+
+        return this._getAvailableCurrencies().map((currency) => balancesByCurrency.get(currency) ?? {
+            currency,
+            balance: 0,
+            income: 0,
+            expenses: 0,
+        });
+    }
+
+    private _getAvailableCurrencies(): string[] {
+        const currencies = new Set<string>();
+
+        this._accounts.forEach((account) => {
+            const currency = String(account.currency ?? "").toUpperCase();
+            if (currency) currencies.add(currency);
+        });
+
+        return this._sortCurrencyCodes([...currencies]);
+    }
+
+    private _sortCurrencies(balances: CurrencyBalance[]): CurrencyBalance[] {
+        const byCurrency = new Map(balances.map((item) => [item.currency.toUpperCase(), item]));
+
+        return this._sortCurrencyCodes([...byCurrency.keys()]).map((currency) => byCurrency.get(currency)!);
+    }
+
+    private _sortCurrencyCodes(currencies: string[]): string[] {
+        const priority = new Map<string, number>(SUMMARY_CURRENCIES.map((currency, index) => [currency, index]));
+
+        return currencies.sort((a, b) => {
+            const priorityA = priority.get(a) ?? Number.MAX_SAFE_INTEGER;
+            const priorityB = priority.get(b) ?? Number.MAX_SAFE_INTEGER;
+
+            return priorityA === priorityB ? a.localeCompare(b) : priorityA - priorityB;
+        });
     }
 
     private _toMoneyNumber(value: unknown): number {
@@ -145,23 +199,44 @@ export class BalancePage extends BasePage {
 
     private _initFilters(root: HTMLElement): void {
         const filterButtons = root.querySelectorAll<HTMLButtonElement>(".js--balance-filter");
-        const sections = root.querySelectorAll<HTMLElement>(".js--balance-currency-section");
 
         filterButtons.forEach((btn) => {
             btn.addEventListener("click", () => {
-                const selectedCurrency = btn.getAttribute("data-currency") ?? "all";
-                this._selectedCurrency = selectedCurrency;
+                if (btn.hidden) return;
 
-                root.querySelector(".balance__filter--active")?.classList.remove("balance__filter--active");
-                btn.classList.add("balance__filter--active");
-
-                sections.forEach((section) => {
-                    const currency = section.getAttribute("data-currency");
-                    section.hidden = !(selectedCurrency === "all" || currency === selectedCurrency);
-                });
-
+                this._selectedCurrency = btn.getAttribute("data-currency") ?? "all";
+                this._applyCurrencyFilter(root);
                 this._renderAccounts(root);
             });
+        });
+    }
+
+    private _syncCurrencyFilters(root: HTMLElement): void {
+        const availableCurrencies = new Set(this._getAvailableCurrencies());
+        const filterButtons = root.querySelectorAll<HTMLButtonElement>(".js--balance-filter");
+
+        filterButtons.forEach((button) => {
+            const currency = button.getAttribute("data-currency") ?? "all";
+            button.hidden = currency !== "all" && !availableCurrencies.has(currency);
+        });
+
+        if (this._selectedCurrency !== "all" && !availableCurrencies.has(this._selectedCurrency)) {
+            this._selectedCurrency = "all";
+        }
+    }
+
+    private _applyCurrencyFilter(root: HTMLElement): void {
+        const sections = root.querySelectorAll<HTMLElement>(".js--balance-currency-section");
+        const filterButtons = root.querySelectorAll<HTMLButtonElement>(".js--balance-filter");
+
+        filterButtons.forEach((button) => {
+            const currency = button.getAttribute("data-currency") ?? "all";
+            button.classList.toggle("balance__filter--active", currency === this._selectedCurrency);
+        });
+
+        sections.forEach((section) => {
+            const currency = section.getAttribute("data-currency");
+            section.hidden = !(this._selectedCurrency === "all" || currency === this._selectedCurrency);
         });
     }
 
@@ -332,6 +407,7 @@ export class BalancePage extends BasePage {
             this._closeAccountForm(root);
             this._setAccountStatus(root, successMessage, "success");
             await this._loadAccounts(root);
+            await this._refreshBalanceSummary(root);
         } catch (error) {
             this._setAccountStatus(root, error instanceof Error ? error.message : "Ошибка сохранения счёта", "error");
         } finally {
@@ -339,18 +415,34 @@ export class BalancePage extends BasePage {
         }
     }
 
-    private async _deleteAccount(root: HTMLElement, id: number): Promise<void> {
+    private _deleteAccount(root: HTMLElement, id: number): void {
         const account = this._accounts.find((item) => item.id === id);
         const title = account?.name ?? `#${id}`;
-        if (!window.confirm(`Удалить счёт «${title}»?`)) return;
+        const modal = new Modal({
+            title: "Удалить счёт?",
+            message: `Вы точно хотите удалить счёт «${title}»? Это действие нельзя отменить.`,
+            confirmText: "Удалить",
+            cancelText: "Отмена",
+            onConfirm: () => {
+                void this._handleAccountDelete(root, id, modal);
+            },
+            onCancel: () => modal.destroy(),
+        });
 
+        modal.render(document.body);
+    }
+
+    private async _handleAccountDelete(root: HTMLElement, id: number, modal: Modal): Promise<void> {
         try {
             const data = await deleteAccount(id);
             if (data.code !== 200) throw new Error(data.message ?? "Счёт не удалён");
+
+            modal.destroy();
             this._setAccountStatus(root, "Счёт удалён", "success");
             await this._loadAccounts(root);
+            await this._refreshBalanceSummary(root);
         } catch (error) {
-            this._setAccountStatus(root, error instanceof Error ? error.message : "Ошибка удаления счёта", "error");
+            modal.show_error(error instanceof Error ? error.message : "Ошибка удаления счёта");
         }
     }
 
@@ -371,9 +463,36 @@ export class BalancePage extends BasePage {
     private _setAccountStatus(root: HTMLElement, text: string, state: "success" | "error" | "neutral", hide = false): void {
         const status = root.querySelector<HTMLElement>(".js--account-status");
         if (!status) return;
+
+        if (this._accountStatusTimer !== null) {
+            window.clearTimeout(this._accountStatusTimer);
+            this._accountStatusTimer = null;
+        }
+
         status.textContent = text;
         status.hidden = hide || text.length === 0;
         status.className = `accounts-panel__status js--account-status accounts-panel__status--${state}`;
+
+        if (state === "success" && !status.hidden) {
+            this._accountStatusTimer = window.setTimeout(() => {
+                status.hidden = true;
+                status.textContent = "";
+                this._accountStatusTimer = null;
+            }, 3500);
+        }
+    }
+
+    private async _refreshBalanceSummary(root: HTMLElement): Promise<void> {
+        const balanceData = await this._loadBalance();
+        this._balances = this._normalizeBalances(balanceData.balances);
+
+        if (balanceData.loadError) {
+            this._showBalanceError(root, "Нет связи с backend. Запусти сервер на 8081 или проверь VITE_SERVER_URL.");
+        }
+
+        this._syncCurrencyFilters(root);
+        this._renderBalanceSections(root, this._getBalancesForAvailableCurrencies());
+        this._applyCurrencyFilter(root);
     }
 
     private _showBalanceError(root: HTMLElement, text: string): void {
