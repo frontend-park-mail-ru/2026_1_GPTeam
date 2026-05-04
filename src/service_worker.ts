@@ -12,7 +12,7 @@ declare const self: ServiceWorkerGlobalScope
 
 
 const CacheHeaderPlugin = {
-    cacheWillUpdate: async ({request, response}: {request: Request, response: Response}) => {
+    cacheWillUpdate: async ({response}: {response: Response}) => {
         if (!response) return null;
         let cached_response = new Response(response.body, {
             status: response.status,
@@ -37,8 +37,7 @@ registerRoute(
         return request.destination === "script" ||
             request.destination === "style" ||
             request.destination === "font" ||
-            request.destination === "image" ||
-            request.destination === "document";
+            request.destination === "image";
     },
     new CacheFirst({
         cacheName: "static",
