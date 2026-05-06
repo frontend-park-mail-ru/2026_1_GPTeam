@@ -19,3 +19,16 @@ services:
       - app
     networks:
       - gpteam-network
+
+  nginx-exporter:
+    image: nginx/nginx-prometheus-exporter:latest
+    container_name: nginx-exporter
+    restart: unless-stopped
+    command:
+      - "--nginx.scrape-uri=http://nginx/stub_status"
+    expose:
+      - "9113"
+    networks:
+      - gpteam-network
+    depends_on:
+      - nginx
