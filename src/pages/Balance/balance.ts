@@ -294,7 +294,7 @@ export class BalancePage extends BasePage {
         } catch {
             this._accounts = [];
             list.innerHTML = "<div class='account-card account-card--empty'>Нет связи с backend на 8081</div>";
-            this._setAccountStatus(root, "Проверь, что backend запущен и VITE_SERVER_URL указывает на http://localhost:8081", "error");
+            this._setAccountStatus(root, "Нет связи с сервером", "error");
         }
     }
 
@@ -488,7 +488,7 @@ export class BalancePage extends BasePage {
             this._balances = this._normalizeBalances(balanceData.balances);
 
         if (balanceData.loadError) {
-            this._showBalanceError(root, "Нет связи с backend. Запусти сервер на 8081 или проверь VITE_SERVER_URL.");
+            this._showBalanceError(root, "Нет связи с сервером");
         }
 
         this._syncCurrencyFilters(root);
