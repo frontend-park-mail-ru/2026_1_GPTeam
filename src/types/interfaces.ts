@@ -239,3 +239,46 @@ export interface AppealCardProps extends Record<string, unknown> {
         avatar_url: string;
     };
 }
+
+export type AnalysisPeriod = "month" | "quarter" | "year";
+
+export interface AnalysisSummary {
+    total_budget_limit: number;
+    total_budget_spent: number;
+    total_budget_free: number;
+    income_total: number;
+    expense_total: number;
+    savings: number;
+}
+
+export interface AnalysisBudgetItem {
+    id: number;
+    title: string;
+    categories: string[];
+    target: number;
+    actual: number;
+    remaining: number;
+    progress: number;
+    currency: string;
+}
+
+export interface AnalysisCategoryItem {
+    category: string;
+    amount: number;
+    share: number;
+}
+
+export interface AnalysisTimelineItem {
+    label: string;
+    income: number;
+    expense: number;
+}
+
+export interface AnalysisResponse extends SimpleResponse {
+    period: AnalysisPeriod;
+    period_label: string;
+    summary: AnalysisSummary;
+    budgets: AnalysisBudgetItem[];
+    categories: AnalysisCategoryItem[];
+    timeline: AnalysisTimelineItem[];
+}

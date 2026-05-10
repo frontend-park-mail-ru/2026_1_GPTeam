@@ -1,0 +1,57 @@
+<div class="analysis">
+    <section class="analysis-hero">
+        <div>
+            <h2 class="analysis-hero__title">Анализ финансов</h2>
+            <p class="analysis-hero__subtitle">Общий срез по лимитам, структуре расходов и динамике движения денег за выбранный период.</p>
+        </div>
+    </section>
+
+    <section class="analysis-panel analysis-panel--summary">
+        <div class="analysis-panel__head">
+            <div>
+                <h3 class="analysis-panel__title">Обзор</h3>
+                <p class="analysis-panel__caption js--analysis-period-label">Период</p>
+            </div>
+            <div class="analysis__filters" aria-label="Фильтр периода">
+                <button type="button" class="analysis__filter analysis__filter--active js--analysis-period" data-period="month">Месяц</button>
+                <button type="button" class="analysis__filter js--analysis-period" data-period="quarter">Квартал</button>
+                <button type="button" class="analysis__filter js--analysis-period" data-period="year">Год</button>
+            </div>
+        </div>
+        <div class="analysis__notice analysis__notice--error js--analysis-error" hidden></div>
+        <div class="analysis-kpis js--analysis-kpis"></div>
+    </section>
+
+    <section class="analysis-panel analysis-panel--budgets">
+        <div class="analysis-panel__head">
+            <div>
+                <h3 class="analysis-panel__title">Анализ бюджетов</h3>
+            </div>
+        </div>
+        <div class="analysis__chart-wrap js--analysis-budget-chart"></div>
+        <div class="analysis-budget-list js--analysis-budget-list"></div>
+    </section>
+
+    <section class="analysis-stack">
+        <section class="analysis-panel analysis-panel--categories">
+            <div class="analysis-panel__head analysis-panel__head--compact">
+                <div>
+                    <h3 class="analysis-panel__title">Структура расходов</h3>
+                </div>
+            </div>
+            <div class="analysis-donut-section">
+                <div class="analysis-donut js--analysis-donut"></div>
+                <div class="analysis-donut-legend js--analysis-donut-legend"></div>
+            </div>
+        </section>
+
+        <section class="analysis-panel analysis-panel--timeline">
+            <div class="analysis-panel__head analysis-panel__head--compact">
+                <div>
+                    <h3 class="analysis-panel__title">Динамика доходов и расходов</h3>
+                </div>
+            </div>
+            <div class="analysis__chart-wrap js--analysis-line-chart"></div>
+        </section>
+    </section>
+</div>
