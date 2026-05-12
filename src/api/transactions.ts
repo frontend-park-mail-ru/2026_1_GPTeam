@@ -10,6 +10,7 @@ import {
     TransactionSearchResponse,
     TransactionSearchFilters
 } from "../types/interfaces";
+import {is_login} from "./auth.ts";
 
 /**
  * Получает список всех ID транзакций пользователя.
@@ -186,4 +187,38 @@ export const getTransactionTitlesAutocomplete = async (query: string): Promise<s
         return Array.from(titles);
     }
     return [];
+};
+
+export const import_csv = async (file: File): Promise<{ success: boolean; errors?: Array<{ field: string; message: string }> }> => {
+    let csv_file: File = new File([file], file.name, {
+        type: "text/csv",
+    });
+    let formData: FormData = new FormData();
+    formData.append("file", csv_file);
+    let response: Response = await client("/api/transactions/import", {
+        method: "POST",
+        credentials: "include",
+        body: formData,
+    });
+    let data: any = await response.json();
+    if (data.code === 200)
+        return { success: true };
+    if (data.code === 401) {
+        const login: boolean = await is_login();
+        if (login) {
+            const retry_response = await client("/api/transactions/import", {
+                method: "POST",
+                credentials: "include",
+                body: formData,
+            });
+            data = await retry_response.json();
+            if (data.code === 200)
+                return { success: true };
+        }
+    }
+    let errors: Array<{ field: string; message: string }> = data.errors ? data.errors : [];
+    let message: string = data.message;
+    if (message)
+        errors.push({ field: "", message: message });
+    return { success: false, errors: errors };
 };
