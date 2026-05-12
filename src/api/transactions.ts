@@ -195,6 +195,7 @@ export const import_csv = async (file: File): Promise<{ success: boolean; errors
     });
     let formData: FormData = new FormData();
     formData.append("file", csv_file);
+    formData.append("account_id", "1")
     let response: Response = await client("/api/transactions/import", {
         method: "POST",
         credentials: "include",
