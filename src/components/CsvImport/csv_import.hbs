@@ -1,5 +1,25 @@
-<div>
-    <input id="import_input" type="file" accept="text/csv">
-    <button id="import_btn">Импортировать</button>
-    <p id="import_error"></p>
+<div class="import-block">
+    <div class="import-block__header">
+        <label class="import-block__file-label">
+            Выберите csv файл
+            <input id="import_input" class="import-block__file-input" type="file" accept="text/csv">
+        </label>
+        <button id="import_btn" class="import-block__btn primary_btn">Импортировать</button>
+    </div>
+    <p id="import_error" class="import-block__error"></p>
+    <div class="import-block__checkbox-label">
+        <label for="another_service_import_checkbox">
+            Импорт из стороннего сервиса
+        </label>
+        <input id="another_service_import_checkbox" class="import-block__checkbox" type="checkbox">
+    </div>
+    <div class="import-block__account-selector disabled">
+        <p class="import-block__account-selector__help-text">Выберите счёт для применения транзакций</p>
+        <div class="import-block__input-wrapper">
+            <div class="import-block__input custom-select__display" id="account_display"></div>
+            <input type="hidden" id="account_input" name="account">
+            <span class="custom-select__arrow">▾</span>
+            <div class="custom-select__dropdown" id="account_dropdown"></div>
+        </div>
+    </div>
 </div>

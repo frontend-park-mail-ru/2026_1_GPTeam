@@ -1,0 +1,115 @@
+.import-block {
+  margin: 16px 0;
+  padding: 20px 20px 5px 20px;
+  border: 1px solid rgb(255 255 255 / 10%);
+  border-radius: 16px;
+  background: linear-gradient(135deg, rgb(28 31 53 / 96%), rgb(23 26 42 / 96%));
+  box-sizing: border-box;
+  transition: all 0.2s;
+  overflow-wrap: anywhere;
+  font-family: Manrope, sans-serif;
+
+  &__header {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-around;
+    margin-bottom: 16px;
+  }
+
+  &__file-label {
+    cursor: pointer;
+    border: 1px solid rgb(255 255 255 / 15%);
+    border-radius: 12px;
+    background: rgb(255 255 255 / 5%);
+    color: #fff;
+    font-size: 15px;
+    padding: 10px;
+    transition: all 0.2s;
+  }
+
+  &__file-label:hover {
+    box-shadow: 0 0 36px rgb(107 114 128 / 40%);
+  }
+
+  &__file-label:active {
+    border-color: white;
+  }
+
+  &__file-input {
+    display: none;
+  }
+
+  &__btn {
+    cursor: pointer;
+    padding: 5px;
+    color: white;
+    border: 2px solid rgb(255 255 255 / 15%);
+    border-radius: 12px;
+    background: #484fff;
+    font-size: 15px;
+    transition: all 0.2s;
+  }
+
+  &__btn:hover {
+    box-shadow: 0 0 36px rgb(72 79 255 / 40%);
+  }
+
+  &__btn:active {
+    border-color: white;
+  }
+
+  &__error {
+    color: #f37474;
+    padding-left: 10px;
+  }
+
+  &__checkbox-label {
+    width: auto;
+    display: flex;
+    justify-content: flex-start;
+    padding-left: 10px;
+  }
+
+  &__checkbox-label label {
+    cursor: pointer;
+  }
+
+  &__checkbox-label input {
+    cursor: pointer;
+    margin: 0 8px;
+    accent-color: #484fff;
+  }
+
+  &__account-selector {
+    margin: 10px 0;
+    transition: all 0.4s ease-in-out;
+    opacity: 1;
+    max-height: 1000px;
+
+    &__help-text {
+      padding-left: 10px;
+      margin-bottom: 10px;
+    }
+  }
+
+  &__account-selector.disabled {
+    opacity: 0;
+    max-height: 0;
+  }
+
+  &__input-wrapper {
+    position: relative;
+  }
+
+  &__input {
+    width: 100%;
+    border: 1px solid rgb(255 255 255 / 15%);
+    border-radius: 12px;
+    background: rgb(255 255 255 / 5%);
+    color: #fff;
+    font-size: 15px;
+    padding: 10px 10px;
+    box-sizing: border-box;
+    transition: all 0.2s;
+  }
+}

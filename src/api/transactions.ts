@@ -189,13 +189,13 @@ export const getTransactionTitlesAutocomplete = async (query: string): Promise<s
     return [];
 };
 
-export const import_csv = async (file: File): Promise<{ success: boolean; errors?: Array<{ field: string; message: string }> }> => {
+export const import_csv = async (file: File, account_id: string): Promise<{ success: boolean; errors?: Array<{ field: string; message: string }> }> => {
     let csv_file: File = new File([file], file.name, {
         type: "text/csv",
     });
     let formData: FormData = new FormData();
     formData.append("file", csv_file);
-    formData.append("account_id", "1")
+    formData.append("account_id", account_id)
     let response: Response = await client("/api/transactions/import", {
         method: "POST",
         credentials: "include",
