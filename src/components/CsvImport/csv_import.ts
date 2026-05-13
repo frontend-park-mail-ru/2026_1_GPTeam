@@ -52,7 +52,7 @@ export class CsvImport extends BaseComponent {
             }
             catch (err) {
                 let message: string = err instanceof Error ? err.message : "Не удалось загрузить файл";
-                let modal: ModalMessage = new ModalMessage(message, () => router.navigate("/operations"));
+                let modal: ModalMessage = new ModalMessage(message, () => router.refresh());
                 modal.render(document.body);
             }
             finally {
