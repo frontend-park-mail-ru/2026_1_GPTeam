@@ -2,6 +2,8 @@ import {BaseComponent} from "../base_component.ts";
 import template from "./csv_import.hbs?raw";
 import "./csv_import.scss";
 import {import_csv} from "../../api/transactions.ts";
+import {ModalMessage} from "../ModalMessage/modal_message.ts";
+import {router} from "../../router/router_instance.ts";
 
 export class CsvImport extends BaseComponent {
     constructor(props: Record<string, any>) {
@@ -39,24 +41,19 @@ export class CsvImport extends BaseComponent {
             }
 
             btn.disabled = true;
+            input!.value = "";
             try {
                 let response = await import_csv(file);
-                if (!response.success) {
-                    let message: string | undefined = response.errors?.[0].message;
-                    if (!message)
-                        message = "Ошибка сервера";
-                    if (error)
-                        error.innerText = message;
-                    else
-                        console.error(message);
-                }
+                let message: string = "Транзакции импортированы."
+                if (!response.success)
+                    message = "Произошла ошибка. Применены только валидные транзакции.";
+                let modal: ModalMessage = new ModalMessage(message, () => router.refresh());
+                modal.render(document.body);
             }
             catch (err) {
-                let message: string = err instanceof Error ? err.message : "Не удалось сохранить аватар";
-                if (error)
-                    error.innerText = message;
-                else
-                    console.error(message);
+                let message: string = err instanceof Error ? err.message : "Не удалось загрузить файл";
+                let modal: ModalMessage = new ModalMessage(message, () => router.navigate("/operations"));
+                modal.render(document.body);
             }
             finally {
                 btn.disabled = false;
