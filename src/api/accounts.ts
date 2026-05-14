@@ -75,6 +75,12 @@ export const deleteAccount = async (id: number): Promise<SimpleResponse> => {
     return requestWithRefresh<SimpleResponse>(`/api/accounts/${id}`, { method: "DELETE" });
 };
 
+export const leaveAccount = async (id: number): Promise<SimpleResponse> => {
+    return requestWithRefresh<SimpleResponse>(`/api/accounts/${id}/leave`, {
+        method: "POST",
+    });
+};
+
 export interface ShortAccount {
     id: number;
     account_id: number;
