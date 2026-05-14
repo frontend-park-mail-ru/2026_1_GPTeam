@@ -95,6 +95,8 @@ export interface Account {
     name: string;
     balance: number;
     currency: string;
+    /** Владелец счёта (user id); нужен UI приглашений */
+    owner_id?: number;
     created_at: string;
     updated_at: string;
 }

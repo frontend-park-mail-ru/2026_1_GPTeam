@@ -37,10 +37,9 @@ h1 {
   margin: 0 auto;
   padding: 2rem;
   
-  /* Добавляем Flexbox для жесткого каркаса */
   display: flex;
   flex-direction: column;
-  gap: 2rem; /* Это создаст непробиваемый отступ между хедером и контентом */
+  gap: 2rem;
 }
 
 .page__header {

@@ -50,12 +50,8 @@ export class Modal extends BaseComponent {
     }
 
     show_error(message: string): void {
-        let error_element = this.getElement()?.querySelector<HTMLElement>(".modal-error__message");
-        console.log(this)
-        console.log(this._element)
-        console.log(this.getElement())
+        const error_element = this.getElement()?.querySelector<HTMLElement>(".modal-error__message");
         if (!error_element) {
-            alert(message);
             return;
         }
         error_element.style.display = "block";
