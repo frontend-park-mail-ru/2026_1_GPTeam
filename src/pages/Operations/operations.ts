@@ -10,6 +10,7 @@ import { router } from "../../router/router_instance";
 // @ts-ignore
 import template from "./operations.hbs?raw";
 import "./operations.scss";
+import {CsvImport} from "../../components/CsvImport/csv_import.ts";
 
 /**
  * Страница списка операций с фильтрацией по типу и периоду.
@@ -50,6 +51,13 @@ export class OperationsPage extends BasePage {
         this._initSearch(root);
         await this._loadAccountsAndCategories(root);
         await this._loadTransactions(root);
+
+        let import_component: CsvImport = new CsvImport({});
+        let container: HTMLElement | null = root.querySelector("#import");
+        if (!container) {
+            return;
+        }
+        import_component.render(container);
     }
 
     /**
