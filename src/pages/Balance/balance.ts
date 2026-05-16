@@ -239,6 +239,8 @@ export class BalancePage extends BasePage {
         });
         slot.addEventListener("invite-rejected", () => {
             void this._loadAccounts(root);
+            this._membersList?.refresh();
+            this._pendingInvites?.refresh(); // если есть метод refresh
         });
 
         // Слушаем события изменений участников из других вкладок через localStorage

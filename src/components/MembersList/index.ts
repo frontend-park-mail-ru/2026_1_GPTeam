@@ -83,9 +83,14 @@ export class MembersList {
             if (response.code === 200 && response.members) {
                 const serverMembers = response.members;
 
-                // Retain local pending invites not yet confirmed by the server
+                // Сохраняем локальные pending-записи только для юзеров, которых
+                // нет на сервере И которые ещё есть в this.members.
+                // После удаления/отзыва мы предварительно чистим this.members,
+                // поэтому удалённый юзер сюда не попадёт.
                 const localPending = this.members.filter(
-                    (m) => m.status === "pending" && !serverMembers.some((sm) => sm.user_id === m.user_id)
+                    (m) =>
+                        m.status === "pending" &&
+                        !serverMembers.some((sm) => sm.user_id === m.user_id),
                 );
 
                 this.members = [...localPending, ...serverMembers];
@@ -124,15 +129,17 @@ export class MembersList {
                         </div>
                         <div class="member-email">${this.escapeHtml(member.email)}</div>
                     </div>
-                    ${this.isOwner && !member.is_owner
-                        ? `<button type="button" class="btn-remove-member" 
-                               data-user-id="${member.user_id}"
-                               data-status="${member.status}">
-                               ${member.status === "pending" ? "Отменить" : "Удалить"}
-                           </button>`
-                        : ""}
+                    ${
+                        this.isOwner && !member.is_owner
+                            ? `<button type="button" class="btn-remove-member"
+                                   data-user-id="${member.user_id}"
+                                   data-status="${member.status}">
+                                   ${member.status === "pending" ? "Отменить" : "Удалить"}
+                               </button>`
+                            : ""
+                    }
                 </div>
-            `
+            `,
             )
             .join("");
 
@@ -162,8 +169,6 @@ export class MembersList {
             const response = await inviteUser(this.accountId, query);
 
             if (response.code === 200) {
-                // Оптимистично показываем нового участника как ожидающего,
-                // если сервер вернул данные приглашения — используем их.
                 const invite = (response as any).invite;
                 if (invite) {
                     const synthetic: Member = {
@@ -177,7 +182,6 @@ export class MembersList {
                         is_owner: false,
                     };
 
-                    // Не добавляем дубликат
                     if (!this.members.some((m) => m.user_id === synthetic.user_id && m.status === synthetic.status)) {
                         this.members.unshift(synthetic);
                         this.renderMembers();
@@ -186,7 +190,6 @@ export class MembersList {
 
                 this.element.querySelector(".invite-modal")?.classList.add("hidden");
 
-                // Уведомляем другие вкладки/окна о добавлении приглашения (если есть user_id)
                 try {
                     const invitedUserId = (response as any).invite?.user_id;
                     if (typeof invitedUserId === "number") {
@@ -194,11 +197,10 @@ export class MembersList {
                     } else {
                         localStorage.setItem(`account:${this.accountId}:members_changed`, String(Date.now()));
                     }
-                } catch (e) {
+                } catch {
                     // ignore
                 }
 
-                // Перезагрузим с сервера для «истинного» состояния
                 await this.loadMembers();
             } else {
                 showMessageModal("Приглашение", response.message || "Не удалось отправить приглашение");
@@ -221,21 +223,31 @@ export class MembersList {
                     const response = await removeMember(this.accountId, userId);
                     if (response.code === 200) {
                         modal.destroy();
+
+                        // Убираем юзера из локального состояния ДО вызова loadMembers,
+                        // чтобы localPending-логика не вернула его обратно в список.
+                        this.members = this.members.filter((m) => m.user_id !== userId);
+
                         try {
-                            localStorage.setItem(`account:${this.accountId}:member_removed:${userId}`, String(Date.now()));
-                        } catch (e) {
+                            localStorage.setItem(
+                                `account:${this.accountId}:member_removed:${userId}`,
+                                String(Date.now()),
+                            );
+                        } catch {
                             // ignore
                         }
+
                         await this.loadMembers();
                     } else {
                         modal.show_error(
-                            response.message || (isPending ? "Не удалось отменить приглашение" : "Не удалось удалить участника")
+                            response.message ||
+                                (isPending ? "Не удалось отменить приглашение" : "Не удалось удалить участника"),
                         );
                     }
                 } catch {
                     modal.show_error("Ошибка сети или сервера");
                 }
-            }
+            },
         );
     }
 
