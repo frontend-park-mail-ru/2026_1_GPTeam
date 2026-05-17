@@ -277,6 +277,8 @@ export interface AnalysisTimelineItem {
 export interface AnalysisResponse extends SimpleResponse {
     period: AnalysisPeriod;
     period_label: string;
+    period_start: string;
+    period_end: string;
     summary: AnalysisSummary;
     budgets: AnalysisBudgetItem[];
     categories: AnalysisCategoryItem[];

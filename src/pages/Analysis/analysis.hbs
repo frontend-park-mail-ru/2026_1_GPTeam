@@ -13,9 +13,15 @@
                 <p class="analysis-panel__caption js--analysis-period-label">Период</p>
             </div>
             <div class="analysis__filters" aria-label="Фильтр периода">
-                <button type="button" class="analysis__filter analysis__filter--active js--analysis-period" data-period="month">Месяц</button>
-                <button type="button" class="analysis__filter js--analysis-period" data-period="quarter">Квартал</button>
-                <button type="button" class="analysis__filter js--analysis-period" data-period="year">Год</button>
+                <div class="analysis__period-buttons">
+                    <button type="button" class="analysis__filter analysis__filter--active js--analysis-period" data-period="month">Месяц</button>
+                    <button type="button" class="analysis__filter js--analysis-period" data-period="quarter">Квартал</button>
+                    <button type="button" class="analysis__filter js--analysis-period" data-period="year">Год</button>
+                </div>
+                <label class="analysis__date-field">
+                    <span>Начало</span>
+                    <input class="analysis__date-input js--analysis-start-date" type="date">
+                </label>
             </div>
         </div>
         <div class="analysis__notice analysis__notice--error js--analysis-error" hidden></div>
@@ -25,7 +31,8 @@
     <section class="analysis-panel analysis-panel--budgets">
         <div class="analysis-panel__head">
             <div>
-                <h3 class="analysis-panel__title">Анализ бюджетов</h3>
+                <h3 class="analysis-panel__title">Лимиты и исполнение</h3>
+                <p class="analysis-panel__caption">Столбчатый график показывает целевые лимиты бюджета и фактические траты. Ниже — список с прогрессом по каждому бюджету.</p>
             </div>
         </div>
         <div class="analysis__chart-wrap js--analysis-budget-chart"></div>
@@ -37,6 +44,7 @@
             <div class="analysis-panel__head analysis-panel__head--compact">
                 <div>
                     <h3 class="analysis-panel__title">Структура расходов</h3>
+                    <p class="analysis-panel__caption">Круговая диаграмма по категориям расходов.</p>
                 </div>
             </div>
             <div class="analysis-donut-section">
@@ -49,6 +57,7 @@
             <div class="analysis-panel__head analysis-panel__head--compact">
                 <div>
                     <h3 class="analysis-panel__title">Динамика доходов и расходов</h3>
+                    <p class="analysis-panel__caption">График по выбранному периоду. Синяя линия — расходы, светлая — доходы.</p>
                 </div>
             </div>
             <div class="analysis__chart-wrap js--analysis-line-chart"></div>

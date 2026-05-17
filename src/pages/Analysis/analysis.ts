@@ -17,6 +17,7 @@ const MAX_DONUT_ITEMS = 4;
 
 export class AnalysisPage extends BasePage {
     private _selectedPeriod: AnalysisPeriod = "month";
+    private _selectedStartDate = "";
 
     async render(root: HTMLElement): Promise<void> {
         const compiledTemplate = Handlebars.compile(template);
@@ -41,6 +42,12 @@ export class AnalysisPage extends BasePage {
                 await this._loadAndRender(root);
             });
         });
+
+        const startDateInput = root.querySelector<HTMLInputElement>(".js--analysis-start-date");
+        startDateInput?.addEventListener("change", async () => {
+            this._selectedStartDate = startDateInput.value;
+            await this._loadAndRender(root);
+        });
     }
 
     private _syncPeriodButtons(root: HTMLElement): void {
@@ -58,7 +65,7 @@ export class AnalysisPage extends BasePage {
         }
 
         try {
-            const data = await fetchAnalysis(this._selectedPeriod);
+            const data = await fetchAnalysis(this._selectedPeriod, this._selectedStartDate || undefined);
             if (data.code === 401) {
                 router.navigate("/login");
                 return;
@@ -317,6 +324,8 @@ export class AnalysisPage extends BasePage {
             message: "Ok",
             period: this._selectedPeriod,
             period_label: "Период",
+            period_start: "",
+            period_end: "",
             summary: {
                 total_budget_limit: 0,
                 total_budget_spent: 0,

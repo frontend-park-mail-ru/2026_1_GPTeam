@@ -87,9 +87,42 @@
 
 .analysis__filters {
   display: flex;
-  gap: 12px;
+  align-items: center;
+  gap: 16px;
   margin: 12px 0 0;
   flex-wrap: wrap;
+}
+
+.analysis__period-buttons {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+
+.analysis__date-field {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: rgb(255 255 255 / 50%);
+  font-size: 13px;
+  font-weight: 800;
+}
+
+.analysis__date-input {
+  border: 1px solid rgb(255 255 255 / 10%);
+  border-radius: 14px;
+  background: rgb(255 255 255 / 5%);
+  color: #fff;
+  font-family: Manrope, sans-serif;
+  font-size: 14px;
+  font-weight: 700;
+  padding: 9px 12px;
+  outline: none;
+}
+
+.analysis__date-input:focus {
+  border-color: rgb(72 79 255 / 70%);
+  box-shadow: 0 0 0 4px rgb(72 79 255 / 14%);
 }
 
 .analysis__filter {
