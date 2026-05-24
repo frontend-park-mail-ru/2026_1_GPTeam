@@ -11,6 +11,7 @@ import { router } from "../../router/router_instance";
 import template from "./operations.hbs?raw";
 import "./operations.scss";
 import {CsvImport} from "../../components/CsvImport/csv_import.ts";
+import {CsvExport} from "../../components/CsvExport/csv_export.ts";
 
 /**
  * Страница списка операций с фильтрацией по типу и периоду.
@@ -51,6 +52,12 @@ export class OperationsPage extends BasePage {
         this._initSearch(root);
         await this._loadAccountsAndCategories(root);
         await this._loadTransactions(root);
+
+        const export_component = new CsvExport({});
+        const export_container = root.querySelector("#export");
+        if (export_container) {
+            export_component.render(export_container);
+        }
 
         let import_component: CsvImport = new CsvImport({});
         let container: HTMLElement | null = root.querySelector("#import");

@@ -1,0 +1,77 @@
+.export-block {
+  margin: 16px 0;
+  padding: 20px 20px 5px 20px;
+  border: 1px solid rgb(255 255 255 / 10%);
+  border-radius: 16px;
+  background: linear-gradient(135deg, rgb(28 31 53 / 96%), rgb(23 26 42 / 96%));
+  box-sizing: border-box;
+  transition: all 0.2s;
+  overflow-wrap: anywhere;
+  font-family: Manrope, sans-serif;
+
+  &__header {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    margin-bottom: 16px;
+  }
+
+  &__help-text {
+    margin: 0;
+    padding-left: 10px;
+    color: rgb(255 255 255 / 70%);
+    font-size: 15px;
+  }
+
+  &__btn {
+    cursor: pointer;
+    padding: 10px 16px;
+    color: white;
+    border: 2px solid rgb(255 255 255 / 15%);
+    border-radius: 12px;
+    background: #484fff;
+    font-size: 15px;
+    white-space: nowrap;
+    transition: all 0.2s;
+  }
+
+  &__btn:hover:not(:disabled) {
+    box-shadow: 0 0 36px rgb(72 79 255 / 40%);
+  }
+
+  &__btn:active:not(:disabled) {
+    border-color: white;
+  }
+
+  &__btn:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+  }
+
+  &__error {
+    color: #f37474;
+    padding-left: 10px;
+  }
+
+  &__account-selector {
+    margin: 10px 0;
+  }
+
+  &__input-wrapper {
+    position: relative;
+  }
+
+  &__input {
+    width: 100%;
+    border: 1px solid rgb(255 255 255 / 15%);
+    border-radius: 12px;
+    background: rgb(255 255 255 / 5%);
+    color: #fff;
+    font-size: 15px;
+    padding: 10px 10px;
+    box-sizing: border-box;
+    transition: all 0.2s;
+  }
+}
