@@ -10,6 +10,7 @@ import {
     TransactionSearchResponse,
     TransactionSearchFilters
 } from "../types/interfaces";
+import {is_login} from "./auth.ts";
 
 /**
  * Получает список всех ID транзакций пользователя.
@@ -186,4 +187,99 @@ export const getTransactionTitlesAutocomplete = async (query: string): Promise<s
         return Array.from(titles);
     }
     return [];
+};
+
+export const import_csv = async (file: File, account_id: string): Promise<{ success: boolean; errors?: Array<{ field: string; message: string }> }> => {
+    let csv_file: File = new File([file], file.name, {
+        type: "text/csv",
+    });
+    let formData: FormData = new FormData();
+    formData.append("file", csv_file);
+    formData.append("account_id", account_id)
+    let response: Response = await client("/api/transactions/import", {
+        method: "POST",
+        credentials: "include",
+        body: formData,
+    });
+    let data: any = await response.json();
+    if (data.code === 200)
+        return { success: true };
+    if (data.code === 401) {
+        const login: boolean = await is_login();
+        if (login) {
+            const retry_response = await client("/api/transactions/import", {
+                method: "POST",
+                credentials: "include",
+                body: formData,
+            });
+            data = await retry_response.json();
+            if (data.code === 200)
+                return { success: true };
+        }
+    }
+    let errors: Array<{ field: string; message: string }> = data.errors ? data.errors : [];
+    let message: string = data.message;
+    if (message)
+        errors.push({ field: "", message: message });
+    return { success: false, errors: errors };
+};
+
+const parseContentDispositionFilename = (header: string | null): string | null => {
+    if (!header) return null;
+    const match = header.match(/filename\*?=(?:UTF-8''|")?([^";\n]+)/i);
+    if (!match) return null;
+    try {
+        return decodeURIComponent(match[1].replace(/"/g, "").trim());
+    } catch {
+        return match[1].replace(/"/g, "").trim();
+    }
+};
+
+const parseExportError = async (response: Response): Promise<never> => {
+    let message = "Не удалось экспортировать транзакции";
+    try {
+        const data: { message?: string } = await response.json();
+        if (data.message) message = data.message;
+    } catch {
+        // ignore non-JSON body
+    }
+    throw new Error(message);
+};
+
+const fetchExportResponse = (account_id: string): Promise<Response> =>
+    client(`/api/transactions/export?account_id=${encodeURIComponent(account_id)}`, {
+        method: "GET",
+    });
+
+const readExportFile = async (response: Response): Promise<{ blob: Blob; filename: string }> => {
+    if (!response.ok) {
+        await parseExportError(response);
+    }
+    const blob = await response.blob();
+    const filename = parseContentDispositionFilename(response.headers.get("content-disposition")) ?? "transactions.csv";
+    return { blob, filename };
+};
+
+export const export_csv = async (account_id: string): Promise<{ blob: Blob; filename: string }> => {
+    let response = await fetchExportResponse(account_id);
+    const contentType = response.headers.get("content-type") ?? "";
+
+    if (contentType.includes("application/json")) {
+        const data: { code?: number; message?: string } = await response.json();
+        if (data.code === 401) {
+            const login = await is_login();
+            if (login) {
+                response = await fetchExportResponse(account_id);
+                const retryContentType = response.headers.get("content-type") ?? "";
+                if (retryContentType.includes("application/json")) {
+                    const retryData: { message?: string } = await response.json();
+                    throw new Error(retryData.message ?? "Не удалось экспортировать транзакции");
+                }
+                return readExportFile(response);
+            }
+        }
+        throw new Error(data.message ?? "Не удалось экспортировать транзакции");
+    }
+
+    return readExportFile(response);
 };

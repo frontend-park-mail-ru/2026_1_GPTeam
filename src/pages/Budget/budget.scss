@@ -1,3 +1,11 @@
+
+.page__content--budget {
+  align-items: flex-start;
+  justify-content: center;
+  min-height: auto;
+  width: 100%;
+}
+
 $color-budget-card-gradient-start: rgb(72 79 255 / 15%);
 $color-budget-card-gradient-end: rgb(72 79 255 / 5%);
 $color-budget-card-border: rgb(72 79 255 / 30%);
@@ -17,36 +25,50 @@ $color-budget-create-shadow-hover: rgb(72 79 255 / 70%);
 .budget {
   display: flex;
   flex-direction: column;
-  align-items: center;
-  gap: 32px;
-  padding: 32px;
-  min-height: 90vh;
-  width: 100%;
-  max-width: 1400px;
+  gap: 24px;
+  padding: 42px 0 72px;
+  min-height: auto;
+  width: min(760px, calc(100vw - 64px));
   margin: 0 auto;
   box-sizing: border-box;
+  font-family: Manrope, sans-serif;
 }
 
-.budget__header {
-  width: 100%;
-  max-width: 100%;
+.budget-hero {
   display: flex;
-  flex-direction: column;
-  align-items: center;
-  text-align: center;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 24px;
+  padding: 10px 32px 8px;
+  width: 100%;
+  max-width: 732px;
+  margin: 0 auto;
 }
 
+.budget-hero__title,
 .budget__title {
   margin: 0;
-  color: $color-surface-root-light-scheme;
-  font-size: 28px;
-  font-weight: 700;
+  color: #fff;
+  font-size: clamp(36px, 5vw, 64px);
+  font-weight: 900;
+  line-height: 0.95;
+  letter-spacing: -0.06em;
 }
 
+.budget-hero__subtitle,
 .budget__page-date {
-  color: rgb(255 255 255 / 40%);
-  font-size: 13px;
-  margin: 0;
+  max-width: 520px;
+  margin: 16px 0 0;
+  color: rgb(255 255 255 / 48%);
+  font-size: 16px;
+  line-height: 1.45;
+}
+
+.budget-hero__action-slot {
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  min-width: 220px;
 }
 
 .budget__list {
@@ -238,7 +260,7 @@ $color-budget-create-shadow-hover: rgb(72 79 255 / 70%);
 
 .budget__slot {
   display: flex;
-  justify-content: center;
+  justify-content: flex-end;
   width: 100%;
 }
 
@@ -250,16 +272,18 @@ $color-budget-create-shadow-hover: rgb(72 79 255 / 70%);
 }
 
 .budget__create {
-  background: $color-budget-create-bg;
+  background: linear-gradient(135deg, #6166ff, #4c50f7);
   color: $color-surface-root-light-scheme;
-  border: none;
-  border-radius: 50px;
-  padding: 14px 32px;
-  font-size: 16px;
-  font-weight: 600;
+  border: 1px solid rgb(91 94 255 / 85%);
+  border-radius: 999px;
+  padding: 14px 24px;
+  font-size: 15px;
+  font-weight: 800;
+  line-height: 1.1;
+  white-space: nowrap;
   cursor: pointer;
   transition: all 0.2s;
-  box-shadow: 0 0 20px $color-budget-create-shadow;
+  box-shadow: 0 18px 42px rgb(84 91 255 / 18%);
 
   &:hover {
     box-shadow: 0 0 36px $color-budget-create-shadow-hover;
@@ -269,12 +293,14 @@ $color-budget-create-shadow-hover: rgb(72 79 255 / 70%);
 
 @media (max-width: 1024px) {
   .budget {
-    padding: 24px 20px;
+    width: min(100%, calc(100vw - 48px));
+    padding: 32px 0 56px;
     gap: 24px;
   }
 
-  .budget__title {
-    font-size: 26px;
+  .budget-hero {
+    padding-left: 18px;
+    padding-right: 18px;
   }
 
   .budget__list {
@@ -358,14 +384,24 @@ $color-budget-create-shadow-hover: rgb(72 79 255 / 70%);
   }
 }
 
-@media (max-width: 320px) {
+@media (max-width: 768px) {
   .budget {
-    padding: 12px 10px;
-    gap: 16px;
+    width: min(100%, calc(100vw - 28px));
+    padding: 28px 0 48px;
+    gap: 20px;
   }
 
-  .budget__title {
-    font-size: 20px;
+  .budget-hero {
+    flex-direction: column;
+    align-items: stretch;
+    padding-left: 18px;
+    padding-right: 18px;
+  }
+
+  .budget-hero__action-slot,
+  .budget__slot {
+    justify-content: flex-start;
+    min-width: 0;
   }
 
   .budget-card {

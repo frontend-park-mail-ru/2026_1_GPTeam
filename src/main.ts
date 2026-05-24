@@ -16,6 +16,7 @@ import "./styles/global.scss";
 import { LandingPage } from "./pages/Landing/landing.ts";
 import { ProfilePage } from "./pages/Profile/profile.ts";
 import { BalancePage } from "./pages/Balance/balance.ts";
+import { AnalysisPage } from "./pages/Analysis/analysis.ts";
 import { ProfileEditPage } from "./pages/ProfileEdit/profile_edit.ts";
 import { OperationsPage } from "./pages/Operations/operations.ts";
 import { AvatarEditPage } from "./pages/AvatarEdit/avatar_edit.ts";
@@ -44,6 +45,7 @@ router
     .addRoute("/signup", () => new SignupPage())
     .addRoute("/profile", () => new ProfilePage())
     .addRoute("/balance", () => new BalancePage())
+    .addRoute("/analysis", () => new AnalysisPage())
     .addRoute("/budget", () => new BudgetPage())
     .addRoute("/budget/edit/:id", (params) => new BudgetEditPage(Number(params.id)))
     .addRoute("/profile/edit", () => new ProfileEditPage())
@@ -84,6 +86,7 @@ function getHeaderActivePath(path: string): string {
     if (path.startsWith("/profile")) return "/profile";
     if (path.startsWith("/budget")) return "/budget";
     if (path.startsWith("/balance")) return "/balance";
+    if (path.startsWith("/analysis")) return "/analysis";
     return path;
 }
 

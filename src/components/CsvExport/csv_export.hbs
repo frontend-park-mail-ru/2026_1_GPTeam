@@ -1,0 +1,15 @@
+<div class="export-block">
+    <div class="export-block__header">
+        <p class="export-block__help-text">Выберите счёт для экспорта транзакций</p>
+        <button id="export_btn" class="export-block__btn primary_btn" type="button">Экспортировать в CSV</button>
+    </div>
+    <p id="export_error" class="export-block__error"></p>
+    <div class="export-block__account-selector">
+        <div class="export-block__input-wrapper">
+            <div class="export-block__input custom-select__display" id="export_account_display"></div>
+            <input type="hidden" id="export_account_input" name="export_account">
+            <span class="custom-select__arrow">▾</span>
+            <div class="custom-select__dropdown" id="export_account_dropdown"></div>
+        </div>
+    </div>
+</div>

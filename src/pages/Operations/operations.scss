@@ -4,9 +4,9 @@
 }
 
 .operations-page {
-    width: min(680px, calc(100% - 96px));
+    width: min(760px, calc(100vw - 64px));
     margin: 0 auto;
-    padding: 32px 0 48px;
+    padding: 42px 0 48px;
     box-sizing: border-box;
 }
 
@@ -19,18 +19,19 @@
 }
 
 .operations-page__title {
-    margin: 0 0 10px;
+    margin: 0 0 16px;
     color: #fff;
     font-family: Manrope, sans-serif;
-    font-size: 42px;
-    font-weight: 800;
-    line-height: 1.05;
-    letter-spacing: -0.04em;
+    font-size: clamp(36px, 5vw, 64px);
+    font-weight: 900;
+    line-height: 0.95;
+    letter-spacing: -0.06em;
 }
 
 .operations-page__subtitle {
+    max-width: 600px;
     margin: 0;
-    color: rgb(255 255 255 / 44%);
+    color: rgb(255 255 255 / 48%);
     font-family: Manrope, sans-serif;
     font-size: 16px;
     line-height: 1.45;
@@ -459,6 +460,7 @@
     }
 
     .operations-page__add-btn {
+    white-space: nowrap;
         width: 100%;
         margin-top: 0;
     }
@@ -508,6 +510,7 @@
     }
 
     .operations-page__add-btn {
+    white-space: nowrap;
         width: 100%;
     }
 
@@ -615,6 +618,7 @@
 }
 
 .operations-page__add-btn {
+    white-space: nowrap;
     flex-shrink: 0;
     margin-top: 8px;
     border: 1px solid rgb(91 94 255 / 85%);
@@ -771,6 +775,7 @@
     }
 
     .operations-page__add-btn {
+    white-space: nowrap;
         width: 100%;
         margin-top: 0;
     }
@@ -792,6 +797,7 @@
     }
 
     .operations-page__add-btn {
+    white-space: nowrap;
         width: 100%;
     }
 

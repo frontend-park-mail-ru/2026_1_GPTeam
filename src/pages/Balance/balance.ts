@@ -4,9 +4,9 @@ import { get_balance } from "../../api/balance.ts";
 import {
     createAccount,
     deleteAccount,
-    fetchAccount,
     fetchAccounts,
     updateAccount,
+    leaveAccount,
 } from "../../api/accounts.ts";
 import { TotalBalance } from "../../components/TotalBalance/total_balance.ts";
 import { IncomeBalance } from "../../components/IncomeBalance/income_balance.ts";
@@ -22,18 +22,25 @@ import type {
     CurrencyBalance,
 } from "../../types/interfaces.ts";
 import "./balance.scss";
+import { PendingInvites } from "../../components/PendingInvites/index.ts";
+import { MembersList } from "../../components/MembersList/index.ts";
+import { get_profile } from "../../api/profile.ts";
+import { showDangerConfirmModal } from "../../utils/modal_helpers.ts";
 
 const SUMMARY_CURRENCIES = ["RUB", "EUR", "USD"] as const;
 
-/**
- * Страница баланса: сводка по валютам + CRUD счетов.
- */
 export class BalancePage extends BasePage {
     private _accounts: Account[] = [];
     private _balances: CurrencyBalance[] = [];
     private _editingAccountId: number | null = null;
     private _selectedCurrency = "all";
     private _accountStatusTimer: number | null = null;
+    private _pendingInvites: PendingInvites | null = null;
+    private _membersList: MembersList | null = null;
+    private _currentUserId: number | null = null;
+    private _openMembersAccountId: number | null = null;
+    private _openDetailAccountId: number | null = null;
+    private _storageHandler: ((e: StorageEvent) => void) | null = null;
 
     async render(root: HTMLElement): Promise<void> {
         const balanceData = await this._loadBalance();
@@ -55,6 +62,7 @@ export class BalancePage extends BasePage {
         if (balanceData.balances)
             this._balances = this._normalizeBalances(balanceData.balances);
         this._initAccountControls(root);
+        await this._initInvitesAndProfile(root);
         await this._loadAccounts(root);
         this._syncCurrencyFilters(root);
         this._renderBalanceSections(root, this._getBalancesForAvailableCurrencies());
@@ -127,7 +135,6 @@ export class BalancePage extends BasePage {
         });
     }
 
-
     private _normalizeBalances(balances: CurrencyBalance[]): CurrencyBalance[] {
         const result = new Map<string, CurrencyBalance>();
 
@@ -195,6 +202,80 @@ export class BalancePage extends BasePage {
     private _toMoneyNumber(value: unknown): number {
         const numberValue = Number(value);
         return Number.isFinite(numberValue) ? numberValue : 0;
+    }
+
+    public override destroy(): void {
+        this._pendingInvites?.destroy();
+        this._membersList?.destroy();
+        this._pendingInvites = null;
+        this._membersList = null;
+        this._openMembersAccountId = null;
+        this._openDetailAccountId = null;
+        if (this._storageHandler) {
+            window.removeEventListener("storage", this._storageHandler);
+            this._storageHandler = null;
+        }
+        super.destroy();
+    }
+
+    private async _initInvitesAndProfile(root: HTMLElement): Promise<void> {
+        try {
+            const profileRes = await get_profile();
+            if (profileRes.code === 200 && profileRes.user?.id != null) {
+                this._currentUserId = profileRes.user.id;
+            }
+        } catch {
+            this._currentUserId = null;
+        }
+
+        const slot = root.querySelector<HTMLElement>(".js--pending-invites");
+        if (!slot) return;
+
+        this._pendingInvites?.destroy();
+        this._pendingInvites = new PendingInvites(slot);
+        slot.addEventListener("invite-accepted", () => {
+            void this._loadAccounts(root);
+            this._membersList?.refresh();
+        });
+        slot.addEventListener("invite-rejected", () => {
+            void this._loadAccounts(root);
+            this._membersList?.refresh();
+            this._pendingInvites?.refresh(); // если есть метод refresh
+        });
+
+        // Слушаем события изменений участников из других вкладок через localStorage
+        this._storageHandler = (e: StorageEvent) => {
+            if (!e.key) return;
+            if (!e.key.startsWith(`account:`)) return;
+            const parts = e.key.split(":");
+            // Ожидаемые форматы:
+            // account:<id>:member_left:<userId>
+            // account:<id>:member_removed:<userId>
+            // account:<id>:member_added:<userId>
+            if (parts.length >= 4 && parts[0] === "account") {
+                const accountId = Number(parts[1]);
+                const action = parts[2];
+                const userId = Number(parts[3]);
+
+                // Обновляем список аккаунтов (например, если участник вышел и перестал видеть счёт)
+                void this._loadAccounts(root);
+
+                // Если у владельца открыта панель участников для этого счёта — применим локальные изменения
+                if (this._openMembersAccountId === accountId && this._membersList) {
+                    if (action === "member_left" || action === "member_removed") {
+                        this._membersList.externalMemberRemoved(userId);
+                    } else if (action === "member_added") {
+                        // Не знаем деталей нового участника — запросим с сервера
+                        this._membersList.refresh();
+                    }
+                }
+            } else if (parts.length >= 3 && parts[2].startsWith("members")) {
+                // backward compatibility: members_changed
+                void this._loadAccounts(root);
+                this._membersList?.refresh();
+            }
+        };
+        window.addEventListener("storage", this._storageHandler);
     }
 
     private _initFilters(root: HTMLElement): void {
@@ -267,7 +348,10 @@ export class BalancePage extends BasePage {
                 this._deleteAccount(root, id);
             }
             if (target.dataset.accountAction === "read") {
-                this._showAccountDetails(root, id);
+                void this._openAccountDetail(root, id);
+            }
+            if (target.dataset.accountAction === "members") {
+                void this._toggleMembersPanel(root, id);
             }
         });
     }
@@ -294,7 +378,7 @@ export class BalancePage extends BasePage {
         } catch {
             this._accounts = [];
             list.innerHTML = "<div class='account-card account-card--empty'>Нет связи с backend на 8081</div>";
-            this._setAccountStatus(root, "Проверь, что backend запущен и VITE_SERVER_URL указывает на http://localhost:8081", "error");
+            this._setAccountStatus(root, "Нет связи с сервером", "error");
         }
     }
 
@@ -309,35 +393,91 @@ export class BalancePage extends BasePage {
             list.innerHTML = `
                 <article class="account-card account-card--empty">
                     <span class="account-card__label">${isCurrencyFilterActive ? this._escape(this._selectedCurrency) : "Пусто"}</span>
-                    <h4 class="account-card__name">${isCurrencyFilterActive ? "Нет счетов в этой валюте" : "Счетов пока нет"}</h4>
+                    <h4 class="account-card__name">${isCurrencyFilterActive ? "Нет счетов в этой валюте" : "Счётов пока нет"}</h4>
                     <p class="account-card__meta">${isCurrencyFilterActive ? "Выбери другую валюту или добавь новый счёт." : "Нажми «Новый счёт», чтобы добавить первый источник денег."}</p>
                 </article>
             `;
             return;
         }
 
-        list.innerHTML = accounts.map((account) => `
-            <article class="account-card">
-                <div class="account-card__topline">
-                    <span class="account-card__label">${this._escape(account.currency)}</span>
-                    <button class="account-card__ghost" type="button" data-account-action="read" data-account-id="${account.id}">Открыть</button>
-                </div>
-                <h4 class="account-card__name">${this._escape(account.name)}</h4>
-                <div class="account-card__balance">${this._formatMoney(account.balance, account.currency)}</div>
-                <p class="account-card__meta">Обновлён: ${this._formatDate(account.updated_at)}</p>
-                <div class="account-card__actions">
-                    <button type="button" data-account-action="edit" data-account-id="${account.id}">Изменить</button>
-                    <button type="button" data-account-action="delete" data-account-id="${account.id}">Удалить</button>
-                </div>
-            </article>
-        `).join("");
+        list.innerHTML = accounts.map((account) => {
+            const uid = this._currentUserId;
+            const ownerId = account.owner_id ?? 0;
+            const isAccountOwner = uid != null && ownerId > 0 && ownerId === uid;
+
+            return `
+                <article class="account-card">
+                    <div class="account-card__topline">
+                        <span class="account-card__label">${this._escape(account.currency)}</span>
+                        <div class="account-card__topline-actions">
+                            ${isAccountOwner
+                                ? `<button class="account-card__ghost account-card__ghost--members" type="button"
+                                    data-account-action="members" data-account-id="${account.id}">
+                                    Участники
+                                </button>`
+                                : ""}
+                            <button class="account-card__ghost" type="button"
+                                data-account-action="read" data-account-id="${account.id}">Открыть</button>
+                        </div>
+                    </div>
+                    <h4 class="account-card__name">${this._escape(account.name)}</h4>
+                    <div class="account-card__balance">${this._formatMoney(account.balance, account.currency)}</div>
+                    <p class="account-card__meta">Обновлён: ${this._formatDate(account.updated_at)}</p>
+                    ${isAccountOwner
+                        ? `<div class="account-card__actions">
+                            <button type="button" data-account-action="edit" data-account-id="${account.id}">Изменить</button>
+                            <button type="button" data-account-action="delete" data-account-id="${account.id}">Удалить</button>
+                        </div>`
+                        : `<div class="account-card__actions">
+                            <button type="button" class="btn-leave-account" data-account-id="${account.id}">Выйти</button>
+                        </div>`}
+                </article>
+            `;
+        }).join("");
+
+        list.querySelectorAll<HTMLButtonElement>(".btn-leave-account").forEach((btn) => {
+            btn.addEventListener("click", (e) => {
+                e.stopPropagation();
+                const accountId = parseInt(btn.dataset.accountId || "0");
+
+                showDangerConfirmModal(
+                    "Выйти из счёта?",
+                    "Вы перестанете видеть этот счёт и его историю. Продолжить?",
+                    async (modal) => {
+                        try {
+                            await leaveAccount(accountId);
+                            this._accounts = this._accounts.filter((a) => a.id !== accountId);
+                            if (this._openDetailAccountId === accountId) {
+                                this._openDetailAccountId = null;
+                                this._setAccountStatus(root, "", "neutral", true);
+                            }
+
+                            // Notify other tabs about the change
+                            try {
+                                const uid = this._currentUserId ?? "unknown";
+                                localStorage.setItem(`account:${accountId}:member_left:${uid}`, String(Date.now()));
+                            } catch (e) {
+                                console.error("Failed to update localStorage:", e);
+                            }
+
+                            // Refresh members list for the owner
+                            this._membersList?.refresh();
+                            this._renderAccounts(root);
+                            modal.destroy();
+                        } catch (err) {
+                            console.error("Failed to leave account:", err);
+                            modal.show_error("Не удалось выйти из счёта");
+                        }
+                    }
+                );
+            });
+        });
     }
 
     private _getVisibleAccounts(): Account[] {
         if (this._selectedCurrency === "all") {
             return this._accounts;
         }
-
         return this._accounts.filter((account) => account.currency.toUpperCase() === this._selectedCurrency);
     }
 
@@ -380,8 +520,8 @@ export class BalancePage extends BasePage {
         const submit = form.querySelector<HTMLButtonElement>(".js--account-submit");
         const name = form.querySelector<HTMLInputElement>(".js--account-name")?.value.trim() ?? "";
         const balanceRaw = form.querySelector<HTMLInputElement>(".js--account-balance")?.value.trim() ?? "";
-        const currency = form.querySelector<HTMLSelectElement>(".js--account-currency")?.value ?? "RUB";
-        const balance = balanceRaw === "" ? 0 : Number(balanceRaw);
+        const currency = form.querySelector<HTMLSelectElement>(".js--account-currency")?.value.trim() ?? "RUB";
+        const balance = this._toMoneyNumber(balanceRaw);
 
         if (!name) {
             this._setAccountStatus(root, "Название счёта обязательно", "error");
@@ -446,18 +586,74 @@ export class BalancePage extends BasePage {
         }
     }
 
-    private async _showAccountDetails(root: HTMLElement, id: number): Promise<void> {
-        try {
-            const data = await fetchAccount(id);
-            if (data.code !== 200 || !data.account) throw new Error(data.message ?? "Счёт не найден");
-            this._setAccountStatus(
-                root,
-                `${data.account.name}: ${this._formatMoney(data.account.balance, data.account.currency)} · создан ${this._formatDate(data.account.created_at)}`,
-                "neutral",
-            );
-        } catch (error) {
-            this._setAccountStatus(root, error instanceof Error ? error.message : "Ошибка чтения счёта", "error");
+    private async _openAccountDetail(root: HTMLElement, id: number): Promise<void> {
+        if (this._openDetailAccountId === id) {
+            this._openDetailAccountId = null;
+            this._setAccountStatus(root, "", "neutral", true);
+            return;
         }
+
+        const wrap = root.querySelector<HTMLElement>(".js--members-panel-wrap");
+        if (wrap && this._openMembersAccountId !== id) {
+            wrap.hidden = true;
+            this._membersList?.destroy();
+            this._membersList = null;
+            this._openMembersAccountId = null;
+        }
+
+        // ← Берём данные из кэша, не делаем лишний запрос
+        const acc = this._accounts.find((a) => a.id === id);
+        if (!acc) {
+            this._setAccountStatus(root, "Счёт не найден", "error");
+            return;
+        }
+
+        this._openDetailAccountId = id;
+        this._setAccountStatus(
+            root,
+            `${acc.name}: ${this._formatMoney(acc.balance, acc.currency)} · обновлён ${this._formatDate(acc.updated_at)}`,
+            "neutral",
+        );
+    }
+
+    private async _toggleMembersPanel(root: HTMLElement, id: number): Promise<void> {
+        const wrap = root.querySelector<HTMLElement>(".js--members-panel-wrap");
+        const mountRoot = root.querySelector<HTMLElement>(".js--members-panel-root");
+        const titleEl = root.querySelector<HTMLElement>(".js--members-panel-title");
+
+        if (this._openDetailAccountId !== null) {
+            this._openDetailAccountId = null;
+            this._setAccountStatus(root, "", "neutral", true);
+        }
+
+        if (!wrap || !mountRoot || !titleEl) return;
+
+        if (this._openMembersAccountId === id && !wrap.hidden) {
+            wrap.hidden = true;
+            this._membersList?.destroy();
+            this._membersList = null;
+            this._openMembersAccountId = null;
+            return;
+        }
+
+        const acc = this._accounts.find((a) => a.id === id);
+        if (!acc) {
+            this._setAccountStatus(root, "Счёт не найден", "error");
+            return;
+        }
+
+        const ownerId = acc.owner_id ?? 0;
+        const isOwner = this._currentUserId != null && ownerId > 0 && ownerId === this._currentUserId;
+
+        this._membersList?.destroy();
+        this._membersList = null;
+        mountRoot.innerHTML = "";
+
+        this._membersList = new MembersList(mountRoot, id, isOwner);
+        titleEl.textContent = `Участники: ${acc.name}`;
+        wrap.hidden = false;
+        this._openMembersAccountId = id;
+        wrap.scrollIntoView({ behavior: "smooth", block: "nearest" });
     }
 
     private _setAccountStatus(root: HTMLElement, text: string, state: "success" | "error" | "neutral", hide = false): void {
@@ -488,7 +684,7 @@ export class BalancePage extends BasePage {
             this._balances = this._normalizeBalances(balanceData.balances);
 
         if (balanceData.loadError) {
-            this._showBalanceError(root, "Нет связи с backend. Запусти сервер на 8081 или проверь VITE_SERVER_URL.");
+            this._showBalanceError(root, "Нет связи с сервером");
         }
 
         this._syncCurrencyFilters(root);
