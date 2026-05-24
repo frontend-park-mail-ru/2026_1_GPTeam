@@ -1,5 +1,5 @@
-import { client } from "./client.ts";
-import type { AnalysisPeriod, AnalysisResponse } from "../types/interfaces.ts";
+import {client} from "./client.ts";
+import type {AnalysisPeriod, AnalysisResponse} from "../types/interfaces.ts";
 
 export const fetchAnalysis = async (period: AnalysisPeriod = "month", startDate?: string): Promise<AnalysisResponse> => {
     const params = new URLSearchParams({ period });
