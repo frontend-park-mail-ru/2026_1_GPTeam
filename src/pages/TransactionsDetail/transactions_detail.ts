@@ -68,9 +68,13 @@ export class TransactionDetailPage extends BasePage {
             router.navigate("/operations");
         });
 
-        container.querySelector("#delete_btn")?.addEventListener("click", () => {
-            this._confirmDelete(container);
-        });
+        if (data.can_edit) {
+            container.querySelector("#delete_btn")?.addEventListener("click", () => {
+                this._confirmDelete(container);
+            });
+        } else {
+            container.querySelector("#delete_btn")?.remove();
+        }
     }
 
     /**

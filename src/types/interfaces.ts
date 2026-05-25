@@ -133,6 +133,7 @@ export interface Transaction {
     currency: string;
     created_at: string;
     transaction_date: string;
+    can_edit: boolean;
 }
 
 export interface TransactionListResponse extends SimpleResponse {
