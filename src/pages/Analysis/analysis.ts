@@ -65,14 +65,15 @@ export class AnalysisPage extends BasePage {
         }
 
         try {
-            const data = await fetchAnalysis(this._selectedPeriod, this._selectedStartDate || undefined);
+            const data: AnalysisResponse = await fetchAnalysis(this._selectedPeriod, this._selectedStartDate || undefined);
             if (data.code === 401) {
                 router.navigate("/login");
                 return;
             }
             this._renderData(root, data);
-        } catch {
-            this._showError(root, "Не удалось загрузить аналитику. Проверь соединение с сервером.");
+        } catch (e) {
+            console.error(e);
+            this._showError(root, "Не удалось загрузить аналитику.");
             this._renderData(root, this._emptyAnalysisResponse());
         }
     }
@@ -217,11 +218,13 @@ export class AnalysisPage extends BasePage {
         const donut = root.querySelector<HTMLElement>(".js--analysis-donut");
         const legend = root.querySelector<HTMLElement>(".js--analysis-donut-legend");
         if (!donut || !legend) return;
+        donut.hidden = false;
 
         if (categories.length === 0 || totalExpenses <= 0) {
             donut.innerHTML = '<div class="analysis-empty">Нет расходов за выбранный период.</div>';
             donut.style.background = "transparent";
             legend.innerHTML = "";
+            donut.hidden = true;
             return;
         }
 

@@ -32,16 +32,14 @@ export class BudgetPage extends BasePage {
 
         root.innerHTML = `
             <div class="page">
-                <main class="page__content page__content--budget">
+                <main class="page__content">
                     <div class="budget">
-                        <section class="budget-hero">
-                            <div>
-                                <h2 class="budget-hero__title budget__title js--inner-header">Бюджет</h2>
-                                <p class="budget-hero__subtitle budget__page-date">${today}</p>
-                            </div>
-                            <div class="budget-hero__action-slot js--budget-slot"></div>
-                        </section>
+                        <div class="budget__header">
+                            <h2 class="budget__title js--inner-header">Бюджет</h2>
+                            <p class="budget__page-date">${today}</p>
+                        </div>
                         <div class="budget__list js--budget-list"></div>
+                        <div class="budget__slot js--budget-slot"></div>
                     </div>
                 </main>
             </div>
